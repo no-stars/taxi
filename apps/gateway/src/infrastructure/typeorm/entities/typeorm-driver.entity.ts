@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm'
 import { TypeOrmAccount } from '@infrastructure/typeorm/entities/typeorm-account.entity'
 
 @Entity('driver')
@@ -19,10 +19,15 @@ export class TypeOrmDriver {
   @Column()
   isWorking: boolean
 
+  @Column()
+  accountId: string
+
   @OneToOne(
     type => TypeOrmAccount,
-    account => account.driver
+    account => account.driver,
+    { onDelete: 'CASCADE' }
   )
+  @JoinColumn()
   account: TypeOrmAccount
 
 }

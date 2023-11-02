@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm'
 import { TypeOrmDriver } from '@infrastructure/typeorm/entities/typeorm-driver.entity'
 
 @Entity('account')
