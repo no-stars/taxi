@@ -6,8 +6,8 @@ import { TypeOrmDriver } from '@infrastructure/typeorm/entities/typeorm-driver.e
 
 
 interface ResourceRepositoryPort {
-  addDriver(payload: any): Promise<TypeOrmDriver>
-  findDriverList(): Promise<TypeOrmDriver[]>
+  addDriver(payload: any): Promise<any>
+  findDriverList(): Promise<any[]>
 }
 
 
@@ -20,22 +20,22 @@ export class TypeOrmDriverRepositoryAdapter extends Repository<TypeOrmDriver> im
     super(TypeOrmDriver, dataSource.createEntityManager())
   }
 
-  public async addDriver(payload: any): Promise<TypeOrmDriver> {
+  public async addDriver(payload: any): Promise<any> {
     const result: InsertResult = await this.createQueryBuilder(this.driverAlias)
       .insert()
       .into(TypeOrmDriver)
       .values([payload])
       .execute()
 
-    const ormEntity: TypeOrmDriver = result.identifiers[0].id
+    const ormEntity: any = result?.identifiers?.[0]?.id
 
     return ormEntity
   }
 
-  public async findDriverList(): Promise<TypeOrmDriver[]> {
+  public async findDriverList(): Promise<any[]> {
     const query: SelectQueryBuilder<TypeOrmDriver> = this.buildResourceQueryBuilder()
 
-    const ormEntity: TypeOrmDriver[] = await query.getMany()
+    const ormEntity: any[] = await query.getMany()
 
     return ormEntity
   }

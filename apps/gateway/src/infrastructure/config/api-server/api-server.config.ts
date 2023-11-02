@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer'
-import { IsEnum, IsUrl } from 'class-validator'
+import { IsEnum, IsPort } from 'class-validator'
 import { Environment } from '@core/common/constants'
 import { ApiServerVariables } from './api-server.interface'
 
@@ -9,9 +9,9 @@ export class ApiServerConfig implements ApiServerVariables {
   @IsEnum(Environment)
   NODE_ENV: Environment
 
-  @Expose()
-  @IsUrl()
-  SERVICE_URL: string
+  @Expose({ name: 'APP_PORT' })
+  @IsPort()
+  PORT: string
 
   // get isAuthEnabled(): string {
   //   return this.PORT

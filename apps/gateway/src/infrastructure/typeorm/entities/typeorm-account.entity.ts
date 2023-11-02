@@ -1,7 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm'
+import { TypeOrmDriver } from '@infrastructure/typeorm/entities/typeorm-driver.entity'
 
 @Entity('account')
-export class TypeOrmDriver {
+export class TypeOrmAccount {
 
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -12,7 +13,10 @@ export class TypeOrmDriver {
   @Column()
   email: string
 
-  @OneToOne((type) => Question, (question) => question.categories)
-  questions: Question[]
+  @OneToOne(
+    type => TypeOrmDriver,
+    driver => driver.account
+  )
+  driver: TypeOrmDriver
 
 }
