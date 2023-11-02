@@ -1,12 +1,21 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity('resource')
-export class TypeOrmResource {
+@Entity('driver')
+export class TypeOrmDriver {
 
   @PrimaryGeneratedColumn('uuid')
   id: string
 
   @Column()
-  name: string
+  lastName: string
+
+  @Column()
+  firstName: string
+
+  @Column()
+  middleName: string
+
+  @Column()
+  isWorking: boolean
 
 }

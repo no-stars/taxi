@@ -1,8 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { GatewayModule } from './gateway.module';
+import { ServerApplication } from '@application/server-application'
+import 'reflect-metadata'
+
 
 async function bootstrap() {
-  const app = await NestFactory.create(GatewayModule);
-  await app.listen(3000);
+  const serverApplication: ServerApplication = ServerApplication.new()
+  await serverApplication.run()
 }
-bootstrap();
+
+bootstrap()

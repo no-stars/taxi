@@ -1,80 +1,48 @@
 import { Injectable } from '@nestjs/common'
 import { DataSource } from 'typeorm'
+import { Repository, SelectQueryBuilder, InsertResult } from 'typeorm'
 
-import { Resource } from '@core/domain/resource/entities/resource.entity'
-import { Optional, Nullable } from '@libs/common/types'
-import { ResourceEntityMapper } from '@infrastructure/typeorm/entity-mappers/resource.mapper'
-import { TypeOrmResource } from '@infrastructure/typeorm/entities/typeorm-resource.entity'
-import { Repository, SelectQueryBuilder } from 'typeorm'
-import { ResourceRepositoryPort } from '@core/domain/resource/port/persistence/resource-repository-port'
-import { TokenPagination } from '@libs/communication/core'
+import { TypeOrmDriver } from '@infrastructure/typeorm/entities/typeorm-driver.entity'
+
+
+interface ResourceRepositoryPort {
+  addDriver(payload: any): Promise<TypeOrmDriver>
+  findDriverList(): Promise<TypeOrmDriver[]>
+}
 
 
 @Injectable()
-export class TypeOrmResourceRepositoryAdapter extends Repository<TypeOrmResource> implements ResourceRepositoryPort {
+export class TypeOrmDriverRepositoryAdapter extends Repository<TypeOrmDriver> implements ResourceRepositoryPort {
 
-  private readonly resourceAlias: string = 'resource'
+  private readonly driverAlias: string = 'driver'
 
   constructor(private dataSource: DataSource) {
-    super(TypeOrmResource, dataSource.createEntityManager())
+    super(TypeOrmDriver, dataSource.createEntityManager())
   }
 
-  public async findResource(
-    by: { id: string }
-  ): Promise<Optional<Resource>> {
-    let domainEntity: Optional<Resource>
+  public async addDriver(payload: any): Promise<TypeOrmDriver> {
+    const result: InsertResult = await this.createQueryBuilder(this.driverAlias)
+      .insert()
+      .into(TypeOrmDriver)
+      .values([payload])
+      .execute()
 
-    const query: SelectQueryBuilder<TypeOrmResource> = this.buildResourceQueryBuilder()
-    this.extendQueryWithByProperties(by, query)
-    const ormEntity: Nullable<TypeOrmResource> = await query.getOne()
+    const ormEntity: TypeOrmDriver = result.identifiers[0].id
 
-    if (ormEntity) {
-      domainEntity = ResourceEntityMapper.toDomainEntity(ormEntity)
-    }
-
-    return domainEntity
+    return ormEntity
   }
 
-  public async findResourceList(
-    pagination?: TokenPagination
-  ): Promise<Resource[]> {
-    const query: SelectQueryBuilder<TypeOrmResource> = this.buildResourceQueryBuilder()
+  public async findDriverList(): Promise<TypeOrmDriver[]> {
+    const query: SelectQueryBuilder<TypeOrmDriver> = this.buildResourceQueryBuilder()
 
-    if (pagination) {
-      this.extendQueryWithPagination(pagination, query)
-    }
+    const ormEntity: TypeOrmDriver[] = await query.getMany()
 
-    const ormEntity: TypeOrmResource[] = await query.getMany()
-    const domainEntities: Resource[] = ResourceEntityMapper.toDomainEntities(ormEntity)
-
-    return domainEntities
+    return ormEntity
   }
 
-  private buildResourceQueryBuilder(): SelectQueryBuilder<TypeOrmResource> {
-    return this
-      .createQueryBuilder(this.resourceAlias)
+  private buildResourceQueryBuilder(): SelectQueryBuilder<TypeOrmDriver> {
+    return this.createQueryBuilder(this.driverAlias)
       .select()
-  }
-
-  private extendQueryWithByProperties(
-    by: { id: string },
-    query: SelectQueryBuilder<TypeOrmResource>
-  ): void {
-    if (by.id) {
-      query.andWhere(`"${this.resourceAlias}"."id" = :id`, { id: by.id })
-    }
-  }
-
-  private extendQueryWithPagination(
-    pagination: Nullable<TokenPagination>,
-    query: SelectQueryBuilder<TypeOrmResource>
-  ): void {
-    if (pagination === null) {
-      return
-    }
-
-    query.andWhere(`"${this.resourceAlias}"."id" > :id`, { id: pagination.nextPageToken })
-    query.limit(pagination.pageSize)
   }
 
 }

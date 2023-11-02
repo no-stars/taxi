@@ -1,9 +1,10 @@
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { NestFactory } from '@nestjs/core'
-import { ValidationPipe } from '@nestjs/common'
+import { LoggerService, ValidationPipe, ValidationPipeOptions } from "@nestjs/common"
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger'
 import { RootModule } from '@application/modules/root.module'
-import { options as proxyServiceOptions, PROTO_PATH } from '@libs/communication'
+import { Logger as PinoLogger } from 'nestjs-pino'
+
 
 interface SwaggerOptions {
   title: string
@@ -13,21 +14,28 @@ interface SwaggerOptions {
 
 export class ServerApplication {
 
-  private readonly port: string = process.env.APP_PORT || '8888'
+  private readonly port: string = process.env.APP_PORT || '3000'
   private readonly appBasePath: string = process.env.APP_BASE_PATH || ''
   private readonly swaggerBasePath: string = process.env.SWAGGER_BASE_PATH || ''
 
-  async run(): Promise<void> {
-    const app: NestExpressApplication = await NestFactory.create<NestExpressApplication>(RootModule)
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        transform: true,
-      })
-    )
-    app.setGlobalPrefix(this.appBasePath)
+  private logger: LoggerService
 
-    console.log(PROTO_PATH)
+  async run(): Promise<void> {
+    const app: NestExpressApplication = await NestFactory.create<NestExpressApplication>(
+      RootModule,
+      { bufferLogs: true }
+    )
+
+    const validationOptions: ValidationPipeOptions = {
+      whitelist: true,
+      transform: true,
+    }
+
+    this.logger = app.get(PinoLogger)
+
+    app.useGlobalPipes(new ValidationPipe(validationOptions))
+    app.setGlobalPrefix(this.appBasePath)
+    app.useLogger(this.logger)
 
     this.buildAPIDocumentation(app)
     this.log()
@@ -41,8 +49,8 @@ export class ServerApplication {
 
   private buildAPIDocumentation(app: NestExpressApplication): void {
     const SWAGGER_OPTIONS: SwaggerOptions = {
-      title: 'ResearchCenter',
-      description: 'Center for public opinion research',
+      title: 'Taxi',
+      description: 'Taxi application backend',
       version: '1.0',
     }
 
@@ -50,7 +58,6 @@ export class ServerApplication {
       .setTitle(SWAGGER_OPTIONS.title)
       .setDescription(SWAGGER_OPTIONS.description)
       .setVersion(SWAGGER_OPTIONS.version)
-      .setBasePath(this.appBasePath)
       .build()
 
     const document: OpenAPIObject = SwaggerModule.createDocument(app, options)
@@ -58,7 +65,8 @@ export class ServerApplication {
   }
 
   private log(): void {
-    console.log(`Server is running on port: ${this.port}`)
+    this.logger.log(`Server is running on port: ${this.port}`)
+    this.logger.log(`Environment: ${process.env.NODE_ENV}`)
   }
 
 }
