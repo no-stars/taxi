@@ -15,7 +15,7 @@ export class TypeOrmAccount {
 
   @OneToOne(
     type => TypeOrmDriver,
-    driver => driver.account
+    (driver: TypeOrmDriver) => driver.account
   )
   driver: TypeOrmDriver
 

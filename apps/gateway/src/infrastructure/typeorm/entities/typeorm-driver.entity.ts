@@ -24,7 +24,7 @@ export class TypeOrmDriver {
 
   @OneToOne(
     type => TypeOrmAccount,
-    account => account.driver,
+    (account: TypeOrmAccount) => account.driver,
     { onDelete: 'CASCADE' }
   )
   @JoinColumn()
