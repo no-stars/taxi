@@ -1,12 +1,12 @@
 module.exports = {
   rootDir: '.',
-  displayName: 'gateway',
+  displayName: 'orders',
   preset: 'ts-jest',
   transform: {
     '^.+\\.ts$': [
       'ts-jest',
       {
-        tsconfig: 'apps/gateway/tsconfig.app.json',
+        tsconfig: 'apps/orders/tsconfig.app.json',
       },
     ],
   },
