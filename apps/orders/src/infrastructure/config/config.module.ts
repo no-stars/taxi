@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { apiServerConfig } from '@infrastructure/config/index'
-import { Environment } from '@core/common/constants'
+import { Environment } from '@libs/common/constants'
 import { ConfigModule as NestConfigModule } from '@nestjs/config'
 
 

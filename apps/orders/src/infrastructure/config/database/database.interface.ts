@@ -1,4 +1,4 @@
-import { TypeormDatabaseType } from '@core/common/constants'
+import { TypeormDatabaseType } from '@libs/common/constants'
 
 export interface DatabaseVariables {
   DB_TYPE: TypeormDatabaseType

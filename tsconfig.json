@@ -13,8 +13,6 @@
     "incremental": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": false,
-
-    // Strict Checks
     "alwaysStrict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -24,19 +22,16 @@
     "strictBindCallApply": true,
     "noPropertyAccessFromIndexSignature": false,
     "noUncheckedIndexedAccess": true,
-    // Linter Checks
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowUnreachableCode": true,
     "allowUnusedLabels": true,
-    // Base Strict Checks
     "noImplicitUseStrict": false,
     "suppressExcessPropertyErrors": false,
     "suppressImplicitAnyIndexErrors": false,
     "noStrictGenericChecks": false,
-
     "paths": {
       "@core/*": [
         "src/core/*"
@@ -49,6 +44,18 @@
       ],
       "@test/*": [
         "test/*"
+      ],
+      "@libs/communication": [
+        "../../libs/communication/src"
+      ],
+      "@libs/communication/*": [
+        "../../libs/communication/src/*"
+      ],
+      "@libs/common": [
+        "../../libs/common/src"
+      ],
+      "@libs/common/*": [
+        "../../libs/common/src/*"
       ]
     }
   }

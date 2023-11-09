@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer'
 import { IsPort, IsString } from 'class-validator'
-import { TypeormDatabaseType } from '@core/common/constants'
+import { TypeormDatabaseType } from '@libs/common/constants'
 import { DatabaseVariables } from './database.interface'
 
 

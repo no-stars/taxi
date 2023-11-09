@@ -1,4 +1,4 @@
-import { Environment } from '@core/common/constants'
+import { Environment } from '@libs/common/constants'
 import { ConfigService } from '@nestjs/config'
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { DatabaseVariables } from '@infrastructure/config'
