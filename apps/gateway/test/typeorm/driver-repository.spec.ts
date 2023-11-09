@@ -1,7 +1,7 @@
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Test } from '@nestjs/testing'
-import { TypeOrmDriverRepositoryAdapter } from '@infrastructure/typeorm/repository/driver-repository.adapter'
+import { TypeOrmDriverRepositoryAdapter } from '@infrastructure/persistent/typeorm/repository/driver-repository.adapter'
 import { TestingModule } from '@nestjs/testing/testing-module'
 
 

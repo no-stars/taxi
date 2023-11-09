@@ -1,8 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { OrdersModule } from './orders.module';
+import { ServerApplication } from '@application/server-application'
+import 'reflect-metadata'
+
 
 async function bootstrap() {
-  const app = await NestFactory.create(OrdersModule);
-  await app.listen(3000);
+  const serverApplication: ServerApplication = ServerApplication.new()
+  await serverApplication.run()
 }
-bootstrap();
+
+bootstrap()

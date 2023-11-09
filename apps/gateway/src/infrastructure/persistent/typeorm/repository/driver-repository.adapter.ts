@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 import { Repository, SelectQueryBuilder, InsertResult } from 'typeorm'
 
-import { TypeOrmDriver } from '@infrastructure/typeorm/entities/typeorm-driver.entity'
+import { TypeOrmDriver } from '@infrastructure/persistent/typeorm/entities/typeorm-driver.entity'
 
 
 interface ResourceRepositoryPort {
