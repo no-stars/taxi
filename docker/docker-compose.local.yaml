@@ -5,19 +5,20 @@ services:
     container_name: ${PROJECT_NAME}-kafka-local
     build: ./images/kafka
     ports:
-      - "9092:9092"
+      - 19092:19092
     environment:
       - KAFKA_CFG_NODE_ID=0
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,CONNECTIONS_FROM_HOST://:19092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-local:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-local:9092,CONNECTIONS_FROM_HOST://localhost:19092
     volumes:
       - kafka_data:/bitnami/kafka
     networks:
       - backend
-      - kafkaui
+      - kafka
 
   kafka-ui-local:
     container_name: ${PROJECT_NAME}-kafka-ui-local
@@ -29,12 +30,25 @@ services:
     volumes:
       - ~/kui/config.yml:/etc/kafkaui/dynamic_config.yaml
     networks:
-      - kafkaui
+      - kafka
+    depends_on:
+      - kafka-local
+
+  schema-registry:
+    container_name: ${PROJECT_NAME}-schema-registry-local
+    build: ./images/schema-registry
+    ports:
+      - '8081:8081'
+    environment:
+      - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081
+      - SCHEMA_REGISTRY_KAFKA_BROKERS=PLAINTEXT://kafka-local:9092
+    networks:
+      - kafka
     depends_on:
       - kafka-local
 
   redis-local:
-    container_name: ${PROJECT_NAME}-redisit-local
+    container_name: ${PROJECT_NAME}-redis-local
     build: ./images/redis
     ports:
       - "${REDIS_EXPOSE_PORT}:${REDIS_PORT}"
@@ -97,7 +111,7 @@ services:
 
 networks:
   backend:
-  kafkaui:
+  kafka:
   pgadmin:
 
 volumes:
