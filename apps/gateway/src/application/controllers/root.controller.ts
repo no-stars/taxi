@@ -17,11 +17,11 @@ export class RootController {
 
     this.client.emit(
       'order_created',
-      `{
+      {
         orderId: '7788',
         passenger: '1234',
         driver: '5432',
-      }`
+      }
     )
 
     return 'Alive'

@@ -1,6 +1,5 @@
-import { Global, Module } from '@nestjs/common'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { Module } from '@nestjs/common'
+import { ClientsModule } from '@nestjs/microservices'
 import { options } from '@libs/communication/orders'
 
 
@@ -11,14 +10,12 @@ export const ORDER_SERVICE = Symbol('ORDER_SERVICE')
     ClientsModule.register([
       {
         name: ORDER_SERVICE,
-        transport: Transport.KAFKA,
+        transport: options.transport,
         options: {
+          producerOnlyMode: true,
           client: {
             clientId: 'gateway',
-            brokers: ['localhost:19092'],
-          },
-          consumer: {
-            groupId: 'gateway-consumer',
+            brokers: options.options?.client?.brokers || [],
           },
         },
       },

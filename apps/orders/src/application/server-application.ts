@@ -1,72 +1,55 @@
-import { NestExpressApplication } from '@nestjs/platform-express'
+import { INestMicroservice } from '@nestjs/common'
+import { MicroserviceOptions } from '@nestjs/microservices'
 import { NestFactory } from '@nestjs/core'
-import { LoggerService, ValidationPipe, ValidationPipeOptions } from "@nestjs/common"
-import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger'
+import { LoggerService, ValidationPipe, ValidationPipeOptions } from '@nestjs/common'
 import { RootModule } from '@application/modules/root.module'
 import { Logger as PinoLogger } from 'nestjs-pino'
+import { options as serviceOptions } from '@libs/communication/orders'
+import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices/nest-microservice-options.interface'
+import { KafkaOptions } from '@nestjs/microservices/interfaces/microservice-configuration.interface'
 
-
-interface SwaggerOptions {
-  title: string
-  description: string
-  version: string
-}
 
 export class ServerApplication {
-
-  private readonly port: string = process.env.APP_PORT || '3000'
-  private readonly appBasePath: string = process.env.APP_BASE_PATH || ''
-  private readonly swaggerBasePath: string = process.env.SWAGGER_BASE_PATH || ''
 
   private logger: LoggerService
 
   async run(): Promise<void> {
-    const app: NestExpressApplication = await NestFactory.create<NestExpressApplication>(
-      RootModule,
-      { bufferLogs: true }
-    )
+    const options: NestMicroserviceOptions & KafkaOptions = {
+      transport: serviceOptions.transport,
+      options: {
+        client: {
+          brokers: serviceOptions.options?.client?.brokers || [],
+        },
+        consumer: {
+          groupId: 'orders-consumer',
+        },
+      },
+      bufferLogs: true,
+    }
+
+    const app: INestMicroservice = await NestFactory.createMicroservice<MicroserviceOptions>(RootModule, options)
+
+    this.logger = app.get(PinoLogger)
 
     const validationOptions: ValidationPipeOptions = {
       whitelist: true,
       transform: true,
     }
 
-    this.logger = app.get(PinoLogger)
-
-    app.useGlobalPipes(new ValidationPipe(validationOptions))
-    app.setGlobalPrefix(this.appBasePath)
     app.useLogger(this.logger)
+    app.useGlobalPipes(new ValidationPipe(validationOptions))
 
-    this.buildAPIDocumentation(app)
+    await app.listen()
+
     this.log()
-
-    await app.listen(this.port)
   }
 
   static new(): ServerApplication {
     return new ServerApplication()
   }
 
-  private buildAPIDocumentation(app: NestExpressApplication): void {
-    const SWAGGER_OPTIONS: SwaggerOptions = {
-      title: 'Taxi',
-      description: 'Taxi application backend',
-      version: '1.0',
-    }
-
-    const options: Omit<OpenAPIObject, 'paths'> = new DocumentBuilder()
-      .setTitle(SWAGGER_OPTIONS.title)
-      .setDescription(SWAGGER_OPTIONS.description)
-      .setVersion(SWAGGER_OPTIONS.version)
-      .build()
-
-    const document: OpenAPIObject = SwaggerModule.createDocument(app, options)
-    SwaggerModule.setup(this.swaggerBasePath, app, document)
-  }
-
   private log(): void {
-    this.logger.log(`Server is running on port: ${this.port}`)
-    this.logger.log(`Environment: ${process.env.NODE_ENV}`)
+    this.logger.log(`Service is listening ${serviceOptions.options?.client?.brokers}`)
   }
 
 }
