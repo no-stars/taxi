@@ -5,16 +5,15 @@ import { LoggerService, ValidationPipe, ValidationPipeOptions } from '@nestjs/co
 import { RootModule } from '@application/modules/root.module'
 import { Logger as PinoLogger } from 'nestjs-pino'
 import { options as serviceOptions } from '@libs/communication/orders'
-import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices/nest-microservice-options.interface'
-import { KafkaOptions } from '@nestjs/microservices/interfaces/microservice-configuration.interface'
 
 
 export class ServerApplication {
 
+  private readonly port: string = process.env.APP_PORT || '3001'
   private logger: LoggerService
 
   async run(): Promise<void> {
-    const options: NestMicroserviceOptions & KafkaOptions = {
+    const kafkaMicroservice: MicroserviceOptions = {
       transport: serviceOptions.transport,
       options: {
         client: {
@@ -24,10 +23,13 @@ export class ServerApplication {
           groupId: 'orders-consumer',
         },
       },
-      bufferLogs: true,
     }
 
-    const app: INestMicroservice = await NestFactory.createMicroservice<MicroserviceOptions>(RootModule, options)
+    const app = await NestFactory.create(RootModule, { bufferLogs: true })
+    const microservice: INestMicroservice = app.connectMicroservice<MicroserviceOptions>(
+      kafkaMicroservice,
+      { inheritAppConfig: true }
+    )
 
     this.logger = app.get(PinoLogger)
 
@@ -39,7 +41,8 @@ export class ServerApplication {
     app.useLogger(this.logger)
     app.useGlobalPipes(new ValidationPipe(validationOptions))
 
-    await app.listen()
+    await app.startAllMicroservices()
+    await app.listen(this.port)
 
     this.log()
   }
@@ -49,6 +52,7 @@ export class ServerApplication {
   }
 
   private log(): void {
+    this.logger.log(`App is running on port: ${this.port}`)
     this.logger.log(`Service is listening ${serviceOptions.options?.client?.brokers}`)
   }
 

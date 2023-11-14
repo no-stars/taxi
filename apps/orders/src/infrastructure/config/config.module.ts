@@ -4,9 +4,10 @@ import { Environment } from '@libs/common/constants'
 import { ConfigModule as NestConfigModule } from '@nestjs/config'
 
 
+const serviceName = process.env.SERVICE_NAME
 const envFilePath = process.env.NODE_ENV === Environment.PRODUCTION
-  ? './apps/gateway/.env'
-  : './apps/gateway/local.env'
+  ? `./apps/${serviceName}/.env`
+  : `./apps/${serviceName}/local.env`
 
 
 @Module({
