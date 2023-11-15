@@ -9,4 +9,4 @@
 
 
 ## pg
-```./node_modules/.bin/ts-node --project apps/orders/tsconfig.app.json -r tsconfig-paths/register ./apps/orders/src/infrastructure/persistent/pg/migrations/index.ts```
+```npm run migrate orders up```
