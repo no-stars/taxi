@@ -10,4 +10,9 @@
 
 ## pg
 ```npm run migrate SERVICE up```
+
 ```npm run migrate SERVICE down```
+
+```npm run migrate:all up```
+
+```npm run migrate:all down```
