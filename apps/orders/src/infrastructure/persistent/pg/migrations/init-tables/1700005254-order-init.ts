@@ -2,6 +2,8 @@ import MigrationInterface from '@infrastructure/persistent/pg/migrations/migrati
 import { Pool } from 'pg'
 
 
+//  start_location GEOMETRY(Point, 4326) NOT NULL,
+//  finish_location GEOMETRY(Point, 4326) NOT NULL,
 const createOrderTableQuery = `
 CREATE TABLE IF NOT EXISTS orders (
   order_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

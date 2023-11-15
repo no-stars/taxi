@@ -6,3 +6,4 @@ export { PriceSegmentRequirementRelations } from '@infrastructure/persistent/pg/
 export { ShiftRelations } from '@infrastructure/persistent/pg/migrations/table-relations/1700008834-shift-relations'
 export { OrderRelations } from '@infrastructure/persistent/pg/migrations/table-relations/1700009049-order-relations'
 export { PriceProposeRelations } from '@infrastructure/persistent/pg/migrations/table-relations/1700009151-price-propose-relations'
+export { CarDriverRelations } from '@infrastructure/persistent/pg/migrations/table-relations/1700041970-car-driver-relations'

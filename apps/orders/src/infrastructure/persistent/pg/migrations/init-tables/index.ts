@@ -16,3 +16,4 @@ export { PaymentInit } from '@infrastructure/persistent/pg/migrations/init-table
 export { RideInit } from '@infrastructure/persistent/pg/migrations/init-tables/1700005569-ride-init'
 export { PriceProposeInit } from '@infrastructure/persistent/pg/migrations/init-tables/1700005759-price-propose-init'
 export { RatingInit } from '@infrastructure/persistent/pg/migrations/init-tables/1700006316-rating-init'
+export { CarDriverInit } from '@infrastructure/persistent/pg/migrations/init-tables/1700041880-car-driver-init'

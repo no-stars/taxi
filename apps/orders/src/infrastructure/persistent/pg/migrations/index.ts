@@ -2,6 +2,7 @@ import { pool } from '@infrastructure/persistent/migrations.config'
 import MigrationInterface from '@infrastructure/persistent/pg/migrations/migration.interface'
 import * as InitTable from '@infrastructure/persistent/pg/migrations/init-tables'
 import * as TableRelations from '@infrastructure/persistent/pg/migrations/table-relations'
+import * as TableIndexes from '@infrastructure/persistent/pg/migrations/table-indexes'
 
 
 enum MigrationAction {
@@ -28,6 +29,7 @@ const initTableMigrations: MigrationInterface[] = [
   new InitTable.RideInit(pool),
   new InitTable.PriceProposeInit(pool),
   new InitTable.RatingInit(pool),
+  new InitTable.CarDriverInit(pool),
 ]
 
 const tableRelationsMigrations: MigrationInterface[] = [
@@ -39,12 +41,30 @@ const tableRelationsMigrations: MigrationInterface[] = [
   new TableRelations.ShiftRelations(pool),
   new TableRelations.OrderRelations(pool),
   new TableRelations.PriceProposeRelations(pool),
+  new TableRelations.CarDriverRelations(pool),
+]
+
+const tableIndexesMigrations: MigrationInterface[] = [
+  new TableIndexes.PersonIndexes(pool),
+  new TableIndexes.PassengerIndexes(pool),
+  new TableIndexes.SavedAddressIndexes(pool),
+  new TableIndexes.DriverIndexes(pool),
+  new TableIndexes.CarDriverIndexes(pool),
+  new TableIndexes.PriceSegmentRequirementIndexes(pool),
+  new TableIndexes.ShiftIndexes(pool),
+  new TableIndexes.PaymentCardIndexes(pool),
+  new TableIndexes.WithdrawCardIndexes(pool),
+  new TableIndexes.RideIndexes(pool),
+  new TableIndexes.PriceProposeIndexes(pool),
+  new TableIndexes.RatingIndexes(pool),
+  new TableIndexes.OrderIndexes(pool),
 ]
 
 
 const migrations: MigrationInterface[] = [
   ...initTableMigrations,
   ...tableRelationsMigrations,
+  ...tableIndexesMigrations,
 ]
 
 
