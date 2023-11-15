@@ -9,4 +9,5 @@
 
 
 ## pg
-```npm run migrate orders up```
+```npm run migrate SERVICE up```
+```npm run migrate SERVICE down```
