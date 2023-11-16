@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { Pool } from 'pg'
 
 
-config({ path: '/Users/mac/Documents/projects/taxi/apps/orders/local.env' })
+config({ path: '/Users/mac/Documents/projects/taxi/apps/ratings/local.env' })
 
 const configService = new ConfigService()
 

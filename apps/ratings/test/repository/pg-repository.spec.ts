@@ -6,8 +6,7 @@ import { Pool } from 'pg'
 import { PgRatingRepositoryAdapter } from '@infrastructure/persistent/pg/repository/rating-repository.adapter'
 import { PG_CONNECTION } from '@infrastructure/persistent/database.config'
 import { RatingInit } from '@infrastructure/persistent/pg/migrations/init-tables'
-import { StringUtils } from '@libs/common/utils/string'
-
+import { StringUtils } from '../../../../libs/common/src/utils'
 
 
 describe('Pg Repository', () => {

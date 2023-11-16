@@ -2,14 +2,15 @@ import { INestMicroservice } from '@nestjs/common'
 import { MicroserviceOptions } from '@nestjs/microservices'
 import { NestFactory } from '@nestjs/core'
 import { LoggerService, ValidationPipe, ValidationPipeOptions } from '@nestjs/common'
-import { RootModule } from '@application/modules/root.module'
 import { Logger as PinoLogger } from 'nestjs-pino'
-import { options as serviceOptions } from '@libs/communication/orders'
+
+import { RootModule } from '@application/modules/root.module'
+import { options as serviceOptions } from '@libs/communication/ratings'
 
 
 export class ServerApplication {
 
-  private readonly port: string = process.env.APP_PORT || '3001'
+  private readonly port: string = process.env.APP_PORT || '3002'
   private logger: LoggerService
 
   async run(): Promise<void> {
@@ -20,7 +21,7 @@ export class ServerApplication {
           brokers: serviceOptions.options?.client?.brokers || [],
         },
         consumer: {
-          groupId: 'orders-consumer',
+          groupId: 'ratings-consumer',
         },
       },
     }

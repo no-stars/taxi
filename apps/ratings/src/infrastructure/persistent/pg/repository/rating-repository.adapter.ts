@@ -1,38 +1,49 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { DataSource } from 'typeorm'
-import { SelectQueryBuilder, InsertResult } from 'typeorm'
+import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistent/database.config'
-import { Pool } from 'pg'
+import { Pool, QueryResult } from 'pg'
+import { plainToInstance } from 'class-transformer'
+import PgRatingEntity, { PgRatingField } from '@infrastructure/persistent/pg/entities/pg-rating.entity'
 
 
-interface ResourceRepositoryPort {
-  addOrder(payload: any): Promise<any>
-  findOrderList(): Promise<any[]>
+interface RatingRepositoryPort {
+  addRating(payload: object): Promise<number | null>
+  findRatingList(): Promise<any[]>
 }
 
 
 @Injectable()
-export class PgOrderRepositoryAdapter implements ResourceRepositoryPort {
+export class PgRatingRepositoryAdapter implements RatingRepositoryPort {
 
-  private readonly orderAlias: string = 'orders'
+  private readonly ratingAlias = 'ratings'
+  private readonly logger = new Logger(PgRatingRepositoryAdapter.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 
-  public async addOrder(payload: any): Promise<any> {
-    const result: any = await this.pool.query(`INSERT INTO ${this.orderAlias} VALUES ('')`)
+  public async addRating(payload: object): Promise<number | null> {
+    const queryText
+      = `INSERT INTO ${this.ratingAlias}
+         (rating_id, ride_id, stars_by_passenger, stars_by_driver, created_at, updated_at, deleted_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
-    // ride_id, start_location, finish_location, passenger_id, price_segment, recommended_price, price, payment_type, order_type
-    // NULL,
+    const pgRating: PgRatingEntity = plainToInstance(PgRatingEntity, payload)
+    const values: PgRatingField[] = pgRating.getFields()
 
-    return ormEntity
+    this.logger.log(queryText, values)
+    const result: QueryResult = await this.pool.query(queryText, values)
+
+    return result.rowCount
   }
 
-  public async findOrderList(): Promise<any[]> {
-    const query: SelectQueryBuilder<TypeOrmDriver> = this.buildResourceQueryBuilder()
+  public async findRatingList(): Promise<any[]> {
+    const queryText
+      = `SELECT rating_id, ride_id, stars_by_passenger, stars_by_driver, created_at, updated_at, deleted_at 
+         FROM ${this.ratingAlias}`
 
-    const ormEntity: any[] = await query.getMany()
+    this.logger.log(queryText)
+    const result: QueryResult = await this.pool.query(queryText)
+    const pgRatings: PgRatingEntity[] = plainToInstance(PgRatingEntity, result.rows)
 
-    return ormEntity
+    return result.rows
   }
 
 }

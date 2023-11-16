@@ -28,6 +28,15 @@
         "tsConfigPath": "apps/orders/tsconfig.app.json"
       }
     },
+    "ratings": {
+      "type": "application",
+      "root": "apps/ratings",
+      "entryFile": "main",
+      "sourceRoot": "apps/ratings/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/ratings/tsconfig.app.json"
+      }
+    },
     "communication": {
       "type": "library",
       "root": "libs/communication",
