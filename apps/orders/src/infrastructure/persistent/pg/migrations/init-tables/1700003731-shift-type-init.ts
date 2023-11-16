@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS shift_types (
   shift_name TEXT NOT NULL UNIQUE,
   price INTEGER NOT NULL,
   working_hours INTEGER NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

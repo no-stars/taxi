@@ -9,9 +9,9 @@ CREATE TABLE IF NOT EXISTS shifts (
   car_id UUID NOT NULL,
   shift_type_id UUID NOT NULL,
   payment_id UUID NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

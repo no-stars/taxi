@@ -12,9 +12,9 @@ CREATE TABLE IF NOT EXISTS rides (
   car_id UUID NOT NULL,
   payment_id UUID NOT NULL,
   status TEXT NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

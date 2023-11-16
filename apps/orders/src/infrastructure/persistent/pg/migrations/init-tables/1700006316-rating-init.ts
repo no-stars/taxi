@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS ratings (
   ride_id UUID NOT NULL,
   stars_by_passenger INTEGER CHECK (stars_by_passenger > 0 AND stars_by_passenger <= 5),
   stars_by_driver INTEGER CHECK (stars_by_driver > 0 AND stars_by_driver <= 5),
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

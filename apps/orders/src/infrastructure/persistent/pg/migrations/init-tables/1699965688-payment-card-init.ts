@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS payment_cards (
   card_number TEXT NOT NULL,
   cvv TEXT NOT NULL,
   holder_name TEXT NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

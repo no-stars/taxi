@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS price_proposes (
   propose_type TEXT NOT NULL,
   proposed_price INTEGER NOT NULL,
   result TEXT NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

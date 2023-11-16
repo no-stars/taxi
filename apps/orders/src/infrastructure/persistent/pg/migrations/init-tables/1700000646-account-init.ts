@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS accounts (
   account_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   phone_number TEXT NOT NULL UNIQUE,
   email TEXT NOT NULL UNIQUE,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

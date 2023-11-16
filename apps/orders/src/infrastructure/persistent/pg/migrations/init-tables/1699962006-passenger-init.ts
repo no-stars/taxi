@@ -6,9 +6,9 @@ const createPassengerTableQuery = `
 CREATE TABLE IF NOT EXISTS passengers (
   passenger_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   person_id UUID,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

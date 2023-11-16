@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS saved_addresses (
   address_name TEXT NOT NULL,
   passenger_id UUID NOT NULL,
   coordinates POINT NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

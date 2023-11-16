@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS price_segment_requirements (
   price_segment TEXT NOT NULL,
   car_model_id UUID NOT NULL,
   min_year INTEGER,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 

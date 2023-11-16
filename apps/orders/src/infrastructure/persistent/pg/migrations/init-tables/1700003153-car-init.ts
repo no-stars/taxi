@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS cars (
   car_model_id UUID NOT NULL,
   plate_number TEXT NOT NULL,
   release_year INTEGER NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz,
-  deleted_at timestamptz
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ,
+  deleted_at TIMESTAMPTZ
 );
 `
 
