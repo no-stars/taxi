@@ -1,10 +1,12 @@
+import { JwtService } from '@nestjs/jwt'
+import { UnauthorizedException } from '@nestjs/common'
+
 import { ConfirmCodeRepositoryPort } from '@infrastructure/persistent/redis/repository/confirm-code-repository.adapter'
 import { ConfirmCode } from '@core/common/confirm-code'
 import { AccountRepositoryPort } from '@infrastructure/persistent/pg/repository/account-repository.adapter'
 import { Account } from '@core/domain/entities/account.entity'
 import { Nullable } from '@libs/common/types/nullable'
-import { JwtService } from '@nestjs/jwt'
-import { Injectable } from '@nestjs/common'
+
 
 interface ConfirmUseCasePayload {
   phoneNumber: string
@@ -16,7 +18,7 @@ interface ConfirmUseCaseResult {
 }
 
 interface JwtPayload {
-  accountId: string
+  sub: string
 }
 
 export class ConfirmUseCase {
@@ -32,7 +34,7 @@ export class ConfirmUseCase {
     const isValid: boolean = payload.providedCode.isEqual(validCode)
 
     if (!isValid) {
-      throw new Error()
+      throw new UnauthorizedException()
     }
 
     await this.confirmCodeRepository.reset(payload.phoneNumber)
@@ -45,7 +47,7 @@ export class ConfirmUseCase {
       account = await this.accountRepository.addAccount(newAccount)
     }
 
-    const jwtPayload: JwtPayload = { accountId: account.getId() }
+    const jwtPayload: JwtPayload = { sub: account.getId() }
     const accessToken: string = await this.jwtService.signAsync(jwtPayload)
 
     return { accessToken }

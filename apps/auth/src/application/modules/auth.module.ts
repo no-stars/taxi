@@ -11,6 +11,8 @@ import { InMemoryConfirmCodeRepositoryAdapter } from '@infrastructure/persistent
 import { ConfirmUseCase } from '@core/service/usecase/confirm.usecase'
 import { PgAccountRepositoryAdapter } from '@infrastructure/persistent/pg/repository/account-repository.adapter'
 import { SecurityVariables } from '@infrastructure/config/security/security.interface'
+import { ValidateUseCase } from '@core/service/usecase/validate.usecase'
+
 
 const useCaseProviders = [
   {
@@ -30,6 +32,13 @@ const useCaseProviders = [
       return new ConfirmUseCase(accountRepository, confirmCodeRepository, jwtService)
     },
     inject: [PgAccountRepositoryAdapter, InMemoryConfirmCodeRepositoryAdapter, JwtService],
+  },
+  {
+    provide: ValidateUseCase,
+    useFactory: (jwtService: JwtService) => {
+      return new ValidateUseCase(jwtService)
+    },
+    inject: [JwtService],
   },
 ]
 
