@@ -2,7 +2,7 @@ import { Environment } from '@libs/common/constants'
 import { ConfigService } from '@nestjs/config'
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { DatabaseVariables } from '@infrastructure/config'
-import { ENTITIES } from '@infrastructure/persistent/typeorm/entities'
+import { ENTITIES } from '@infrastructure/persistence/typeorm/entities'
 
 
 const DB_LOGGING_ENABLED = process.env.NODE_ENV === Environment.DEVELOPMENT

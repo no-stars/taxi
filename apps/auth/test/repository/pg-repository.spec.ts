@@ -4,9 +4,9 @@ import { TestingModule } from '@nestjs/testing/testing-module'
 import { Pool } from 'pg'
 
 import { StringUtils } from '../../../../libs/common/src/utils'
-import { PgAccountRepositoryAdapter } from '@infrastructure/persistent/pg/repository/account-repository.adapter'
-import { PG_CONNECTION } from '@infrastructure/persistent/database.config'
-import { AccountInit } from '@infrastructure/persistent/pg/migrations/init-tables'
+import { PgAccountRepositoryAdapter } from '@infrastructure/persistence/pg/repository/account-repository.adapter'
+import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
+import { AccountInit } from '@infrastructure/persistence/pg/migrations/init-tables'
 import { Account } from '@core/domain/entities/account.entity'
 
 

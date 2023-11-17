@@ -1,9 +1,9 @@
 import { JwtService } from '@nestjs/jwt'
 import { UnauthorizedException } from '@nestjs/common'
 
-import { ConfirmCodeRepositoryPort } from '@infrastructure/persistent/redis/repository/confirm-code-repository.adapter'
+import { ConfirmCodeRepositoryPort } from '@infrastructure/persistence/redis/repository/confirm-code-repository.adapter'
 import { ConfirmCode } from '@core/common/confirm-code'
-import { AccountRepositoryPort } from '@infrastructure/persistent/pg/repository/account-repository.adapter'
+import { AccountRepositoryPort } from '@infrastructure/persistence/pg/repository/account-repository.adapter'
 import { Account } from '@core/domain/entities/account.entity'
 import { Nullable } from '@libs/common/types/nullable'
 

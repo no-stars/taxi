@@ -7,9 +7,9 @@ import ExternalSystemsModule from '@infrastructure/external-systems/external-sys
 import { AuthController } from '@application/controllers/auth.controller'
 import { SignInUseCase } from '@core/service/usecase/sign-in.usecase'
 import { SmsSystemFakeAdapter } from '@infrastructure/external-systems/sms/sms-fake.service'
-import { InMemoryConfirmCodeRepositoryAdapter } from '@infrastructure/persistent/redis/repository/confirm-code-repository.adapter'
+import { InMemoryConfirmCodeRepositoryAdapter } from '@infrastructure/persistence/redis/repository/confirm-code-repository.adapter'
 import { ConfirmUseCase } from '@core/service/usecase/confirm.usecase'
-import { PgAccountRepositoryAdapter } from '@infrastructure/persistent/pg/repository/account-repository.adapter'
+import { PgAccountRepositoryAdapter } from '@infrastructure/persistence/pg/repository/account-repository.adapter'
 import { SecurityVariables } from '@infrastructure/config/security/security.interface'
 import { ValidateUseCase } from '@core/service/usecase/validate.usecase'
 

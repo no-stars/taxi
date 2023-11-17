@@ -14,7 +14,7 @@ const cfg = {
   database: configService.get('DB_NAME'),
   logging: true,
   synchronize: false,
-  entities: ['apps/gateway/src/infrastructure/persistent/typeorm/entities/*.entity{.ts,.js}'],
-  migrations: ['apps/gateway/src/infrastructure/persistent/typeorm/migrations/*{.ts,.js}'],
+  entities: ['apps/gateway/src/infrastructure/persistence/typeorm/entities/*.entity{.ts,.js}'],
+  migrations: ['apps/gateway/src/infrastructure/persistence/typeorm/migrations/*{.ts,.js}'],
 }
 export const connectionSource = new DataSource(cfg as DataSourceOptions)
