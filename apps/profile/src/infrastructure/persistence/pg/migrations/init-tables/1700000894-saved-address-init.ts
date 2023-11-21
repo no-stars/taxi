@@ -4,7 +4,7 @@ import { Pool } from 'pg'
 
 const createSavedAddressModelTableQuery = `
 CREATE TABLE IF NOT EXISTS saved_addresses (
-  account_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  saved_address_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   address_name TEXT NOT NULL,
   passenger_id UUID NOT NULL,
   coordinates POINT NOT NULL,

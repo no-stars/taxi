@@ -6,6 +6,9 @@ import { Pool } from 'pg'
 import { PgPassengerRepositoryAdapter } from '@infrastructure/persistence/pg/repository/passenger-repository.adapter'
 import { PgPersonRepositoryAdapter } from '@infrastructure/persistence/pg/repository/person-repository.adapter'
 import { PgDriverRepositoryAdapter } from '@infrastructure/persistence/pg/repository/driver-repository.adapter'
+import {
+  PgSavedAddressRepositoryAdapter,
+} from '@infrastructure/persistence/pg/repository/saved-address-repository.adapter'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import {
   PassengerInit,
@@ -26,16 +29,17 @@ describe('Pg Repository', () => {
 
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
+
   let passengerRepo: PgPassengerRepositoryAdapter
   let personRepo: PgPersonRepositoryAdapter
   let driverRepo: PgDriverRepositoryAdapter
+  let savedAddressRepo: PgSavedAddressRepositoryAdapter
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
 
     const pool = new Pool({
-      connectionString: 'postgres://root:root12345@localhost:5432/taxi',
-      // connectionString: postgresContainer.getConnectionUri(),
+      connectionString: postgresContainer.getConnectionUri(),
     })
 
     const profileMigrations = [
@@ -49,7 +53,7 @@ describe('Pg Repository', () => {
     ]
 
     for (const profileMigration of profileMigrations) {
-      // await profileMigration.up()
+      await profileMigration.up()
     }
 
     await pool.end()
@@ -61,13 +65,13 @@ describe('Pg Repository', () => {
         {
           provide: PG_CONNECTION,
           useFactory: () => new Pool({
-            connectionString: 'postgres://root:root12345@localhost:5432/taxi',
-            // connectionString: postgresContainer.getConnectionUri(),
+            connectionString: postgresContainer.getConnectionUri(),
           }),
         },
         PgPassengerRepositoryAdapter,
         PgPersonRepositoryAdapter,
         PgDriverRepositoryAdapter,
+        PgSavedAddressRepositoryAdapter,
       ],
     }).compile()
 
@@ -75,6 +79,7 @@ describe('Pg Repository', () => {
     passengerRepo = module.get(PgPassengerRepositoryAdapter)
     personRepo = module.get(PgPersonRepositoryAdapter)
     driverRepo = module.get(PgDriverRepositoryAdapter)
+    savedAddressRepo = module.get(PgSavedAddressRepositoryAdapter)
   })
 
   afterAll(async () => {
@@ -157,5 +162,42 @@ describe('Pg Repository', () => {
 
     // expect(foundPersonByPassenger).toEqual(person)
     // expect(foundPersonByDriver).toEqual(person)
+  })
+
+  it('should create and then find saved address', async () => {
+    const person = {
+      person_id: StringUtils.uuid(),
+      account_id: StringUtils.uuid(),
+      first_name: 'Asd',
+      last_name: 'Zxc',
+      middle_name: 'Qwe',
+      created_at: new Date(),
+      updated_at: null,
+      deleted_at: null,
+    }
+    const passenger = {
+      passenger_id: StringUtils.uuid(),
+      person_id: person.person_id,
+      created_at: new Date(),
+      updated_at: null,
+      deleted_at: null,
+    }
+    const savedAddress = {
+      saved_address_id: StringUtils.uuid(),
+      address_name: 'qqq',
+      passenger_id: passenger.passenger_id,
+      coordinates: '35.204088, 54.307690',
+      created_at: new Date(),
+      updated_at: null,
+      deleted_at: null,
+    }
+
+    await personRepo.addPerson(person)
+    await passengerRepo.addPassenger(passenger)
+    await savedAddressRepo.addSavedAddress(savedAddress)
+
+    const foundSavedAddress = await savedAddressRepo.findSavedAddressList({ passengerId: passenger.passenger_id })
+
+    // expect(foundSavedAddress).toEqual(savedAddress)
   })
 })
