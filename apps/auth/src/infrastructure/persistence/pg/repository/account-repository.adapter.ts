@@ -29,7 +29,7 @@ export class PgAccountRepositoryAdapter implements AccountRepositoryPort {
          VALUES ($1, $2, $3, $4, $5, $6)`
 
     const pgAccount: PgAccountEntity = AccountEntityMapper.toPgEntity(payload)
-    const values: PgAccountField[] = pgAccount.getFields()
+    const values: PgAccountField[] = pgAccount.getValues()
 
     this.logger.log(queryText, values)
     const response: QueryResult = await this.pool.query(queryText, values)

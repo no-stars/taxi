@@ -1,6 +1,3 @@
-export { SavedAddressRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700007923-saved-address-relations'
-export { PassengerRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700008390-passenger-relations'
-export { DriverRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700008494-driver-relations'
 export { CarRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700008606-car-relations'
 export { PriceSegmentRequirementRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700008825-price-segment-requirement-relations'
 export { ShiftRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700008834-shift-relations'

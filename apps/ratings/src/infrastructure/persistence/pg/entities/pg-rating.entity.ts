@@ -19,7 +19,7 @@ export default class PgRatingEntity {
 
   deleted_at: Date
 
-  getFields(): PgRatingField[] {
+  getValues(): PgRatingField[] {
     return [
       this.id,
       this.ride_id,

@@ -1,0 +1,36 @@
+import { Inject, Injectable, Logger } from '@nestjs/common'
+import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
+import { Pool, QueryResult } from 'pg'
+import { plainToInstance } from 'class-transformer'
+import PgDriverEntity, { PgDriverField } from '@infrastructure/persistence/pg/entities/pg-driver.entity'
+
+
+interface DriverRepositoryPort {
+  addDriver(payload: object): Promise<number | null>
+}
+
+
+@Injectable()
+export class PgDriverRepositoryAdapter implements DriverRepositoryPort {
+
+  private readonly driverAlias = 'drivers'
+  private readonly logger = new Logger(PgDriverRepositoryAdapter.name)
+
+  constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
+
+  public async addDriver(payload: object): Promise<number | null> {
+    const queryText
+      = `INSERT INTO ${this.driverAlias}
+         (driver_id, person_id, created_at, updated_at, deleted_at)
+         VALUES ($1, $2, $3, $4, $5)`
+
+    const pgDriver: PgDriverEntity = plainToInstance(PgDriverEntity, payload)
+    const values: PgDriverField[] = pgDriver.getValues()
+
+    this.logger.log(queryText, values)
+    const result: QueryResult = await this.pool.query(queryText, values)
+
+    return result.rowCount
+  }
+
+}

@@ -17,7 +17,7 @@ export default class PgAccountEntity {
 
   deleted_at: Nullable<Date>
 
-  getFields(): PgAccountField[] {
+  getValues(): PgAccountField[] {
     return [
       this.account_id,
       this.phone_number,

@@ -11,13 +11,9 @@ enum MigrationAction {
 }
 
 const initTableMigrations: MigrationInterface[] = [
-  new InitTable.PassengerInit(pool),
   new InitTable.PaymentCardInit(pool),
   new InitTable.CarModelInit(pool),
   new InitTable.AccountInit(pool),
-  new InitTable.SavedAddressInit(pool),
-  new InitTable.PersonInit(pool),
-  new InitTable.DriverInit(pool),
   new InitTable.CarInit(pool),
   new InitTable.PriceSegmentRequirementInit(pool),
   new InitTable.ShiftInit(pool),
@@ -33,9 +29,6 @@ const initTableMigrations: MigrationInterface[] = [
 ]
 
 const tableRelationsMigrations: MigrationInterface[] = [
-  new TableRelations.SavedAddressRelations(pool),
-  new TableRelations.PassengerRelations(pool),
-  new TableRelations.DriverRelations(pool),
   new TableRelations.CarRelations(pool),
   new TableRelations.PriceSegmentRequirementRelations(pool),
   new TableRelations.ShiftRelations(pool),
@@ -45,10 +38,6 @@ const tableRelationsMigrations: MigrationInterface[] = [
 ]
 
 const tableIndexesMigrations: MigrationInterface[] = [
-  new TableIndexes.PersonIndexes(pool),
-  new TableIndexes.PassengerIndexes(pool),
-  new TableIndexes.SavedAddressIndexes(pool),
-  new TableIndexes.DriverIndexes(pool),
   new TableIndexes.CarDriverIndexes(pool),
   new TableIndexes.PriceSegmentRequirementIndexes(pool),
   new TableIndexes.ShiftIndexes(pool),

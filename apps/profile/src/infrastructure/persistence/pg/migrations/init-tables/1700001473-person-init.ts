@@ -5,7 +5,7 @@ import { Pool } from 'pg'
 const createPersonTableQuery = `
 CREATE TABLE IF NOT EXISTS persons (
   person_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  account_id UUID,
+  account_id UUID NOT NULL,
   first_name TEXT NOT NULL,
   last_name TEXT,
   middle_name TEXT,

@@ -26,7 +26,7 @@ export class PgRatingRepositoryAdapter implements RatingRepositoryPort {
          VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
     const pgRating: PgRatingEntity = plainToInstance(PgRatingEntity, payload)
-    const values: PgRatingField[] = pgRating.getFields()
+    const values: PgRatingField[] = pgRating.getValues()
 
     this.logger.log(queryText, values)
     const result: QueryResult = await this.pool.query(queryText, values)
