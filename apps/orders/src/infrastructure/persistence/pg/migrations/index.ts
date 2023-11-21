@@ -58,6 +58,8 @@ const tableIndexesMigrations: MigrationInterface[] = [
   new TableIndexes.PriceProposeIndexes(pool),
   new TableIndexes.RatingIndexes(pool),
   new TableIndexes.OrderIndexes(pool),
+  new TableIndexes.CarModelIndexes(pool),
+  new TableIndexes.DriverActivityIndexes(pool),
 ]
 
 

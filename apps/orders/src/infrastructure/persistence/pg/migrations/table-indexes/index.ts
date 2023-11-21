@@ -11,3 +11,5 @@ export { RideIndexes } from '@infrastructure/persistence/pg/migrations/table-ind
 export { PriceProposeIndexes } from '@infrastructure/persistence/pg/migrations/table-indexes/1700042552-price-propose-indexes'
 export { RatingIndexes } from '@infrastructure/persistence/pg/migrations/table-indexes/1700042997-rating-indexes'
 export { OrderIndexes } from '@infrastructure/persistence/pg/migrations/table-indexes/1700043112-order-indexes'
+export { CarModelIndexes } from '@infrastructure/persistence/pg/migrations/table-indexes/1700194773-car-model-indexes'
+export { DriverActivityIndexes } from '@infrastructure/persistence/pg/migrations/table-indexes/1700369639-driver-activity-indexes'

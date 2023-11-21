@@ -6,9 +6,14 @@ const createOrderIndexesQuery = `
 CREATE INDEX idx_orders_start_location
   ON orders
   USING GIST (start_location);
+
 CREATE INDEX idx_orders_ride_id ON price_proposes (ride_id);
-CREATE INDEX idx_orders_passenger_id ON price_proposes (passenger_id);
-CREATE INDEX idx_orders_price_segment_order_type ON price_proposes (price_segment, order_type);
+
+CREATE INDEX idx_orders_passenger_id ON price_proposes (passenger_id)
+WHERE ride_id IS NOT NULL;
+
+CREATE INDEX idx_orders_price_segment_order_type ON price_proposes (price_segment, order_type)
+WHERE ride_id IS NOT NULL;
 `
 
 const dropOrderIndexesQuery = `

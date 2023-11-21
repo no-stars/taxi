@@ -3,11 +3,11 @@ import { Pool } from 'pg'
 
 
 const createPriceProposeIndexesQuery = `
-CREATE INDEX idx_price_proposes_order_id ON price_proposes (order_id);
+CREATE INDEX idx_price_proposes_created_at_order_id_driver_id ON price_proposes (created_at, order_id, driver_id);
 `
 
 const dropPriceProposeIndexesQuery = `
-DROP INDEX idx_price_proposes_order_id;
+DROP INDEX idx_price_proposes_created_at_order_id_driver_id;
 `
 
 export class PriceProposeIndexes implements MigrationInterface {

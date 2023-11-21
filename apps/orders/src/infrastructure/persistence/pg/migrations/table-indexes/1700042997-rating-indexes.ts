@@ -4,10 +4,14 @@ import { Pool } from 'pg'
 
 const createRatingIndexesQuery = `
 CREATE INDEX idx_ratings_ride_id ON ratings (ride_id);
+CREATE INDEX idx_ratings_passenger_id ON ratings (passenger_id);
+CREATE INDEX idx_ratings_driver_id ON ratings (driver_id);
 `
 
 const dropRatingIndexesQuery = `
 DROP INDEX idx_ratings_ride_id;
+DROP INDEX idx_ratings_passenger_id;
+DROP INDEX idx_ratings_driver_id;
 `
 
 export class RatingIndexes implements MigrationInterface {
