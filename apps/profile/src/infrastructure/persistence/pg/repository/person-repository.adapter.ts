@@ -7,7 +7,8 @@ import PgPersonEntity, { PgPersonField } from '@infrastructure/persistence/pg/en
 
 interface PersonRepositoryPort {
   addPerson(payload: object): Promise<number | null>
-  findPerson(by: { accountId: string }): Promise<any>
+  findPerson(by: { passengerId?: string, driverId?: string }): Promise<any>
+  findProfile(by: { accountId: string }): Promise<any>
 }
 
 
@@ -34,12 +35,48 @@ export class PgPersonRepositoryAdapter implements PersonRepositoryPort {
     return result.rowCount
   }
 
-  public async findPerson(by: { accountId: string }): Promise<any> {
-    const values = []
+  public async findPerson(by: { passengerId?: string, driverId?: string }): Promise<any> {
+    const values: PgPersonField[] = []
+    const whereConditions: string[] = []
+    const joinConditions: string[] = []
+
+    let queryText
+      = `SELECT pe.person_id, pe.account_id, pe.first_name, pe.last_name, pe.middle_name, pe.created_at, pe.updated_at, pe.deleted_at
+         FROM ${this.personAlias} pe`
+
+    if (by.passengerId) {
+      joinConditions.push('LEFT JOIN passengers pa ON pe.person_id = pa.person_id')
+      whereConditions.push(`pa.passenger_id = $${values.length + 1}`)
+      values.push(by.passengerId)
+    }
+
+    if (by.driverId) {
+      joinConditions.push('LEFT JOIN drivers dr ON pe.person_id = dr.person_id')
+      whereConditions.push(`dr.driver_id = $${values.length + 1}`)
+      values.push(by.driverId)
+    }
+
+    if (joinConditions.length) {
+      queryText = `${queryText} ${joinConditions.join(' ')}`
+    }
+
+    if (whereConditions.length) {
+      queryText = `${queryText} WHERE ${whereConditions.join(' AND ')}`
+    }
+
+    this.logger.log(queryText)
+    const result: QueryResult = await this.pool.query(queryText, values)
+    const pgPerson: PgPersonEntity[] = plainToInstance(PgPersonEntity, result.rows)
+
+    return pgPerson?.[0] || null
+  }
+
+  public async findProfile(by: { accountId: string }): Promise<any> {
+    const values: PgPersonField[] = []
     const whereConditions: string[] = []
 
     let queryText
-      = `SELECT pe.person_id, pe.first_name, pe.last_name, pe.middle_name, pa.passenger_id, dr.driver_id
+      = `SELECT pe.person_id, pa.passenger_id, dr.driver_id
          FROM ${this.personAlias} pe
          LEFT JOIN passengers pa ON pe.person_id = pa.person_id
          LEFT JOIN drivers dr ON pe.person_id = dr.person_id`
