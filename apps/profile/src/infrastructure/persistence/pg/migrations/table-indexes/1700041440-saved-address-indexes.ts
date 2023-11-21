@@ -3,11 +3,11 @@ import { Pool } from 'pg'
 
 
 const createSavedAddressIndexesQuery = `
-CREATE INDEX idx_saved_address_passenger_id ON saved_addresses (passenger_id);
+CREATE INDEX idx_saved_addresses_passenger_id ON saved_addresses (passenger_id);
 `
 
 const dropSavedAddressIndexesQuery = `
-DROP INDEX idx_saved_address_passenger_id;
+DROP INDEX idx_saved_addresses_passenger_id;
 `
 
 export class SavedAddressIndexes implements MigrationInterface {

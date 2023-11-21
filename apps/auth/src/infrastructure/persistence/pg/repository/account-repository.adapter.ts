@@ -10,7 +10,7 @@ import AccountEntityMapper from '@infrastructure/persistence/pg/entity-mappers/a
 
 export interface AccountRepositoryPort {
   addAccount(payload: Account): Promise<Account>
-  findAccount(by?: { phoneNumber: string }): Promise<Nullable<Account>>
+  findAccount(by: { phoneNumber: string }): Promise<Nullable<Account>>
 }
 
 
@@ -37,14 +37,15 @@ export class PgAccountRepositoryAdapter implements AccountRepositoryPort {
     return payload
   }
 
-  public async findAccount(by?: { phoneNumber: string }): Promise<Nullable<Account>> {
+  public async findAccount(by: { phoneNumber: string }): Promise<Nullable<Account>> {
     const values = []
+    const whereConditions: string[] = []
+
     let queryText
       = `SELECT account_id, phone_number, email, created_at, updated_at, deleted_at
          FROM ${this.accountAlias}`
-    const whereConditions: string[] = []
 
-    if (by?.phoneNumber) {
+    if (by.phoneNumber) {
       whereConditions.push(`phone_number = $${values.length + 1}`)
       values.push(by.phoneNumber)
     }

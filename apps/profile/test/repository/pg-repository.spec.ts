@@ -80,7 +80,7 @@ describe('Pg Repository', () => {
     await postgresContainer.stop()
   })
 
-  it('should create and return passenger with corresponding person', async () => {
+  it('should create and return driver and passenger with corresponding person', async () => {
     const person = {
       person_id: StringUtils.uuid(),
       account_id: StringUtils.uuid(),
@@ -98,12 +98,28 @@ describe('Pg Repository', () => {
       updated_at: null,
       deleted_at: null,
     }
+    const driver = {
+      driver_id: StringUtils.uuid(),
+      person_id: person.person_id,
+      created_at: new Date(),
+      updated_at: null,
+      deleted_at: null,
+    }
 
     await personRepo.addPerson(person)
     await passengerRepo.addPassenger(passenger)
+    await driverRepo.addDriver(driver)
 
-    // const person = await personRepo.findRatingList()
-    // const passenger = await passengerRepo.findRatingList()
-    // expect(ratings).toEqual([rating1, rating2])
+    const profile = await personRepo.findPerson({ accountId: person.account_id })
+    const expectedProfile = {
+      id: person.person_id,
+      first_name: person.first_name,
+      last_name: person.last_name,
+      middle_name: person.middle_name,
+      passenger_id: passenger.passenger_id,
+      driver_id: driver.driver_id,
+    }
+
+    expect(profile).toEqual(expectedProfile)
   })
 })

@@ -7,6 +7,7 @@ import PgPersonEntity, { PgPersonField } from '@infrastructure/persistence/pg/en
 
 interface PersonRepositoryPort {
   addPerson(payload: object): Promise<number | null>
+  findPerson(by: { accountId: string }): Promise<any>
 }
 
 
@@ -31,6 +32,32 @@ export class PgPersonRepositoryAdapter implements PersonRepositoryPort {
     const result: QueryResult = await this.pool.query(queryText, values)
 
     return result.rowCount
+  }
+
+  public async findPerson(by: { accountId: string }): Promise<any> {
+    const values = []
+    const whereConditions: string[] = []
+
+    let queryText
+      = `SELECT pe.person_id, pe.first_name, pe.last_name, pe.middle_name, pa.passenger_id, dr.driver_id
+         FROM ${this.personAlias} pe
+         LEFT JOIN passengers pa ON pe.person_id = pa.person_id
+         LEFT JOIN drivers dr ON pe.person_id = dr.person_id`
+
+    if (by.accountId) {
+      whereConditions.push(`pe.account_id = $${values.length + 1}`)
+      values.push(by.accountId)
+    }
+
+    if (whereConditions.length) {
+      queryText = `${queryText} WHERE ${whereConditions.join(' AND ')}`
+    }
+
+    this.logger.log(queryText)
+    const result: QueryResult = await this.pool.query(queryText, values)
+    const pgPerson: PgPersonEntity[] = plainToInstance(PgPersonEntity, result.rows)
+
+    return pgPerson?.[0] || null
   }
 
 }
