@@ -45,13 +45,13 @@ export class PgPersonRepositoryAdapter implements PersonRepositoryPort {
          FROM ${this.personAlias} pe`
 
     if (by.passengerId) {
-      joinConditions.push('LEFT JOIN passengers pa ON pe.person_id = pa.person_id')
+      joinConditions.push('JOIN passengers pa ON pe.person_id = pa.person_id')
       whereConditions.push(`pa.passenger_id = $${values.length + 1}`)
       values.push(by.passengerId)
     }
 
     if (by.driverId) {
-      joinConditions.push('LEFT JOIN drivers dr ON pe.person_id = dr.person_id')
+      joinConditions.push('JOIN drivers dr ON pe.person_id = dr.person_id')
       whereConditions.push(`dr.driver_id = $${values.length + 1}`)
       values.push(by.driverId)
     }

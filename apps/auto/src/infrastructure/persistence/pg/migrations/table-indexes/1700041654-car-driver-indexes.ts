@@ -3,11 +3,11 @@ import { Pool } from 'pg'
 
 
 const createCarDriverIndexesQuery = `
-CREATE INDEX idx_car_driver_driver_id_car_id ON car_drivers (driver_id, car_id);
+CREATE INDEX idx_car_drivers_driver_id_car_id ON car_drivers (driver_id, car_id);
 `
 
 const dropCarDriverIndexesQuery = `
-DROP INDEX idx_car_driver_driver_id_car_id;
+DROP INDEX idx_car_drivers_driver_id_car_id;
 `
 
 export class CarDriverIndexes implements MigrationInterface {

@@ -18,6 +18,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "docker-local": "docker-compose --env-file ./docker/docker-local.env --file ./docker/docker-compose.local.yaml up",
     "migrate": "bash ./scripts/migrate-one.sh",
+    "seed": "bash ./scripts/seed-one.sh",
     "migrate:all": "bash ./scripts/migrate-all.sh"
   },
   "dependencies": {
