@@ -7,7 +7,7 @@ import PgCarEntity, { PgCarField } from '@infrastructure/persistence/pg/entities
 
 interface CarModelRepositoryPort {
   addCarModel(payload: object): Promise<number | null>
-  findCarModel(by: { brandId: string }): Promise<any>
+  findCarModelList(by: { brandId: string }): Promise<any>
 }
 
 
@@ -34,7 +34,7 @@ export class PgCarModelRepositoryAdapter implements CarModelRepositoryPort {
     return result.rowCount
   }
 
-  public async findCarModel(by: { brandId: string }): Promise<any> {
+  public async findCarModelList(by: { brandId: string }): Promise<any> {
     const values: PgCarModelField[] = []
     const whereConditions: string[] = []
 
@@ -53,9 +53,9 @@ export class PgCarModelRepositoryAdapter implements CarModelRepositoryPort {
 
     this.logger.log(queryText)
     const result: QueryResult = await this.pool.query(queryText, values)
-    const pgCarModel: PgCarModelEntity[] = plainToInstance(PgCarModelEntity, result.rows)
+    const pgCarModels: PgCarModelEntity[] = plainToInstance(PgCarModelEntity, result.rows)
 
-    return pgCarModel?.[0] || null
+    return pgCarModels || []
   }
 
 }

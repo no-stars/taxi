@@ -6,6 +6,9 @@ import { Pool } from 'pg'
 import { PgCarRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-repository.adapter'
 import { PgCarDriverRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-driver-repository.adapter'
 import { PgCarModelRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-model-repository.adapter'
+import {
+  PgPriceSegmentRequirementRepositoryAdapter,
+} from '@infrastructure/persistence/pg/repository/price-segment-requirement-repository.adapter'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import {
   CarInit,
@@ -29,6 +32,7 @@ describe('Pg Repository', () => {
   let carRepo: PgCarRepositoryAdapter
   let carDriverRepo: PgCarDriverRepositoryAdapter
   let carModelRepo: PgCarModelRepositoryAdapter
+  let priceSegmentRequirementRepo: PgPriceSegmentRequirementRepositoryAdapter
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -66,6 +70,7 @@ describe('Pg Repository', () => {
         PgCarRepositoryAdapter,
         PgCarDriverRepositoryAdapter,
         PgCarModelRepositoryAdapter,
+        PgPriceSegmentRequirementRepositoryAdapter,
       ],
     }).compile()
 
@@ -73,6 +78,7 @@ describe('Pg Repository', () => {
     carRepo = module.get(PgCarRepositoryAdapter)
     carDriverRepo = module.get(PgCarDriverRepositoryAdapter)
     carModelRepo = module.get(PgCarModelRepositoryAdapter)
+    priceSegmentRequirementRepo = module.get(PgPriceSegmentRequirementRepositoryAdapter)
   })
 
   afterAll(async () => {
@@ -103,12 +109,24 @@ describe('Pg Repository', () => {
       car_id: car.car_id,
       driver_id: StringUtils.uuid(),
     }
+    const priceSegmentRequirement = {
+      price_segment_requirement_id: StringUtils.uuid(),
+      price_segment: 'COMFORT',
+      car_model_id: carModel.car_model_id,
+      min_year: 2013,
+      created_at: new Date(),
+      updated_at: null,
+      deleted_at: null,
+    }
 
     await carModelRepo.addCarModel(carModel)
     await carRepo.addCar(car)
     await carDriverRepo.addCarDriver(carDriver)
+    await priceSegmentRequirementRepo.addPriceSegmentRequirement(priceSegmentRequirement)
 
     const foundCar = await carRepo.findCar({ driverId: carDriver.driver_id })
+    const foundCarModels = await carModelRepo.findCarModelList({ brandId: carModel.car_brand })
     // expect(foundCar).toEqual(car)
+    // expect(foundCarModels).toEqual([carModel])
   })
 })
