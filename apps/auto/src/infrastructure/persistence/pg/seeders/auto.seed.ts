@@ -46,7 +46,7 @@ export class AutoSeed {
   }
 
   private async seedPriceSegmentRequirements() {
-    console.log('-AutoSeed.CarModels')
+    console.log('-AutoSeed.PriceSegmentRequirements')
 
     for (const PriceSegmentRequirementRow of PriceSegmentRequirementRows) {
       const carModel = {
