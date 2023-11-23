@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS payments (
   payment_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   price INTEGER NOT NULL,
   payment_type TEXT NOT NULL,
-  receipt_url TEXT NOT NULL UNIQUE,
+  receipt_url TEXT UNIQUE,
   status TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ,
