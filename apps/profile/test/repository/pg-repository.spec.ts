@@ -56,17 +56,11 @@ describe('Pg Repository', () => {
       await profileMigration.up()
     }
 
-    await pool.end()
-  })
-
-  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
           provide: PG_CONNECTION,
-          useFactory: () => new Pool({
-            connectionString: postgresContainer.getConnectionUri(),
-          }),
+          useFactory: () => pool,
         },
         PgPassengerRepositoryAdapter,
         PgPersonRepositoryAdapter,

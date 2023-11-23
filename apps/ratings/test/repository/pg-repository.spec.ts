@@ -14,7 +14,7 @@ describe('Pg Repository', () => {
 
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
-  let repo: PgRatingRepositoryAdapter
+  let ratingRepo: PgRatingRepositoryAdapter
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -26,24 +26,18 @@ describe('Pg Repository', () => {
     const ratingMigrations = new RatingInit(pool)
     await ratingMigrations.up()
 
-    await pool.end()
-  })
-
-  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
           provide: PG_CONNECTION,
-          useFactory: () => new Pool({
-            connectionString: postgresContainer.getConnectionUri(),
-          }),
+          useFactory: () => pool,
         },
         PgRatingRepositoryAdapter,
       ],
     }).compile()
 
     postgresClient = module.get(PG_CONNECTION)
-    repo = module.get(PgRatingRepositoryAdapter)
+    ratingRepo = module.get(PgRatingRepositoryAdapter)
   })
 
   afterAll(async () => {
@@ -71,10 +65,10 @@ describe('Pg Repository', () => {
       deleted_at: null,
     }
 
-    await repo.addRating(rating1)
-    await repo.addRating(rating2)
+    await ratingRepo.addRating(rating1)
+    await ratingRepo.addRating(rating2)
 
-    const ratings = await repo.findRatingList()
+    const ratings = await ratingRepo.findRatingList()
     expect(ratings).toEqual([rating1, rating2])
   })
 })
