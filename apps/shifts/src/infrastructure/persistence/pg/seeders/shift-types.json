@@ -1,0 +1,22 @@
+[
+  {
+    "shift_name": "12 часов",
+    "price": 1600,
+    "working_hours": 12
+  },
+  {
+    "shift_name": "Полный день",
+    "price": 1200,
+    "working_hours": 9
+  },
+  {
+    "shift_name": "Неполный рабочий день",
+    "price": 800,
+    "working_hours": 4
+  },
+  {
+    "shift_name": "Час",
+    "price": 250,
+    "working_hours": 1
+  }
+]

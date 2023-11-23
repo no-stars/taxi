@@ -37,6 +37,24 @@
         "tsConfigPath": "apps/profile/tsconfig.app.json"
       }
     },
+    "auto": {
+      "type": "application",
+      "root": "apps/auto",
+      "entryFile": "main",
+      "sourceRoot": "apps/auto/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auto/tsconfig.app.json"
+      }
+    },
+    "shifts": {
+      "type": "application",
+      "root": "apps/shifts",
+      "entryFile": "main",
+      "sourceRoot": "apps/shifts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/shifts/tsconfig.app.json"
+      }
+    },
     "orders": {
       "type": "application",
       "root": "apps/orders",

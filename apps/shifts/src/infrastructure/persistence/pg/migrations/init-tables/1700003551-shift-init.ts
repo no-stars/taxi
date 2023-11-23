@@ -6,7 +6,6 @@ const createShiftTableQuery = `
 CREATE TABLE IF NOT EXISTS shifts (
   shift_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   driver_id UUID NOT NULL,
-  car_id UUID NOT NULL,
   shift_type_id UUID NOT NULL,
   payment_id UUID NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now(),
