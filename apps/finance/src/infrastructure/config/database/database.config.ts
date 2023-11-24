@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer'
 import { IsPort, IsString } from 'class-validator'
 import { TypeormDatabaseType } from '@libs/common/constants'
-import { DatabaseVariables } from './database.interface'
+import { DatabaseVariables } from '@infrastructure/config/database/database.interface'
 
 
 export class DatabaseConfig implements DatabaseVariables {

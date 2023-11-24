@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer'
 import { IsEnum, IsPort } from 'class-validator'
 import { Environment } from '@libs/common/constants'
-import { ApiServerVariables } from './api-server.interface'
+import { ApiServerVariables } from '@infrastructure/config/api-server/api-server.interface'
 
 export class ApiServerConfig implements ApiServerVariables {
 
