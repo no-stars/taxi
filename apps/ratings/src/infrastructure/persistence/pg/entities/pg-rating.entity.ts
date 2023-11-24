@@ -1,6 +1,7 @@
 import { Expose } from 'class-transformer'
+import { Nullable } from '@libs/common/types/nullable'
 
-export type PgRatingField = string | Date | number
+export type PgRatingField = string | Date | number | null
 
 export default class PgRatingEntity {
 
@@ -9,15 +10,15 @@ export default class PgRatingEntity {
 
   ride_id: string
 
-  stars_by_passenger: number
+  stars_by_passenger: Nullable<number>
 
-  stars_by_driver: number
+  stars_by_driver: Nullable<number>
 
   created_at: Date
 
   updated_at: Date
 
-  deleted_at: Date
+  deleted_at: Nullable<Date>
 
   getValues(): PgRatingField[] {
     return [

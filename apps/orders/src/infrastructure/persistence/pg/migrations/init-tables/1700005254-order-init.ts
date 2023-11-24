@@ -7,7 +7,7 @@ import { Pool } from 'pg'
 const createOrderTableQuery = `
 CREATE TABLE IF NOT EXISTS orders (
   order_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  ride_id UUID NOT NULL,
+  ride_id UUID,
   start_location POINT NOT NULL,
   finish_location POINT NOT NULL,
   passenger_id UUID NOT NULL,

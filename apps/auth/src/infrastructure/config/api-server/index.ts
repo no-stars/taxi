@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config'
 import { ApiServerVariables } from '@infrastructure/config/api-server/api-server.interface'
 import { ApiServerConfig } from '@infrastructure/config/api-server/api-server.config'
-import { ConfigValidator } from '../config-validator'
+import { ConfigValidator } from '@infrastructure/config/config-validator'
 
 export { ApiServerVariables } from '@infrastructure/config/api-server/api-server.interface'
 
