@@ -7,7 +7,7 @@ import ExternalSystemsModule from '@infrastructure/external-systems/external-sys
 import { AuthController } from '@application/controllers/auth.controller'
 import { SignInUseCase } from '@core/service/usecase/sign-in.usecase'
 import { SmsSystemFakeAdapter } from '@infrastructure/external-systems/sms/sms-fake.service'
-import { InMemoryConfirmCodeRepositoryAdapter } from '@infrastructure/persistence/redis/repository/confirm-code-repository.adapter'
+import { RedisConfirmCodeRepositoryAdapter } from '@infrastructure/persistence/redis/repository/confirm-code-repository.adapter'
 import { ConfirmUseCase } from '@core/service/usecase/confirm.usecase'
 import { PgAccountRepositoryAdapter } from '@infrastructure/persistence/pg/repository/account-repository.adapter'
 import { SecurityVariables } from '@infrastructure/config/security/security.interface'
@@ -17,21 +17,21 @@ import { ValidateUseCase } from '@core/service/usecase/validate.usecase'
 const useCaseProviders = [
   {
     provide: SignInUseCase,
-    useFactory: (smsSystem: SmsSystemFakeAdapter, confirmCodeRepository: InMemoryConfirmCodeRepositoryAdapter) => {
+    useFactory: (smsSystem: SmsSystemFakeAdapter, confirmCodeRepository: RedisConfirmCodeRepositoryAdapter) => {
       return new SignInUseCase(smsSystem, confirmCodeRepository)
     },
-    inject: [SmsSystemFakeAdapter, InMemoryConfirmCodeRepositoryAdapter],
+    inject: [SmsSystemFakeAdapter, RedisConfirmCodeRepositoryAdapter],
   },
   {
     provide: ConfirmUseCase,
     useFactory: (
       accountRepository: PgAccountRepositoryAdapter,
-      confirmCodeRepository: InMemoryConfirmCodeRepositoryAdapter,
+      confirmCodeRepository: RedisConfirmCodeRepositoryAdapter,
       jwtService: JwtService
     ) => {
       return new ConfirmUseCase(accountRepository, confirmCodeRepository, jwtService)
     },
-    inject: [PgAccountRepositoryAdapter, InMemoryConfirmCodeRepositoryAdapter, JwtService],
+    inject: [PgAccountRepositoryAdapter, RedisConfirmCodeRepositoryAdapter, JwtService],
   },
   {
     provide: ValidateUseCase,
@@ -59,7 +59,7 @@ const useCaseProviders = [
     ...useCaseProviders,
     SmsSystemFakeAdapter,
     PgAccountRepositoryAdapter,
-    InMemoryConfirmCodeRepositoryAdapter,
+    RedisConfirmCodeRepositoryAdapter,
   ],
   controllers: [
     AuthController,

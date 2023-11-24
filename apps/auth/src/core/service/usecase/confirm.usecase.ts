@@ -30,14 +30,14 @@ export class ConfirmUseCase {
   ) {}
 
   public async execute(payload: ConfirmUseCasePayload): Promise<ConfirmUseCaseResult> {
-    const validCode: ConfirmCode = await this.confirmCodeRepository.get(payload.phoneNumber)
-    const isValid: boolean = payload.providedCode.isEqual(validCode)
+    const validCode: Nullable<ConfirmCode> = await this.confirmCodeRepository.get(payload.phoneNumber)
+    const isValid: boolean = !!validCode && payload.providedCode.isEqual(validCode)
 
     if (!isValid) {
       throw new UnauthorizedException()
     }
 
-    await this.confirmCodeRepository.reset(payload.phoneNumber)
+    await this.confirmCodeRepository.del(payload.phoneNumber)
     let account: Nullable<Account> = await this.accountRepository.findAccount({ phoneNumber: payload.phoneNumber })
 
     if (!account) {
