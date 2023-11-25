@@ -1,5 +1,5 @@
 import { pool } from '@infrastructure/persistence/migrations.config'
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import * as InitTable from '@infrastructure/persistence/pg/migrations/init-tables'
 import * as TableIndexes from '@infrastructure/persistence/pg/migrations/table-indexes'
 
@@ -9,19 +9,19 @@ enum MigrationAction {
   down = 'down',
 }
 
-const initTableMigrations: MigrationInterface[] = [
+const initTableMigrations: Migration[] = [
   new InitTable.PaymentCardInit(pool),
   new InitTable.WithdrawCardInit(pool),
   new InitTable.PaymentInit(pool),
 ]
 
-const tableIndexesMigrations: MigrationInterface[] = [
+const tableIndexesMigrations: Migration[] = [
   new TableIndexes.PaymentCardIndexes(pool),
   new TableIndexes.WithdrawCardIndexes(pool),
 ]
 
 
-const migrations: MigrationInterface[] = [
+const migrations: Migration[] = [
   ...initTableMigrations,
   ...tableIndexesMigrations,
 ]

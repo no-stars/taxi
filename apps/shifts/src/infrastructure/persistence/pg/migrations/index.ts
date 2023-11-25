@@ -1,5 +1,5 @@
 import { pool } from '@infrastructure/persistence/migrations.config'
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import * as InitTable from '@infrastructure/persistence/pg/migrations/init-tables'
 import * as TableIndexes from '@infrastructure/persistence/pg/migrations/table-indexes'
 import * as TableRelations from '@infrastructure/persistence/pg/migrations/table-relations'
@@ -10,22 +10,22 @@ enum MigrationAction {
   down = 'down',
 }
 
-const initTableMigrations: MigrationInterface[] = [
+const initTableMigrations: Migration[] = [
   new InitTable.ShiftInit(pool),
   new InitTable.ShiftTypeInit(pool),
   new InitTable.DriverActivityInit(pool),
 ]
 
-const tableIndexesMigrations: MigrationInterface[] = [
+const tableIndexesMigrations: Migration[] = [
   new TableIndexes.ShiftIndexes(pool),
   new TableIndexes.DriverActivityIndexes(pool),
 ]
 
-const tableRelationsMigrations: MigrationInterface[] = [
+const tableRelationsMigrations: Migration[] = [
   new TableRelations.ShiftRelations(pool),
 ]
 
-const migrations: MigrationInterface[] = [
+const migrations: Migration[] = [
   ...initTableMigrations,
   ...tableIndexesMigrations,
   ...tableRelationsMigrations,

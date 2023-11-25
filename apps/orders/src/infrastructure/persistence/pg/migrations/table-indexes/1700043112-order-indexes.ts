@@ -1,4 +1,4 @@
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import { Pool } from 'pg'
 
 
@@ -23,7 +23,7 @@ DROP INDEX idx_orders_passenger_id;
 DROP INDEX idx_orders_price_segment_order_type;
 `
 
-export class OrderIndexes implements MigrationInterface {
+export class OrderIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 

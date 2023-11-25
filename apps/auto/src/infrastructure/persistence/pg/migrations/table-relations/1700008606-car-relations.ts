@@ -1,4 +1,4 @@
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import { Pool } from 'pg'
 
 
@@ -12,7 +12,7 @@ const dropCarRelationsQuery = `
 ALTER TABLE cars DROP CONSTRAINT cars_car_model_id_fkey;
 `
 
-export class CarRelations implements MigrationInterface {
+export class CarRelations implements Migration {
 
   constructor(private readonly pool: Pool) {}
 

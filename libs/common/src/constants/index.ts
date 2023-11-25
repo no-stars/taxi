@@ -1,4 +1,5 @@
 import { DatabaseType } from 'typeorm'
+import { SEED_COUNT } from './seed'
 
 type TypeormDatabaseType = Exclude<DatabaseType, 'sqljs'>
 
@@ -16,4 +17,5 @@ export {
   TypeormDatabaseType,
   SECONDS_IN_MINUTE,
   MILLISECONDS_IN_SECOND,
+  SEED_COUNT,
 }

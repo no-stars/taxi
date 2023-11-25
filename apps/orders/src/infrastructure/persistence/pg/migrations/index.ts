@@ -1,5 +1,5 @@
 import { pool } from '@infrastructure/persistence/migrations.config'
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import * as InitTable from '@infrastructure/persistence/pg/migrations/init-tables'
 import * as TableRelations from '@infrastructure/persistence/pg/migrations/table-relations'
 import * as TableIndexes from '@infrastructure/persistence/pg/migrations/table-indexes'
@@ -10,49 +10,25 @@ enum MigrationAction {
   down = 'down',
 }
 
-const initTableMigrations: MigrationInterface[] = [
-  new InitTable.PaymentCardInit(pool),
-  new InitTable.CarModelInit(pool),
-  new InitTable.AccountInit(pool),
-  new InitTable.CarInit(pool),
-  new InitTable.PriceSegmentRequirementInit(pool),
-  new InitTable.ShiftInit(pool),
-  new InitTable.ShiftTypeInit(pool),
-  new InitTable.DriverActivityInit(pool),
-  new InitTable.WithdrawCardInit(pool),
+const initTableMigrations: Migration[] = [
   new InitTable.OrderInit(pool),
-  new InitTable.PaymentInit(pool),
   new InitTable.RideInit(pool),
   new InitTable.PriceProposeInit(pool),
-  new InitTable.RatingInit(pool),
-  new InitTable.CarDriverInit(pool),
 ]
 
-const tableRelationsMigrations: MigrationInterface[] = [
-  new TableRelations.CarRelations(pool),
-  new TableRelations.PriceSegmentRequirementRelations(pool),
-  new TableRelations.ShiftRelations(pool),
+const tableRelationsMigrations: Migration[] = [
   new TableRelations.OrderRelations(pool),
   new TableRelations.PriceProposeRelations(pool),
-  new TableRelations.CarDriverRelations(pool),
 ]
 
-const tableIndexesMigrations: MigrationInterface[] = [
-  new TableIndexes.CarDriverIndexes(pool),
-  new TableIndexes.PriceSegmentRequirementIndexes(pool),
-  new TableIndexes.ShiftIndexes(pool),
-  new TableIndexes.PaymentCardIndexes(pool),
-  new TableIndexes.WithdrawCardIndexes(pool),
+const tableIndexesMigrations: Migration[] = [
   new TableIndexes.RideIndexes(pool),
   new TableIndexes.PriceProposeIndexes(pool),
-  new TableIndexes.RatingIndexes(pool),
   new TableIndexes.OrderIndexes(pool),
-  new TableIndexes.CarModelIndexes(pool),
-  new TableIndexes.DriverActivityIndexes(pool),
 ]
 
 
-const migrations: MigrationInterface[] = [
+const migrations: Migration[] = [
   ...initTableMigrations,
   ...tableRelationsMigrations,
   ...tableIndexesMigrations,

@@ -19,6 +19,7 @@
     "docker-local": "docker-compose --env-file ./docker/docker-local.env --file ./docker/docker-compose.local.yaml up",
     "migrate": "bash ./scripts/migrate-one.sh",
     "seed": "bash ./scripts/seed-one.sh",
+    "seed:all": "bash ./scripts/seed-all.sh",
     "migrate:all": "bash ./scripts/migrate-all.sh"
   },
   "dependencies": {
@@ -48,6 +49,7 @@
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",

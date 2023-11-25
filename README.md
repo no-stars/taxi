@@ -16,3 +16,7 @@
 ```npm run migrate:all up```
 
 ```npm run migrate:all down```
+
+```npm run seed SERVICE```
+
+```npm run seed:all```

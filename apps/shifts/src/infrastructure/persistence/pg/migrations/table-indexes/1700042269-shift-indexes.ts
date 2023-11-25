@@ -1,4 +1,4 @@
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import { Pool } from 'pg'
 
 
@@ -10,7 +10,7 @@ const dropShiftIndexesQuery = `
 DROP INDEX idx_shifts_driver_id;
 `
 
-export class ShiftIndexes implements MigrationInterface {
+export class ShiftIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 

@@ -1,4 +1,4 @@
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import { Pool } from 'pg'
 
 
@@ -10,7 +10,7 @@ const dropCarModelIndexesQuery = `
 DROP INDEX idx_car_model_car_brand;
 `
 
-export class CarModelIndexes implements MigrationInterface {
+export class CarModelIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 

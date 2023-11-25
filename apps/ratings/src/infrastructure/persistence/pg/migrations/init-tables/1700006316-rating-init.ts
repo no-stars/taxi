@@ -1,4 +1,4 @@
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import { Pool } from 'pg'
 
 
@@ -18,7 +18,7 @@ const dropRatingTableQuery = `
 DROP TABLE ratings;
 `
 
-export class RatingInit implements MigrationInterface {
+export class RatingInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 

@@ -1,4 +1,4 @@
-import MigrationInterface from '@infrastructure/persistence/pg/migrations/migration.interface'
+import { Migration } from '@libs/common/interfaces'
 import { Pool } from 'pg'
 
 
@@ -12,7 +12,7 @@ const dropShiftRelationsQuery = `
 ALTER TABLE shifts DROP CONSTRAINT shifts_shift_type_id_fkey;
 `
 
-export class ShiftRelations implements MigrationInterface {
+export class ShiftRelations implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
