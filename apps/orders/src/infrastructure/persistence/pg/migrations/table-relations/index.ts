@@ -1,6 +1,4 @@
-export { CarRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700008606-car-relations'
-export { PriceSegmentRequirementRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700008825-price-segment-requirement-relations'
-export { ShiftRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700008834-shift-relations'
 export { OrderRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700009049-order-relations'
-export { PriceProposeRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700009151-price-propose-relations'
-export { CarDriverRelations } from '@infrastructure/persistence/pg/migrations/table-relations/1700041970-car-driver-relations'
+export {
+  PriceProposeRelations,
+} from '@infrastructure/persistence/pg/migrations/table-relations/1700009151-price-propose-relations'

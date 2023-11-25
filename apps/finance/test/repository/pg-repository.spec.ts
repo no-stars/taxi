@@ -128,7 +128,7 @@ describe('Pg Repository', () => {
     const payment = {
       payment_id: StringUtils.uuid(),
       price: 600,
-      payment_type: 'non-cash',
+      payment_type: 'non_cash',
       receipt_url: 'http://payment.system.com/receipt/1234567887654321',
       status: 'pending',
       created_at: new Date(),

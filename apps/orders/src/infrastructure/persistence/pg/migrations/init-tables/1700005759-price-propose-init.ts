@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS price_proposes (
   driver_id UUID NOT NULL,
   propose_type TEXT NOT NULL,
   proposed_price INTEGER NOT NULL,
-  result TEXT NOT NULL,
+  result TEXT,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ

@@ -57,17 +57,17 @@ export class PgRideRepositoryAdapter implements RideRepositoryPort {
 
     this.logger.log(queryText, values)
     const result: QueryResult = await this.pool.query(queryText, values)
-    const pgRide: PgRideEntity[] = plainToInstance(PgRideEntity, result.rows)
+    const pgRides: PgRideEntity[] = plainToInstance(PgRideEntity, result.rows)
 
-    return pgRide
+    return pgRides
   }
 
   public async updateRide(rideId: string, payload: object): Promise<any> {
     const queryText
       = `UPDATE ${this.rideAlias}
-         SET start_time = $2, pick_up_time = $3, finish_time = $4, driver_id = $45,
+         SET start_time = $2, pick_up_time = $3, finish_time = $4, driver_id = $5,
          car_id = $6, payment_id = $7, status = $8, created_at = $9, updated_at = $10, deleted_at = $11
-         WHERE r.ride_id = $1;`
+         WHERE ride_id = $1;`
 
     const pgRide: PgRideEntity = plainToInstance(PgRideEntity, payload)
     const values: PgRideField[] = [rideId, ...pgRide.getValues().slice(1)]

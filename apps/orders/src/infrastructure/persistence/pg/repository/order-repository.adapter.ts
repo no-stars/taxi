@@ -55,7 +55,7 @@ export class PgOrderRepositoryAdapter implements OrderRepositoryPort {
     return pgOrder?.[0] || null
   }
 
-  public async findOrderList(by: { passengerId: string, priceSegment: string, orderType: string }): Promise<any> {
+  public async findOrderList(by: { passengerId?: string, priceSegment?: string, orderType?: string }): Promise<any> {
     const values: PgOrderField[] = []
     const whereConditions: string[] = []
 
@@ -99,7 +99,7 @@ export class PgOrderRepositoryAdapter implements OrderRepositoryPort {
          SET ride_id = $2, start_location = $3, finish_location = $4,
          passenger_id = $5, price_segment = $6, recommended_price = $7, price = $8,
          payment_type = $9, order_type = $10, created_at = $11, updated_at = $12, deleted_at = $13
-         WHERE o.order_id = $1;`
+         WHERE order_id = $1;`
 
     const pgOrder: PgOrderEntity = plainToInstance(PgOrderEntity, payload)
     const values: PgOrderField[] = [orderId, ...pgOrder.getValues().slice(1)]

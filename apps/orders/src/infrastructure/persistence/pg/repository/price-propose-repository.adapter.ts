@@ -8,7 +8,7 @@ import { PgOrderField } from '@infrastructure/persistence/pg/entities/pg-order.e
 
 interface PriceProposeRepositoryPort {
   addPricePropose(payload: object): Promise<number | null>
-  findPriceProposeList(by: { orderId: string, driverId: string }): Promise<any>
+  findPriceProposeList(by: { orderId?: string, driverId?: string }): Promise<any>
   updatePricePropose(priceProposeId: string, payload: object): Promise<any>
 }
 
@@ -37,7 +37,7 @@ export class PgPriceProposeRepositoryAdapter implements PriceProposeRepositoryPo
     return result.rowCount
   }
 
-  public async findPriceProposeList(by: { orderId: string, driverId: string }): Promise<any> {
+  public async findPriceProposeList(by: { orderId?: string, driverId?: string }): Promise<any> {
     const values: PgPriceProposeField[] = []
     const whereConditions: string[] = []
 
@@ -70,9 +70,9 @@ export class PgPriceProposeRepositoryAdapter implements PriceProposeRepositoryPo
   public async updatePricePropose(priceProposeId: string, payload: object): Promise<any> {
     const queryText
       = `UPDATE ${this.priceProposeAlias}
-         SET price_propose_id = $2, order_id = $3, driver_id = $4, propose_type = $5,
-         proposed_price = $6, result = $7, created_at = $8, updated_at = $9, deleted_at = $10
-         WHERE o.order_id = $1;`
+         SET order_id = $2, driver_id = $3, propose_type = $4,
+         proposed_price = $5, result = $6, created_at = $7, updated_at = $8, deleted_at = $9
+         WHERE price_propose_id = $1;`
 
     const pgPricePropose: PgPriceProposeEntity = plainToInstance(PgPriceProposeEntity, payload)
     const values: PgOrderField[] = [priceProposeId, ...pgPricePropose.getValues().slice(1)]
