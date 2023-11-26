@@ -14,6 +14,7 @@ const ALLOWED_CARD_TYPES: string[] = ['Visa', 'Mir']
 export class WithdrawCardSeed implements Seed {
 
   private readonly withdrawCardRepo: PgWithdrawCardRepositoryAdapter
+  private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
     this.withdrawCardRepo = new PgWithdrawCardRepositoryAdapter(this.pool)
@@ -24,10 +25,15 @@ export class WithdrawCardSeed implements Seed {
 
     for (const item of ArrayUtils.range(SEED_COUNT.withdrawCards)) {
       const withdrawCardData = WithdrawCardSeed.generateWithdrawCardData()
-      await this.withdrawCardRepo.addWithdrawCard(withdrawCardData)
+      try {
+        await this.withdrawCardRepo.addWithdrawCard(withdrawCardData)
+      } catch (err) {
+        this.errors.push(err)
+      }
     }
 
     console.log('WithdrawCardSeed finished')
+    console.log(`errors: ${this.errors}`)
   }
 
   private static generateWithdrawCardData(): any {

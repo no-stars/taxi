@@ -24,6 +24,7 @@ export class AutoSeed implements Seed {
   private readonly priceSegmentRequirementRepo: PgPriceSegmentRequirementRepositoryAdapter
   private readonly carModelIds = new Map()
   private readonly carIds: string[] = []
+  private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
     this.carRepo = new PgCarRepositoryAdapter(this.pool)
@@ -41,6 +42,7 @@ export class AutoSeed implements Seed {
     await this.seedCarDrivers()
 
     console.log('AutoSeed finished')
+    console.log(`errors: ${this.errors}`)
   }
 
   private async seedCars(): Promise<void> {
@@ -48,8 +50,12 @@ export class AutoSeed implements Seed {
 
     for (const item of ArrayUtils.range(SEED_COUNT.cars)) {
       const carData = this.generateCarData()
-      await this.carRepo.addCar(carData)
-      this.carIds.push(carData.car_id)
+      try {
+        await this.carRepo.addCar(carData)
+        this.carIds.push(carData.car_id)
+      } catch (err) {
+        this.errors.push(err)
+      }
     }
   }
 
@@ -58,7 +64,11 @@ export class AutoSeed implements Seed {
 
     for (const item of ArrayUtils.range(SEED_COUNT.carDrivers)) {
       const carDriverData = this.generateCarDriverData()
-      await this.carDriversRepo.addCarDriver(carDriverData)
+      try {
+        await this.carDriversRepo.addCarDriver(carDriverData)
+      } catch (err) {
+        this.errors.push(err)
+      }
     }
   }
 

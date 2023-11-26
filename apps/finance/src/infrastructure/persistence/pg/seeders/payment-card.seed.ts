@@ -15,6 +15,7 @@ const ALLOWED_CARD_TYPES: string[] = ['Visa', 'MIR']
 export class PaymentCardSeed implements Seed {
 
   private readonly paymentCardRepo: PgPaymentCardRepositoryAdapter
+  private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
     this.paymentCardRepo = new PgPaymentCardRepositoryAdapter(this.pool)
@@ -25,10 +26,15 @@ export class PaymentCardSeed implements Seed {
 
     for (const item of ArrayUtils.range(SEED_COUNT.paymentCards)) {
       const paymentCardData = PaymentCardSeed.generatePaymentCardData()
-      await this.paymentCardRepo.addPaymentCard(paymentCardData)
+      try {
+        await this.paymentCardRepo.addPaymentCard(paymentCardData)
+      } catch (err) {
+        this.errors.push(err)
+      }
     }
 
     console.log('PaymentCard finished')
+    console.log(`errors: ${this.errors}`)
   }
 
   private static generatePaymentCardData(): any {

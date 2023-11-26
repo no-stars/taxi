@@ -10,6 +10,7 @@ import { Seed } from '@libs/common/interfaces'
 export class AccountSeed implements Seed {
 
   private readonly accountRepo: PgAccountRepositoryAdapter
+  private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
     this.accountRepo = new PgAccountRepositoryAdapter(this.pool)
@@ -22,10 +23,15 @@ export class AccountSeed implements Seed {
       const accountData = AccountSeed.generateAccountData()
 
       const account: Account = Account.new(accountData)
-      await this.accountRepo.addAccount(account)
+      try {
+        await this.accountRepo.addAccount(account)
+      } catch (err) {
+        this.errors.push(err)
+      }
     }
 
     console.log('AccountSeed finished')
+    console.log(`errors: ${this.errors}`)
   }
 
   private static generateAccountData(): any {

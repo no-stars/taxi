@@ -13,6 +13,7 @@ const ALLOWED_STATUSES: string[] = ['paid', 'pending']
 export class PaymentSeed implements Seed {
 
   private readonly paymentRepo: PgPaymentRepositoryAdapter
+  private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
     this.paymentRepo = new PgPaymentRepositoryAdapter(this.pool)
@@ -23,10 +24,15 @@ export class PaymentSeed implements Seed {
 
     for (const item of ArrayUtils.range(SEED_COUNT.payments)) {
       const paymentData = PaymentSeed.generatePaymentData()
-      await this.paymentRepo.addPayment(paymentData)
+      try {
+        await this.paymentRepo.addPayment(paymentData)
+      } catch (err) {
+        this.errors.push(err)
+      }
     }
 
     console.log('PaymentSeed finished')
+    console.log(`errors: ${this.errors}`)
   }
 
   private static generatePaymentData(): any {

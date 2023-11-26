@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS car_drivers (
 `
 
 const dropCarDriverTableQuery = `
-DROP TABLE ratings;
+DROP TABLE car_drivers;
 `
 
 export class CarDriverInit implements Migration {
