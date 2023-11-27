@@ -5,7 +5,9 @@ import { Pool } from 'pg'
 const createPriceProposeRelationsQuery = `
 ALTER TABLE price_proposes
     ADD CONSTRAINT price_proposes_order_id_fkey FOREIGN KEY (order_id)
-    REFERENCES orders (order_id);
+    REFERENCES orders (order_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
 `
 
 const dropPriceProposeRelationsQuery = `

@@ -5,7 +5,9 @@ import { Pool } from 'pg'
 const createShiftRelationsQuery = `
 ALTER TABLE shifts
     ADD CONSTRAINT shifts_shift_type_id_fkey FOREIGN KEY (shift_type_id)
-    REFERENCES shift_types (shift_type_id);
+    REFERENCES shift_types (shift_type_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT;
 `
 
 const dropShiftRelationsQuery = `

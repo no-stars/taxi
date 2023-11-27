@@ -5,7 +5,9 @@ import { Pool } from 'pg'
 const createOrderRelationsQuery = `
 ALTER TABLE orders
     ADD CONSTRAINT orders_ride_id_fkey FOREIGN KEY (ride_id)
-    REFERENCES rides (ride_id);
+    REFERENCES rides (ride_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
 `
 
 const dropOrderRelationsQuery = `

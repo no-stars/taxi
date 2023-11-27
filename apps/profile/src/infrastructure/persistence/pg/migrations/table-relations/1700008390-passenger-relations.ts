@@ -5,7 +5,9 @@ import { Pool } from 'pg'
 const createPassengerRelationsQuery = `
 ALTER TABLE passengers
     ADD CONSTRAINT passengers_person_id_fkey FOREIGN KEY (person_id)
-    REFERENCES persons (person_id);
+    REFERENCES persons (person_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
 `
 
 const dropPassengerRelationsQuery = `

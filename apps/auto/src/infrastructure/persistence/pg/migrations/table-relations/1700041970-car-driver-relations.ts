@@ -5,7 +5,9 @@ import { Pool } from 'pg'
 const createCarDriverRelationsQuery = `
 ALTER TABLE car_drivers
     ADD CONSTRAINT car_drivers_car_id_fkey FOREIGN KEY (car_id)
-    REFERENCES cars (car_id);
+    REFERENCES cars (car_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
 `
 
 const dropCarDriverRelationsQuery = `
