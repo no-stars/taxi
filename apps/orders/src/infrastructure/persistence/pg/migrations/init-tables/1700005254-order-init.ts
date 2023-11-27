@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS orders (
 `
 
 const dropOrderTableQuery = `
-DROP TABLE orders;
+DROP TABLE IF EXISTS orders;
 `
 
 export class OrderInit implements Migration {

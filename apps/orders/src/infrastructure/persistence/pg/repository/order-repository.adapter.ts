@@ -80,6 +80,10 @@ export class PgOrderRepositoryAdapter implements OrderRepositoryPort {
       values.push(by.orderType)
     }
 
+    // circle(driverLocation, 0.002) (2.22 km)
+    // WHERE circle('(80.31958023992814,13.77847602742554)', 0.002) @> start_location
+    // AND ride_id IS NULL
+
     whereConditions.push('o.deleted_at IS NULL')
 
     if (whereConditions.length) {

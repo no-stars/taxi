@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS driver_activities (
 `
 
 const dropDriverActivityTableQuery = `
-DROP TABLE driver_activities;
+DROP TABLE IF EXISTS driver_activities;
 `
 
 export class DriverActivityInit implements Migration {

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS shift_types (
 `
 
 const dropShiftTypeTableQuery = `
-DROP TABLE shift_types;
+DROP TABLE IF EXISTS shift_types;
 `
 
 export class ShiftTypeInit implements Migration {

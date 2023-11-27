@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS price_proposes (
 `
 
 const dropPriceProposeTableQuery = `
-DROP TABLE price_proposes;
+DROP TABLE IF EXISTS price_proposes;
 `
 
 export class PriceProposeInit implements Migration {

@@ -1,9 +1,9 @@
 import { pool } from '@infrastructure/persistence/migrations.config'
-import { ShiftSeed } from '@infrastructure/persistence/pg/seeders/shift.seed'
+import { OrderSeed } from '@infrastructure/persistence/pg/seeders/order.seed'
 
 
 const seeders = [
-  new ShiftSeed(pool),
+  new OrderSeed(pool),
 ]
 
 

@@ -2,8 +2,9 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgPriceProposeEntity, { PgPriceProposeField } from '@infrastructure/persistence/pg/entities/pg-price-propose.entity'
-import { PgOrderField } from '@infrastructure/persistence/pg/entities/pg-order.entity'
+import PgPriceProposeEntity, {
+  PgPriceProposeField,
+} from '@infrastructure/persistence/pg/entities/pg-price-propose.entity'
 
 
 interface PriceProposeRepositoryPort {
@@ -75,7 +76,7 @@ export class PgPriceProposeRepositoryAdapter implements PriceProposeRepositoryPo
          WHERE price_propose_id = $1;`
 
     const pgPricePropose: PgPriceProposeEntity = plainToInstance(PgPriceProposeEntity, payload)
-    const values: PgOrderField[] = [priceProposeId, ...pgPricePropose.getValues().slice(1)]
+    const values: PgPriceProposeField[] = [priceProposeId, ...pgPricePropose.getValues().slice(1)]
 
     this.logger.log(queryText, values)
     const result: QueryResult = await this.pool.query(queryText, values)

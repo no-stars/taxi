@@ -9,7 +9,7 @@ ALTER TABLE price_segment_requirements
 `
 
 const dropPriceSegmentRequirementRelationsQuery = `
-ALTER TABLE price_segment_requirements DROP CONSTRAINT price_segment_requirements_car_model_id_fkey;
+ALTER TABLE price_segment_requirements DROP CONSTRAINT IF EXISTS price_segment_requirements_car_model_id_fkey;
 `
 
 export class PriceSegmentRequirementRelations implements Migration {

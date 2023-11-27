@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS persons (
 `
 
 const dropPersonTableQuery = `
-DROP TABLE persons;
+DROP TABLE IF EXISTS persons;
 `
 
 export class PersonInit implements Migration {

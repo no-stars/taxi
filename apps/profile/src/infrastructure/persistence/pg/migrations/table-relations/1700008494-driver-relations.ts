@@ -9,7 +9,7 @@ ALTER TABLE drivers
 `
 
 const dropDriverRelationsQuery = `
-ALTER TABLE drivers DROP CONSTRAINT drivers_person_id_fkey;
+ALTER TABLE drivers DROP CONSTRAINT IF EXISTS drivers_person_id_fkey;
 `
 
 export class DriverRelations implements Migration {

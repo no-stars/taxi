@@ -38,7 +38,7 @@ export class PaymentCardSeed implements Seed {
   }
 
   private static generatePaymentCardData(): any {
-    const cardType: string = ArrayUtils.randomChoice(ALLOWED_CARD_TYPES) as string
+    const cardType: string = ArrayUtils.randomChoice(ALLOWED_CARD_TYPES)
     const expireAt: Date = startOfMonth(faker.date.future({ years: 3 }))
 
     return {

@@ -1,9 +1,10 @@
 import { pool } from '@infrastructure/persistence/migrations.config'
-import { ShiftSeed } from '@infrastructure/persistence/pg/seeders/shift.seed'
+import { ProfileSeed } from '@infrastructure/persistence/pg/seeders/profile.seed'
+import { Seed } from '@libs/common/interfaces'
 
 
-const seeders = [
-  new ShiftSeed(pool),
+const seeders: Seed[] = [
+  new ProfileSeed(pool),
 ]
 
 

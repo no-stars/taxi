@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS payment_cards (
 `
 
 const dropPaymentCardTableQuery = `
-DROP TABLE payment_cards;
+DROP TABLE IF EXISTS payment_cards;
 `
 
 export class PaymentCardInit implements Migration {

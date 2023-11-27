@@ -2,7 +2,6 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgOrderEntity, { PgOrderField } from '@infrastructure/persistence/pg/entities/pg-order.entity'
 import PgRideEntity, { PgRideField } from '@infrastructure/persistence/pg/entities/pg-ride.entity'
 
 
@@ -54,6 +53,9 @@ export class PgRideRepositoryAdapter implements RideRepositoryPort {
     if (whereConditions.length) {
       queryText = `${queryText} WHERE ${whereConditions.join(' AND ')}`
     }
+
+    // ORDER BY start_time DESC
+    // LIMIT 20
 
     this.logger.log(queryText, values)
     const result: QueryResult = await this.pool.query(queryText, values)

@@ -9,7 +9,7 @@ ALTER TABLE price_proposes
 `
 
 const dropPriceProposeRelationsQuery = `
-ALTER TABLE price_proposes DROP CONSTRAINT price_proposes_order_id_fkey;
+ALTER TABLE price_proposes DROP CONSTRAINT IF EXISTS price_proposes_order_id_fkey;
 `
 
 export class PriceProposeRelations implements Migration {

@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS accounts (
 `
 
 const dropAccountModelTableQuery = `
-DROP TABLE accounts;
+DROP TABLE IF EXISTS accounts;
 `
 
 export class AccountInit implements Migration {

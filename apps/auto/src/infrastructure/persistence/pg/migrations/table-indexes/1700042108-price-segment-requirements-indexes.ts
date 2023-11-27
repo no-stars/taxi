@@ -3,12 +3,12 @@ import { Pool } from 'pg'
 
 
 const createPriceSegmentRequirementIndexesQuery = `
-CREATE INDEX idx_price_segment_requirements_car_model_id_min_year
+CREATE INDEX IF NOT EXISTS idx_price_segment_requirements_car_model_id_min_year
   ON price_segment_requirements (car_model_id, min_year);
 `
 
 const dropPriceSegmentRequirementIndexesQuery = `
-DROP INDEX idx_price_segment_requirements_car_model_id_min_year;
+DROP INDEX IF EXISTS idx_price_segment_requirements_car_model_id_min_year;
 `
 
 export class PriceSegmentRequirementIndexes implements Migration {

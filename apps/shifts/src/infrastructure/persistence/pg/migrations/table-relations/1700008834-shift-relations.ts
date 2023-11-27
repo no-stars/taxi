@@ -9,7 +9,7 @@ ALTER TABLE shifts
 `
 
 const dropShiftRelationsQuery = `
-ALTER TABLE shifts DROP CONSTRAINT shifts_shift_type_id_fkey;
+ALTER TABLE shifts DROP CONSTRAINT IF EXISTS shifts_shift_type_id_fkey;
 `
 
 export class ShiftRelations implements Migration {

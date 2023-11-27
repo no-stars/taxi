@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS withdraw_cards (
 `
 
 const dropWithdrawCardTableQuery = `
-DROP TABLE withdraw_cards;
+DROP TABLE IF EXISTS withdraw_cards;
 `
 
 export class WithdrawCardInit implements Migration {

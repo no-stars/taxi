@@ -3,11 +3,11 @@ import { Pool } from 'pg'
 
 
 const createCarModelIndexesQuery = `
-CREATE INDEX idx_car_model_car_brand ON car_models (car_brand);
+CREATE INDEX IF NOT EXISTS idx_car_model_car_brand ON car_models (car_brand);
 `
 
 const dropCarModelIndexesQuery = `
-DROP INDEX idx_car_model_car_brand;
+DROP INDEX IF EXISTS idx_car_model_car_brand;
 `
 
 export class CarModelIndexes implements Migration {

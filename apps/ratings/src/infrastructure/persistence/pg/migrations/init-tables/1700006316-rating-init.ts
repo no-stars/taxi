@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS ratings (
 `
 
 const dropRatingTableQuery = `
-DROP TABLE ratings;
+DROP TABLE IF EXISTS ratings;
 `
 
 export class RatingInit implements Migration {

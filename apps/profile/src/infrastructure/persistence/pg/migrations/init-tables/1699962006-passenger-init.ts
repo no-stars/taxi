@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS passengers (
 `
 
 const dropPassengerTableQuery = `
-DROP TABLE passengers;
+DROP TABLE IF EXISTS passengers;
 `
 
 export class PassengerInit implements Migration {

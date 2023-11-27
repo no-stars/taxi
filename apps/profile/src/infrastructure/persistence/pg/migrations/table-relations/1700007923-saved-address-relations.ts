@@ -9,7 +9,7 @@ ALTER TABLE saved_addresses
 `
 
 const dropSavedAddressRelationsQuery = `
-ALTER TABLE saved_addresses DROP CONSTRAINT saved_addresses_passenger_id_fkey;
+ALTER TABLE saved_addresses DROP CONSTRAINT IF EXISTS saved_addresses_passenger_id_fkey;
 `
 
 export class SavedAddressRelations implements Migration {

@@ -3,11 +3,11 @@ import { Pool } from 'pg'
 
 
 const createPersonIndexesQuery = `
-CREATE INDEX idx_persons_account_id ON persons (account_id);
+CREATE INDEX IF NOT EXISTS idx_persons_account_id ON persons (account_id);
 `
 
 const dropPersonIndexesQuery = `
-DROP INDEX idx_persons_account_id;
+DROP INDEX IF EXISTS idx_persons_account_id;
 `
 
 export class PersonIndexes implements Migration {

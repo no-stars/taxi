@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS drivers (
 `
 
 const dropDriverTableQuery = `
-DROP TABLE drivers;
+DROP TABLE IF EXISTS drivers;
 `
 
 export class DriverInit implements Migration {

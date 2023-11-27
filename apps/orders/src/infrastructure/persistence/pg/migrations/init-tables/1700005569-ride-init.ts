@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS rides (
 `
 
 const dropRideTableQuery = `
-DROP TABLE rides;
+DROP TABLE IF EXISTS rides;
 `
 
 export class RideInit implements Migration {

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS saved_addresses (
 `
 
 const dropSavedAddressModelTableQuery = `
-DROP TABLE saved_addresses;
+DROP TABLE IF EXISTS saved_addresses;
 `
 
 export class SavedAddressInit implements Migration {

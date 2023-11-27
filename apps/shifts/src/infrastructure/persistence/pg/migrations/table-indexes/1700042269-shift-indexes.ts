@@ -3,11 +3,11 @@ import { Pool } from 'pg'
 
 
 const createShiftIndexesQuery = `
-CREATE INDEX idx_shifts_driver_id ON shifts (driver_id);
+CREATE INDEX IF NOT EXISTS idx_shifts_created_at_driver_id ON shifts (created_at DESC, driver_id);
 `
 
 const dropShiftIndexesQuery = `
-DROP INDEX idx_shifts_driver_id;
+DROP INDEX IF EXISTS idx_shifts_created_at_driver_id;
 `
 
 export class ShiftIndexes implements Migration {

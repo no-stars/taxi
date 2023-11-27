@@ -3,11 +3,11 @@ import { Pool } from 'pg'
 
 
 const createWithdrawCardIndexesQuery = `
-CREATE INDEX idx_withdraw_cards_account_id ON withdraw_cards (account_id);
+CREATE INDEX IF NOT EXISTS idx_withdraw_cards_account_id ON withdraw_cards (account_id);
 `
 
 const dropWithdrawCardIndexesQuery = `
-DROP INDEX idx_withdraw_cards_account_id;
+DROP INDEX IF EXISTS idx_withdraw_cards_account_id;
 `
 
 export class WithdrawCardIndexes implements Migration {

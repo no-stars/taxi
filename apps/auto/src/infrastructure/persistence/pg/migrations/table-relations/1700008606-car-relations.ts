@@ -9,7 +9,7 @@ ALTER TABLE cars
 `
 
 const dropCarRelationsQuery = `
-ALTER TABLE cars DROP CONSTRAINT cars_car_model_id_fkey;
+ALTER TABLE cars DROP CONSTRAINT IF EXISTS cars_car_model_id_fkey;
 `
 
 export class CarRelations implements Migration {

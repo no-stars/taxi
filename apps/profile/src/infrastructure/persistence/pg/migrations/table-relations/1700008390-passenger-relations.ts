@@ -9,7 +9,7 @@ ALTER TABLE passengers
 `
 
 const dropPassengerRelationsQuery = `
-ALTER TABLE passengers DROP CONSTRAINT passengers_person_id_fkey;
+ALTER TABLE passengers DROP CONSTRAINT IF EXISTS passengers_person_id_fkey;
 `
 
 export class PassengerRelations implements Migration {

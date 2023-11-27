@@ -9,7 +9,7 @@ ALTER TABLE orders
 `
 
 const dropOrderRelationsQuery = `
-ALTER TABLE orders DROP CONSTRAINT orders_ride_id_fkey;
+ALTER TABLE orders DROP CONSTRAINT IF EXISTS orders_ride_id_fkey;
 `
 
 export class OrderRelations implements Migration {

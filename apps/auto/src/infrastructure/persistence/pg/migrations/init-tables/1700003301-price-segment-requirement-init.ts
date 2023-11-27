@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS price_segment_requirements (
 `
 
 const dropPriceSegmentRequirementTableQuery = `
-DROP TABLE price_segment_requirements;
+DROP TABLE IF EXISTS price_segment_requirements;
 `
 
 export class PriceSegmentRequirementInit implements Migration {
