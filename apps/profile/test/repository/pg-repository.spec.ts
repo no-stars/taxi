@@ -23,7 +23,7 @@ import {
 } from '@infrastructure/persistence/pg/migrations/table-relations'
 import { StringUtils } from '@libs/common/utils'
 import { Migration } from '@libs/common/interfaces'
-import MigrationRunner from '@libs/common/utils/migration-runner'
+import { MigrationRunner } from '@libs/common/utils'
 
 
 describe('Pg Repository', () => {

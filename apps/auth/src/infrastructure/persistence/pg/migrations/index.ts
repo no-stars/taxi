@@ -1,6 +1,6 @@
 import { pool } from '@infrastructure/persistence/migrations.config'
 import { Migration } from '@libs/common/interfaces'
-import MigrationRunner from '@libs/common/utils/migration-runner'
+import { MigrationRunner } from '@libs/common/utils'
 import * as InitTable from '@infrastructure/persistence/pg/migrations/init-tables'
 
 

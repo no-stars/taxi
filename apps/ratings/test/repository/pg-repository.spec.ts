@@ -8,7 +8,7 @@ import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { RatingInit } from '@infrastructure/persistence/pg/migrations/init-tables'
 import { StringUtils } from '../../../../libs/common/src/utils'
 import { Migration } from '@libs/common/interfaces'
-import MigrationRunner from '@libs/common/utils/migration-runner'
+import { MigrationRunner } from '@libs/common/utils'
 
 
 describe('Pg Repository', () => {

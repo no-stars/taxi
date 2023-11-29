@@ -11,7 +11,7 @@ import { PgShiftRepository } from '@infrastructure/persistence/pg/repository/shi
 import { PgDriverActivityRepository } from '@infrastructure/persistence/pg/repository/driver-activity.repository'
 import { StringUtils } from '@libs/common/utils'
 import { Migration } from '@libs/common/interfaces'
-import MigrationRunner from '@libs/common/utils/migration-runner'
+import { MigrationRunner } from '@libs/common/utils'
 
 
 describe('Pg Repository', () => {

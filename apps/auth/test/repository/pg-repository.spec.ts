@@ -9,7 +9,7 @@ import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { AccountInit } from '@infrastructure/persistence/pg/migrations/init-tables'
 import { Account } from '@core/domain/entities/account.entity'
 import { Migration } from '@libs/common/interfaces'
-import MigrationRunner from '@libs/common/utils/migration-runner'
+import { MigrationRunner } from '@libs/common/utils'
 
 
 describe('Pg Repository', () => {

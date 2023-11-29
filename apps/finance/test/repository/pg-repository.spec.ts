@@ -11,7 +11,7 @@ import { PgPaymentRepository } from '@infrastructure/persistence/pg/repository/p
 import { StringUtils } from '@libs/common/utils'
 import { startOfDay } from 'date-fns'
 import { Migration } from '@libs/common/interfaces'
-import MigrationRunner from '@libs/common/utils/migration-runner'
+import { MigrationRunner } from '@libs/common/utils'
 
 
 describe('Pg Repository', () => {
