@@ -3,8 +3,8 @@ import { Test } from '@nestjs/testing'
 import { TestingModule } from '@nestjs/testing/testing-module'
 import { Pool } from 'pg'
 
-import { StringUtils } from '../../../../libs/common/src/utils'
-import { PgAccountRepositoryAdapter } from '@infrastructure/persistence/pg/repository/account-repository.adapter'
+import { StringUtils } from '@libs/common/utils'
+import { PgAccountRepository } from '@infrastructure/persistence/pg/repository/account.repository'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { AccountInit } from '@infrastructure/persistence/pg/migrations/init-tables'
 import { Account } from '@core/domain/entities/account.entity'
@@ -15,7 +15,7 @@ describe('Pg Repository', () => {
 
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
-  let repo: PgAccountRepositoryAdapter
+  let repo: PgAccountRepository
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -33,12 +33,12 @@ describe('Pg Repository', () => {
           provide: PG_CONNECTION,
           useFactory: () => pool,
         },
-        PgAccountRepositoryAdapter,
+        PgAccountRepository,
       ],
     }).compile()
 
     postgresClient = module.get(PG_CONNECTION)
-    repo = module.get(PgAccountRepositoryAdapter)
+    repo = module.get(PgAccountRepository)
   })
 
   afterAll(async () => {

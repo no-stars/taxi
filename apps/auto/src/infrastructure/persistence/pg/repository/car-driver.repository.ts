@@ -11,10 +11,10 @@ interface CarDriverRepositoryPort {
 
 
 @Injectable()
-export class PgCarDriverRepositoryAdapter implements CarDriverRepositoryPort {
+export class PgCarDriverRepository implements CarDriverRepositoryPort {
 
   private readonly carDriverAlias = 'car_drivers'
-  private readonly logger = new Logger(PgCarDriverRepositoryAdapter.name)
+  private readonly logger = new Logger(PgCarDriverRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

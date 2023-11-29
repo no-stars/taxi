@@ -5,9 +5,9 @@ import { Pool } from 'pg'
 
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { PaymentInit, WithdrawCardInit, PaymentCardInit } from '@infrastructure/persistence/pg/migrations/init-tables'
-import { PgPaymentCardRepositoryAdapter } from '@infrastructure/persistence/pg/repository/payment-card-repository.adapter'
-import { PgWithdrawCardRepositoryAdapter } from '@infrastructure/persistence/pg/repository/withdraw-card-repository.adapter'
-import { PgPaymentRepositoryAdapter } from '@infrastructure/persistence/pg/repository/payment-repository.adapter'
+import { PgPaymentCardRepository } from '@infrastructure/persistence/pg/repository/payment-card.repository'
+import { PgWithdrawCardRepository } from '@infrastructure/persistence/pg/repository/withdraw-card.repository'
+import { PgPaymentRepository } from '@infrastructure/persistence/pg/repository/payment.repository'
 import { StringUtils } from '@libs/common/utils'
 import { startOfDay } from 'date-fns'
 
@@ -17,9 +17,9 @@ describe('Pg Repository', () => {
 
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
-  let paymentCardRepo: PgPaymentCardRepositoryAdapter
-  let withdrawCardRepo: PgWithdrawCardRepositoryAdapter
-  let paymentRepo: PgPaymentRepositoryAdapter
+  let paymentCardRepo: PgPaymentCardRepository
+  let withdrawCardRepo: PgWithdrawCardRepository
+  let paymentRepo: PgPaymentRepository
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -44,16 +44,16 @@ describe('Pg Repository', () => {
           provide: PG_CONNECTION,
           useFactory: () => pool,
         },
-        PgPaymentCardRepositoryAdapter,
-        PgWithdrawCardRepositoryAdapter,
-        PgPaymentRepositoryAdapter,
+        PgPaymentCardRepository,
+        PgWithdrawCardRepository,
+        PgPaymentRepository,
       ],
     }).compile()
 
     postgresClient = module.get(PG_CONNECTION)
-    paymentCardRepo = module.get(PgPaymentCardRepositoryAdapter)
-    withdrawCardRepo = module.get(PgWithdrawCardRepositoryAdapter)
-    paymentRepo = module.get(PgPaymentRepositoryAdapter)
+    paymentCardRepo = module.get(PgPaymentCardRepository)
+    withdrawCardRepo = module.get(PgWithdrawCardRepository)
+    paymentRepo = module.get(PgPaymentRepository)
   })
 
   afterAll(async () => {

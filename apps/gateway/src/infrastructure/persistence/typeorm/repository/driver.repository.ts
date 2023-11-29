@@ -12,7 +12,7 @@ interface ResourceRepositoryPort {
 
 
 @Injectable()
-export class TypeOrmDriverRepositoryAdapter extends Repository<TypeOrmDriver> implements ResourceRepositoryPort {
+export class TypeOrmDriverRepository extends Repository<TypeOrmDriver> implements ResourceRepositoryPort {
 
   private readonly driverAlias: string = 'driver'
 

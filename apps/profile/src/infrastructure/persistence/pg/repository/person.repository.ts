@@ -13,10 +13,10 @@ interface PersonRepositoryPort {
 
 
 @Injectable()
-export class PgPersonRepositoryAdapter implements PersonRepositoryPort {
+export class PgPersonRepository implements PersonRepositoryPort {
 
   private readonly personAlias = 'persons'
-  private readonly logger = new Logger(PgPersonRepositoryAdapter.name)
+  private readonly logger = new Logger(PgPersonRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

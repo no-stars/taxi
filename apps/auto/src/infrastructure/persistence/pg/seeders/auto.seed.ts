@@ -1,12 +1,12 @@
 import { Pool } from 'pg'
 import { faker } from '@faker-js/faker'
 
-import { PgCarModelRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-model-repository.adapter'
-import { PgCarRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-repository.adapter'
-import { PgCarDriverRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-driver-repository.adapter'
+import { PgCarModelRepository } from '@infrastructure/persistence/pg/repository/car-model.repository'
+import { PgCarRepository } from '@infrastructure/persistence/pg/repository/car.repository'
+import { PgCarDriverRepository } from '@infrastructure/persistence/pg/repository/car-driver.repository'
 import {
-  PgPriceSegmentRequirementRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/price-segment-requirement-repository.adapter'
+  PgPriceSegmentRequirementRepository,
+} from '@infrastructure/persistence/pg/repository/price-segment-requirement.repository'
 
 import { ArrayUtils, NumberUtils, StringUtils } from '@libs/common/utils'
 import { Seed } from '@libs/common/interfaces'
@@ -18,19 +18,19 @@ import PriceSegmentRequirementRows from '@infrastructure/persistence/pg/seeders/
 
 export class AutoSeed implements Seed {
 
-  private readonly carRepo: PgCarRepositoryAdapter
-  private readonly carDriversRepo: PgCarDriverRepositoryAdapter
-  private readonly carModelRepo: PgCarModelRepositoryAdapter
-  private readonly priceSegmentRequirementRepo: PgPriceSegmentRequirementRepositoryAdapter
+  private readonly carRepo: PgCarRepository
+  private readonly carDriversRepo: PgCarDriverRepository
+  private readonly carModelRepo: PgCarModelRepository
+  private readonly priceSegmentRequirementRepo: PgPriceSegmentRequirementRepository
   private readonly carModelIds = new Map()
   private readonly carIds: string[] = []
   private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
-    this.carRepo = new PgCarRepositoryAdapter(this.pool)
-    this.carDriversRepo = new PgCarDriverRepositoryAdapter(this.pool)
-    this.carModelRepo = new PgCarModelRepositoryAdapter(this.pool)
-    this.priceSegmentRequirementRepo = new PgPriceSegmentRequirementRepositoryAdapter(this.pool)
+    this.carRepo = new PgCarRepository(this.pool)
+    this.carDriversRepo = new PgCarDriverRepository(this.pool)
+    this.carModelRepo = new PgCarModelRepository(this.pool)
+    this.priceSegmentRequirementRepo = new PgPriceSegmentRequirementRepository(this.pool)
   }
 
   public async execute(): Promise<void> {

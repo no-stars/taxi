@@ -3,12 +3,12 @@ import { Test } from '@nestjs/testing'
 import { TestingModule } from '@nestjs/testing/testing-module'
 import { Pool } from 'pg'
 
-import { PgPassengerRepositoryAdapter } from '@infrastructure/persistence/pg/repository/passenger-repository.adapter'
-import { PgPersonRepositoryAdapter } from '@infrastructure/persistence/pg/repository/person-repository.adapter'
-import { PgDriverRepositoryAdapter } from '@infrastructure/persistence/pg/repository/driver-repository.adapter'
+import { PgPassengerRepository } from '@infrastructure/persistence/pg/repository/passenger.repository'
+import { PgPersonRepository } from '@infrastructure/persistence/pg/repository/person.repository'
+import { PgDriverRepository } from '@infrastructure/persistence/pg/repository/driver.repository'
 import {
-  PgSavedAddressRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/saved-address-repository.adapter'
+  PgSavedAddressRepository,
+} from '@infrastructure/persistence/pg/repository/saved-address.repository'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import {
   PassengerInit,
@@ -30,10 +30,10 @@ describe('Pg Repository', () => {
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
 
-  let passengerRepo: PgPassengerRepositoryAdapter
-  let personRepo: PgPersonRepositoryAdapter
-  let driverRepo: PgDriverRepositoryAdapter
-  let savedAddressRepo: PgSavedAddressRepositoryAdapter
+  let passengerRepo: PgPassengerRepository
+  let personRepo: PgPersonRepository
+  let driverRepo: PgDriverRepository
+  let savedAddressRepo: PgSavedAddressRepository
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -62,18 +62,18 @@ describe('Pg Repository', () => {
           provide: PG_CONNECTION,
           useFactory: () => pool,
         },
-        PgPassengerRepositoryAdapter,
-        PgPersonRepositoryAdapter,
-        PgDriverRepositoryAdapter,
-        PgSavedAddressRepositoryAdapter,
+        PgPassengerRepository,
+        PgPersonRepository,
+        PgDriverRepository,
+        PgSavedAddressRepository,
       ],
     }).compile()
 
     postgresClient = module.get(PG_CONNECTION)
-    passengerRepo = module.get(PgPassengerRepositoryAdapter)
-    personRepo = module.get(PgPersonRepositoryAdapter)
-    driverRepo = module.get(PgDriverRepositoryAdapter)
-    savedAddressRepo = module.get(PgSavedAddressRepositoryAdapter)
+    passengerRepo = module.get(PgPassengerRepository)
+    personRepo = module.get(PgPersonRepository)
+    driverRepo = module.get(PgDriverRepository)
+    savedAddressRepo = module.get(PgSavedAddressRepository)
   })
 
   afterAll(async () => {

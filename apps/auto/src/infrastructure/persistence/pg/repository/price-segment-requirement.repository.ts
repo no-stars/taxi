@@ -12,10 +12,10 @@ interface PriceSegmentRequirementRepositoryPort {
 
 
 @Injectable()
-export class PgPriceSegmentRequirementRepositoryAdapter implements PriceSegmentRequirementRepositoryPort {
+export class PgPriceSegmentRequirementRepository implements PriceSegmentRequirementRepositoryPort {
 
   private readonly priceSegmentRequirementAlias = 'price_segment_requirements'
-  private readonly logger = new Logger(PgPriceSegmentRequirementRepositoryAdapter.name)
+  private readonly logger = new Logger(PgPriceSegmentRequirementRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

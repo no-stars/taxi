@@ -11,10 +11,10 @@ interface DriverRepositoryPort {
 
 
 @Injectable()
-export class PgDriverRepositoryAdapter implements DriverRepositoryPort {
+export class PgDriverRepository implements DriverRepositoryPort {
 
   private readonly driverAlias = 'drivers'
-  private readonly logger = new Logger(PgDriverRepositoryAdapter.name)
+  private readonly logger = new Logger(PgDriverRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

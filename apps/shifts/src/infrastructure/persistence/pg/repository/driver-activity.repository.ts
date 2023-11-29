@@ -13,10 +13,10 @@ interface DriverActivityRepositoryPort {
 
 
 @Injectable()
-export class PgDriverActivityRepositoryAdapter implements DriverActivityRepositoryPort {
+export class PgDriverActivityRepository implements DriverActivityRepositoryPort {
 
   private readonly driverActivityAlias = 'driver_activities'
-  private readonly logger = new Logger(PgDriverActivityRepositoryAdapter.name)
+  private readonly logger = new Logger(PgDriverActivityRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

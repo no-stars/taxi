@@ -14,10 +14,10 @@ interface PgWithdrawCardRepositoryPort {
 
 
 @Injectable()
-export class PgWithdrawCardRepositoryAdapter implements PgWithdrawCardRepositoryPort {
+export class PgWithdrawCardRepository implements PgWithdrawCardRepositoryPort {
 
   private readonly withdrawCardAlias = 'withdraw_cards'
-  private readonly logger = new Logger(PgWithdrawCardRepositoryAdapter.name)
+  private readonly logger = new Logger(PgWithdrawCardRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

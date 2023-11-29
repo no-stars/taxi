@@ -1,8 +1,8 @@
 import { Pool } from 'pg'
 import { faker } from '@faker-js/faker'
 import {
-  PgPaymentCardRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/payment-card-repository.adapter'
+  PgPaymentCardRepository,
+} from '@infrastructure/persistence/pg/repository/payment-card.repository'
 import { StringUtils, ArrayUtils } from '@libs/common/utils'
 import { SEED_COUNT } from '@libs/common/constants'
 import { Seed } from '@libs/common/interfaces'
@@ -14,11 +14,11 @@ const ALLOWED_CARD_TYPES: string[] = ['Visa', 'MIR']
 
 export class PaymentCardSeed implements Seed {
 
-  private readonly paymentCardRepo: PgPaymentCardRepositoryAdapter
+  private readonly paymentCardRepo: PgPaymentCardRepository
   private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
-    this.paymentCardRepo = new PgPaymentCardRepositoryAdapter(this.pool)
+    this.paymentCardRepo = new PgPaymentCardRepository(this.pool)
   }
 
   public async execute(): Promise<void> {

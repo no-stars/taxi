@@ -1,6 +1,6 @@
 import { Pool } from 'pg'
 import { faker } from '@faker-js/faker'
-import { PgPaymentRepositoryAdapter } from '@infrastructure/persistence/pg/repository/payment-repository.adapter'
+import { PgPaymentRepository } from '@infrastructure/persistence/pg/repository/payment.repository'
 import { StringUtils, ArrayUtils, NumberUtils } from '@libs/common/utils'
 import { SEED_COUNT } from '@libs/common/constants'
 import { Seed } from '@libs/common/interfaces'
@@ -12,11 +12,11 @@ const ALLOWED_STATUSES: string[] = ['paid', 'pending']
 
 export class PaymentSeed implements Seed {
 
-  private readonly paymentRepo: PgPaymentRepositoryAdapter
+  private readonly paymentRepo: PgPaymentRepository
   private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
-    this.paymentRepo = new PgPaymentRepositoryAdapter(this.pool)
+    this.paymentRepo = new PgPaymentRepository(this.pool)
   }
 
   public async execute(): Promise<void> {

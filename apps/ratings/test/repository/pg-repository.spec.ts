@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing'
 import { TestingModule } from '@nestjs/testing/testing-module'
 import { Pool } from 'pg'
 
-import { PgRatingRepositoryAdapter } from '@infrastructure/persistence/pg/repository/rating-repository.adapter'
+import { PgRatingRepository } from '@infrastructure/persistence/pg/repository/rating.repository'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { RatingInit } from '@infrastructure/persistence/pg/migrations/init-tables'
 import { StringUtils } from '../../../../libs/common/src/utils'
@@ -14,7 +14,7 @@ describe('Pg Repository', () => {
 
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
-  let ratingRepo: PgRatingRepositoryAdapter
+  let ratingRepo: PgRatingRepository
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -32,12 +32,12 @@ describe('Pg Repository', () => {
           provide: PG_CONNECTION,
           useFactory: () => pool,
         },
-        PgRatingRepositoryAdapter,
+        PgRatingRepository,
       ],
     }).compile()
 
     postgresClient = module.get(PG_CONNECTION)
-    ratingRepo = module.get(PgRatingRepositoryAdapter)
+    ratingRepo = module.get(PgRatingRepository)
   })
 
   afterAll(async () => {

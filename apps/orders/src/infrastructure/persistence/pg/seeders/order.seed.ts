@@ -1,27 +1,27 @@
 import { Pool } from 'pg'
 import { faker } from '@faker-js/faker'
-import { PgOrderRepositoryAdapter } from '@infrastructure/persistence/pg/repository/order-repository.adapter'
-import { PgRideRepositoryAdapter } from '@infrastructure/persistence/pg/repository/ride-repository.adapter'
+import { PgOrderRepository } from '@infrastructure/persistence/pg/repository/order.repository'
+import { PgRideRepository } from '@infrastructure/persistence/pg/repository/ride.repository'
 import {
-  PgPriceProposeRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/price-propose-repository.adapter'
+  PgPriceProposeRepository,
+} from '@infrastructure/persistence/pg/repository/price-propose.repository'
 import { ArrayUtils, NumberUtils, StringUtils } from '@libs/common/utils'
 import { Seed } from '@libs/common/interfaces'
 import { SEED_COUNT } from '@libs/common/constants'
 
 export class OrderSeed implements Seed {
 
-  private readonly orderRepo: PgOrderRepositoryAdapter
-  private readonly rideRepo: PgRideRepositoryAdapter
-  private readonly priceProposeRepo: PgPriceProposeRepositoryAdapter
+  private readonly orderRepo: PgOrderRepository
+  private readonly rideRepo: PgRideRepository
+  private readonly priceProposeRepo: PgPriceProposeRepository
   private readonly rideIds: string[] = []
   private readonly auctionOrderIds: string[] = []
   private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
-    this.orderRepo = new PgOrderRepositoryAdapter(this.pool)
-    this.rideRepo = new PgRideRepositoryAdapter(this.pool)
-    this.priceProposeRepo = new PgPriceProposeRepositoryAdapter(this.pool)
+    this.orderRepo = new PgOrderRepository(this.pool)
+    this.rideRepo = new PgRideRepository(this.pool)
+    this.priceProposeRepo = new PgPriceProposeRepository(this.pool)
   }
 
   public async execute(): Promise<void> {

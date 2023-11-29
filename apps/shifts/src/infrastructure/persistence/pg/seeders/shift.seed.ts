@@ -1,11 +1,11 @@
 import { Pool } from 'pg'
 import {
-  PgShiftTypeRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/shift-type-repository.adapter'
-import { PgShiftRepositoryAdapter } from '@infrastructure/persistence/pg/repository/shift-repository.adapter'
+  PgShiftTypeRepository,
+} from '@infrastructure/persistence/pg/repository/shift-type.repository'
+import { PgShiftRepository } from '@infrastructure/persistence/pg/repository/shift.repository'
 import {
-  PgDriverActivityRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/driver-activity-repository.adapter'
+  PgDriverActivityRepository,
+} from '@infrastructure/persistence/pg/repository/driver-activity.repository'
 import shiftTypeRows from '@infrastructure/persistence/pg/seeders/shift-types.json'
 import { ArrayUtils, StringUtils } from '@libs/common/utils'
 import { Seed } from '@libs/common/interfaces'
@@ -13,16 +13,16 @@ import { SEED_COUNT } from '@libs/common/constants'
 
 export class ShiftSeed implements Seed {
 
-  private readonly shiftRepo: PgShiftRepositoryAdapter
-  private readonly shiftTypeRepo: PgShiftTypeRepositoryAdapter
-  private readonly driverActivityRepo: PgDriverActivityRepositoryAdapter
+  private readonly shiftRepo: PgShiftRepository
+  private readonly shiftTypeRepo: PgShiftTypeRepository
+  private readonly driverActivityRepo: PgDriverActivityRepository
   private readonly shiftTypeIds: string[] = []
   private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
-    this.shiftRepo = new PgShiftRepositoryAdapter(this.pool)
-    this.shiftTypeRepo = new PgShiftTypeRepositoryAdapter(this.pool)
-    this.driverActivityRepo = new PgDriverActivityRepositoryAdapter(this.pool)
+    this.shiftRepo = new PgShiftRepository(this.pool)
+    this.shiftTypeRepo = new PgShiftTypeRepository(this.pool)
+    this.driverActivityRepo = new PgDriverActivityRepository(this.pool)
   }
 
   public async execute(): Promise<void> {

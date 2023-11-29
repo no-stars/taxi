@@ -1,11 +1,11 @@
 import { Pool } from 'pg'
 import { faker } from '@faker-js/faker'
-import { PgPassengerRepositoryAdapter } from '@infrastructure/persistence/pg/repository/passenger-repository.adapter'
-import { PgDriverRepositoryAdapter } from '@infrastructure/persistence/pg/repository/driver-repository.adapter'
-import { PgPersonRepositoryAdapter } from '@infrastructure/persistence/pg/repository/person-repository.adapter'
+import { PgPassengerRepository } from '@infrastructure/persistence/pg/repository/passenger.repository'
+import { PgDriverRepository } from '@infrastructure/persistence/pg/repository/driver.repository'
+import { PgPersonRepository } from '@infrastructure/persistence/pg/repository/person.repository'
 import {
-  PgSavedAddressRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/saved-address-repository.adapter'
+  PgSavedAddressRepository,
+} from '@infrastructure/persistence/pg/repository/saved-address.repository'
 import { StringUtils, ArrayUtils, NumberUtils } from '@libs/common/utils'
 import { SEED_COUNT } from '@libs/common/constants'
 import { Seed } from '@libs/common/interfaces'
@@ -13,18 +13,18 @@ import { Seed } from '@libs/common/interfaces'
 
 export class ProfileSeed implements Seed {
 
-  private readonly passengerRepo: PgPassengerRepositoryAdapter
-  private readonly driverRepo: PgDriverRepositoryAdapter
-  private readonly personRepo: PgPersonRepositoryAdapter
-  private readonly savedAddressRepo: PgSavedAddressRepositoryAdapter
+  private readonly passengerRepo: PgPassengerRepository
+  private readonly driverRepo: PgDriverRepository
+  private readonly personRepo: PgPersonRepository
+  private readonly savedAddressRepo: PgSavedAddressRepository
   private readonly passengerIds: string[] = []
   private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
-    this.passengerRepo = new PgPassengerRepositoryAdapter(this.pool)
-    this.driverRepo = new PgDriverRepositoryAdapter(this.pool)
-    this.personRepo = new PgPersonRepositoryAdapter(this.pool)
-    this.savedAddressRepo = new PgSavedAddressRepositoryAdapter(this.pool)
+    this.passengerRepo = new PgPassengerRepository(this.pool)
+    this.driverRepo = new PgDriverRepository(this.pool)
+    this.personRepo = new PgPersonRepository(this.pool)
+    this.savedAddressRepo = new PgSavedAddressRepository(this.pool)
   }
 
   public async execute(): Promise<void> {

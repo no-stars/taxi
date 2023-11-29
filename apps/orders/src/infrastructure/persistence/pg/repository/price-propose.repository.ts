@@ -15,10 +15,10 @@ interface PriceProposeRepositoryPort {
 
 
 @Injectable()
-export class PgPriceProposeRepositoryAdapter implements PriceProposeRepositoryPort {
+export class PgPriceProposeRepository implements PriceProposeRepositoryPort {
 
   private readonly priceProposeAlias = 'price_proposes'
-  private readonly logger = new Logger(PgPriceProposeRepositoryAdapter.name)
+  private readonly logger = new Logger(PgPriceProposeRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

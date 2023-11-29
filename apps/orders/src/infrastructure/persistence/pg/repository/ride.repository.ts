@@ -13,10 +13,10 @@ interface RideRepositoryPort {
 
 
 @Injectable()
-export class PgRideRepositoryAdapter implements RideRepositoryPort {
+export class PgRideRepository implements RideRepositoryPort {
 
   private readonly rideAlias = 'rides'
-  private readonly logger = new Logger(PgRideRepositoryAdapter.name)
+  private readonly logger = new Logger(PgRideRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

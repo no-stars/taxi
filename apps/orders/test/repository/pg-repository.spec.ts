@@ -6,11 +6,11 @@ import { Pool } from 'pg'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { OrderInit, RideInit, PriceProposeInit } from '@infrastructure/persistence/pg/migrations/init-tables'
 import { OrderRelations, PriceProposeRelations } from '@infrastructure/persistence/pg/migrations/table-relations'
-import { PgOrderRepositoryAdapter } from '@infrastructure/persistence/pg/repository/order-repository.adapter'
-import { PgRideRepositoryAdapter } from '@infrastructure/persistence/pg/repository/ride-repository.adapter'
+import { PgOrderRepository } from '@infrastructure/persistence/pg/repository/order.repository'
+import { PgRideRepository } from '@infrastructure/persistence/pg/repository/ride.repository'
 import {
-  PgPriceProposeRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/price-propose-repository.adapter'
+  PgPriceProposeRepository,
+} from '@infrastructure/persistence/pg/repository/price-propose.repository'
 import { StringUtils } from '@libs/common/utils'
 import { addMinutes } from 'date-fns'
 import { Nullable } from '@libs/common/types/nullable'
@@ -21,9 +21,9 @@ describe('Pg Repository', () => {
 
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
-  let orderRepo: PgOrderRepositoryAdapter
-  let rideRepo: PgRideRepositoryAdapter
-  let priceProposeRepo: PgPriceProposeRepositoryAdapter
+  let orderRepo: PgOrderRepository
+  let rideRepo: PgRideRepository
+  let priceProposeRepo: PgPriceProposeRepository
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -50,16 +50,16 @@ describe('Pg Repository', () => {
           provide: PG_CONNECTION,
           useFactory: () => pool,
         },
-        PgOrderRepositoryAdapter,
-        PgRideRepositoryAdapter,
-        PgPriceProposeRepositoryAdapter,
+        PgOrderRepository,
+        PgRideRepository,
+        PgPriceProposeRepository,
       ],
     }).compile()
 
     postgresClient = module.get(PG_CONNECTION)
-    orderRepo = module.get(PgOrderRepositoryAdapter)
-    rideRepo = module.get(PgRideRepositoryAdapter)
-    priceProposeRepo = module.get(PgPriceProposeRepositoryAdapter)
+    orderRepo = module.get(PgOrderRepository)
+    rideRepo = module.get(PgRideRepository)
+    priceProposeRepo = module.get(PgPriceProposeRepository)
   })
 
   afterAll(async () => {

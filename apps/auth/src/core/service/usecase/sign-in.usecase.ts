@@ -1,4 +1,4 @@
-import { ConfirmCodeRepositoryPort } from '@infrastructure/persistence/redis/repository/confirm-code-repository.adapter'
+import { ConfirmCodeRepositoryPort } from '@infrastructure/persistence/redis/repository/confirm-code.repository'
 import SmsSystemPort from '@infrastructure/external-systems/sms/sms-port.interface'
 import { ConfirmCode } from '@core/common/confirm-code'
 

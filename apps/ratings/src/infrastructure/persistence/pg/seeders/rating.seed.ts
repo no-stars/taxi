@@ -1,5 +1,5 @@
 import { Pool } from 'pg'
-import { PgRatingRepositoryAdapter } from '@infrastructure/persistence/pg/repository/rating-repository.adapter'
+import { PgRatingRepository } from '@infrastructure/persistence/pg/repository/rating.repository'
 import { StringUtils, ArrayUtils, NumberUtils } from '@libs/common/utils'
 import { SEED_COUNT } from '@libs/common/constants'
 import { Seed } from '@libs/common/interfaces'
@@ -8,11 +8,11 @@ import { Nullable } from '@libs/common/types/nullable'
 
 export class RatingSeed implements Seed {
 
-  private readonly ratingRepo: PgRatingRepositoryAdapter
+  private readonly ratingRepo: PgRatingRepository
   private readonly errors: Error[] = []
 
   constructor(private readonly pool: Pool) {
-    this.ratingRepo = new PgRatingRepositoryAdapter(this.pool)
+    this.ratingRepo = new PgRatingRepository(this.pool)
   }
 
   public async execute(): Promise<void> {

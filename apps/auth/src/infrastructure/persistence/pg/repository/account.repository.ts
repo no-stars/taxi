@@ -15,10 +15,10 @@ export interface AccountRepositoryPort {
 
 
 @Injectable()
-export class PgAccountRepositoryAdapter implements AccountRepositoryPort {
+export class PgAccountRepository implements AccountRepositoryPort {
 
   private readonly accountAlias = 'accounts'
-  private readonly logger = new Logger(PgAccountRepositoryAdapter.name)
+  private readonly logger = new Logger(PgAccountRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

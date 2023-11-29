@@ -12,10 +12,10 @@ interface RatingRepositoryPort {
 
 
 @Injectable()
-export class PgRatingRepositoryAdapter implements RatingRepositoryPort {
+export class PgRatingRepository implements RatingRepositoryPort {
 
   private readonly ratingAlias = 'ratings'
-  private readonly logger = new Logger(PgRatingRepositoryAdapter.name)
+  private readonly logger = new Logger(PgRatingRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

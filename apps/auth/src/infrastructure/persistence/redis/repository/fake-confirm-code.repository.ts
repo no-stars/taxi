@@ -12,9 +12,9 @@ export interface ConfirmCodeRepositoryPort {
 
 
 @Injectable()
-export class InMemoryConfirmCodeRepositoryAdapter implements ConfirmCodeRepositoryPort {
+export class InMemoryConfirmCodeRepository implements ConfirmCodeRepositoryPort {
 
-  private readonly logger = new Logger(InMemoryConfirmCodeRepositoryAdapter.name)
+  private readonly logger = new Logger(InMemoryConfirmCodeRepository.name)
   private readonly confirmCodes = new Map()
 
   constructor() {}

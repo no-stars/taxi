@@ -11,10 +11,10 @@ interface PassengerRepositoryPort {
 
 
 @Injectable()
-export class PgPassengerRepositoryAdapter implements PassengerRepositoryPort {
+export class PgPassengerRepository implements PassengerRepositoryPort {
 
   private readonly passengerAlias = 'passengers'
-  private readonly logger = new Logger(PgPassengerRepositoryAdapter.name)
+  private readonly logger = new Logger(PgPassengerRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

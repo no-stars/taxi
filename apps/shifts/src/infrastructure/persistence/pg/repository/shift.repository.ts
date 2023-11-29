@@ -12,10 +12,10 @@ interface ShiftRepositoryPort {
 
 
 @Injectable()
-export class PgShiftRepositoryAdapter implements ShiftRepositoryPort {
+export class PgShiftRepository implements ShiftRepositoryPort {
 
   private readonly shiftAlias = 'shifts'
-  private readonly logger = new Logger(PgShiftRepositoryAdapter.name)
+  private readonly logger = new Logger(PgShiftRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

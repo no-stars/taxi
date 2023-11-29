@@ -12,10 +12,10 @@ interface PgPaymentCardRepositoryPort {
 
 
 @Injectable()
-export class PgPaymentCardRepositoryAdapter implements PgPaymentCardRepositoryPort {
+export class PgPaymentCardRepository implements PgPaymentCardRepositoryPort {
 
   private readonly paymentCardsAlias = 'payment_cards'
-  private readonly logger = new Logger(PgPaymentCardRepositoryAdapter.name)
+  private readonly logger = new Logger(PgPaymentCardRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

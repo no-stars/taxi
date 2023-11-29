@@ -3,12 +3,12 @@ import { Test } from '@nestjs/testing'
 import { TestingModule } from '@nestjs/testing/testing-module'
 import { Pool } from 'pg'
 
-import { PgCarRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-repository.adapter'
-import { PgCarDriverRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-driver-repository.adapter'
-import { PgCarModelRepositoryAdapter } from '@infrastructure/persistence/pg/repository/car-model-repository.adapter'
+import { PgCarRepository } from '@infrastructure/persistence/pg/repository/car.repository'
+import { PgCarDriverRepository } from '@infrastructure/persistence/pg/repository/car-driver.repository'
+import { PgCarModelRepository } from '@infrastructure/persistence/pg/repository/car-model.repository'
 import {
-  PgPriceSegmentRequirementRepositoryAdapter,
-} from '@infrastructure/persistence/pg/repository/price-segment-requirement-repository.adapter'
+  PgPriceSegmentRequirementRepository,
+} from '@infrastructure/persistence/pg/repository/price-segment-requirement.repository'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import {
   CarInit,
@@ -29,10 +29,10 @@ describe('Pg Repository', () => {
 
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
-  let carRepo: PgCarRepositoryAdapter
-  let carDriverRepo: PgCarDriverRepositoryAdapter
-  let carModelRepo: PgCarModelRepositoryAdapter
-  let priceSegmentRequirementRepo: PgPriceSegmentRequirementRepositoryAdapter
+  let carRepo: PgCarRepository
+  let carDriverRepo: PgCarDriverRepository
+  let carModelRepo: PgCarModelRepository
+  let priceSegmentRequirementRepo: PgPriceSegmentRequirementRepository
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -61,18 +61,18 @@ describe('Pg Repository', () => {
           provide: PG_CONNECTION,
           useFactory: () => pool,
         },
-        PgCarRepositoryAdapter,
-        PgCarDriverRepositoryAdapter,
-        PgCarModelRepositoryAdapter,
-        PgPriceSegmentRequirementRepositoryAdapter,
+        PgCarRepository,
+        PgCarDriverRepository,
+        PgCarModelRepository,
+        PgPriceSegmentRequirementRepository,
       ],
     }).compile()
 
     postgresClient = module.get(PG_CONNECTION)
-    carRepo = module.get(PgCarRepositoryAdapter)
-    carDriverRepo = module.get(PgCarDriverRepositoryAdapter)
-    carModelRepo = module.get(PgCarModelRepositoryAdapter)
-    priceSegmentRequirementRepo = module.get(PgPriceSegmentRequirementRepositoryAdapter)
+    carRepo = module.get(PgCarRepository)
+    carDriverRepo = module.get(PgCarDriverRepository)
+    carModelRepo = module.get(PgCarModelRepository)
+    priceSegmentRequirementRepo = module.get(PgPriceSegmentRequirementRepository)
   })
 
   afterAll(async () => {

@@ -6,9 +6,9 @@ import { Pool } from 'pg'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { ShiftInit, ShiftTypeInit, DriverActivityInit } from '@infrastructure/persistence/pg/migrations/init-tables'
 import { ShiftRelations } from '@infrastructure/persistence/pg/migrations/table-relations'
-import { PgShiftTypeRepositoryAdapter } from '@infrastructure/persistence/pg/repository/shift-type-repository.adapter'
-import { PgShiftRepositoryAdapter } from '@infrastructure/persistence/pg/repository/shift-repository.adapter'
-import { PgDriverActivityRepositoryAdapter } from '@infrastructure/persistence/pg/repository/driver-activity-repository.adapter'
+import { PgShiftTypeRepository } from '@infrastructure/persistence/pg/repository/shift-type.repository'
+import { PgShiftRepository } from '@infrastructure/persistence/pg/repository/shift.repository'
+import { PgDriverActivityRepository } from '@infrastructure/persistence/pg/repository/driver-activity.repository'
 import { StringUtils } from '@libs/common/utils'
 
 
@@ -17,9 +17,9 @@ describe('Pg Repository', () => {
 
   let postgresClient: Pool
   let postgresContainer: StartedPostgreSqlContainer
-  let shiftTypeRepo: PgShiftTypeRepositoryAdapter
-  let shiftRepo: PgShiftRepositoryAdapter
-  let driverActivityRepo: PgDriverActivityRepositoryAdapter
+  let shiftTypeRepo: PgShiftTypeRepository
+  let shiftRepo: PgShiftRepository
+  let driverActivityRepo: PgDriverActivityRepository
 
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
@@ -45,16 +45,16 @@ describe('Pg Repository', () => {
           provide: PG_CONNECTION,
           useFactory: () => pool,
         },
-        PgShiftTypeRepositoryAdapter,
-        PgDriverActivityRepositoryAdapter,
-        PgShiftRepositoryAdapter,
+        PgShiftTypeRepository,
+        PgDriverActivityRepository,
+        PgShiftRepository,
       ],
     }).compile()
 
     postgresClient = module.get(PG_CONNECTION)
-    shiftTypeRepo = module.get(PgShiftTypeRepositoryAdapter)
-    driverActivityRepo = module.get(PgDriverActivityRepositoryAdapter)
-    shiftRepo = module.get(PgShiftRepositoryAdapter)
+    shiftTypeRepo = module.get(PgShiftTypeRepository)
+    driverActivityRepo = module.get(PgDriverActivityRepository)
+    shiftRepo = module.get(PgShiftRepository)
   })
 
   afterAll(async () => {

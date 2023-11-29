@@ -12,10 +12,10 @@ interface SavedAddressRepositoryPort {
 
 
 @Injectable()
-export class PgSavedAddressRepositoryAdapter implements SavedAddressRepositoryPort {
+export class PgSavedAddressRepository implements SavedAddressRepositoryPort {
 
   private readonly savedAddressAlias = 'saved_addresses'
-  private readonly logger = new Logger(PgSavedAddressRepositoryAdapter.name)
+  private readonly logger = new Logger(PgSavedAddressRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 

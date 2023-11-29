@@ -15,9 +15,9 @@ export interface ConfirmCodeRepositoryPort {
 
 
 @Injectable()
-export class RedisConfirmCodeRepositoryAdapter implements ConfirmCodeRepositoryPort {
+export class RedisConfirmCodeRepository implements ConfirmCodeRepositoryPort {
 
-  private readonly logger = new Logger(RedisConfirmCodeRepositoryAdapter.name)
+  private readonly logger = new Logger(RedisConfirmCodeRepository.name)
   private readonly prefix = 'confirm_code'
   private readonly CODE_TTL: number = MILLISECONDS_IN_SECOND * SECONDS_IN_MINUTE * 5
 

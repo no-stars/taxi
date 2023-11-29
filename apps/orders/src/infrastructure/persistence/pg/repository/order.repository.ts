@@ -14,10 +14,10 @@ interface OrderRepositoryPort {
 
 
 @Injectable()
-export class PgOrderRepositoryAdapter implements OrderRepositoryPort {
+export class PgOrderRepository implements OrderRepositoryPort {
 
   private readonly orderAlias = 'orders'
-  private readonly logger = new Logger(PgOrderRepositoryAdapter.name)
+  private readonly logger = new Logger(PgOrderRepository.name)
 
   constructor(@Inject(PG_CONNECTION) private readonly pool: Pool) {}
 
