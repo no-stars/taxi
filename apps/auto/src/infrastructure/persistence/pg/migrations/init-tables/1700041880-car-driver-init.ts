@@ -21,14 +21,14 @@ export class CarDriverInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('CarDriverInit.up')
-    return await this.pool.query(createCarDriverTableQuery)
+    await this.pool.query(createCarDriverTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('CarDriverInit.down')
-    return await this.pool.query(dropCarDriverTableQuery)
+    await this.pool.query(dropCarDriverTableQuery)
   }
 
 }

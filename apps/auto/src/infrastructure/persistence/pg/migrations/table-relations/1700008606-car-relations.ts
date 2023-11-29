@@ -18,14 +18,14 @@ export class CarRelations implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('CarRelations.up')
-    return await this.pool.query(createCarRelationsQuery)
+    await this.pool.query(createCarRelationsQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('CarRelations.down')
-    return await this.pool.query(dropCarRelationsQuery)
+    await this.pool.query(dropCarRelationsQuery)
   }
 
 }

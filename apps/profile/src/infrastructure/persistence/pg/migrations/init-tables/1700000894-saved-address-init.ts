@@ -22,14 +22,14 @@ export class SavedAddressInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('SavedAddressInit.up')
-    return await this.pool.query(createSavedAddressModelTableQuery)
+    await this.pool.query(createSavedAddressModelTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('SavedAddressInit.down')
-    return await this.pool.query(dropSavedAddressModelTableQuery)
+    await this.pool.query(dropSavedAddressModelTableQuery)
   }
 
 }

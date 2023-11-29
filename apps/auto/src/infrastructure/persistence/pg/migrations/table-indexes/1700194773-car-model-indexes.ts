@@ -14,14 +14,14 @@ export class CarModelIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('CarModelIndexes.up')
-    return await this.pool.query(createCarModelIndexesQuery)
+    await this.pool.query(createCarModelIndexesQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('CarModelIndexes.down')
-    return await this.pool.query(dropCarModelIndexesQuery)
+    await this.pool.query(dropCarModelIndexesQuery)
   }
 
 }

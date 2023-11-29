@@ -18,14 +18,14 @@ export class SavedAddressRelations implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('SavedAddressRelations.up')
-    return await this.pool.query(createSavedAddressRelationsQuery)
+    await this.pool.query(createSavedAddressRelationsQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('SavedAddressRelations.down')
-    return await this.pool.query(dropSavedAddressRelationsQuery)
+    await this.pool.query(dropSavedAddressRelationsQuery)
   }
 
 }

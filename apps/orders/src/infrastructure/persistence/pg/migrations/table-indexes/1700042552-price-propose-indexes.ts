@@ -15,14 +15,14 @@ export class PriceProposeIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('PriceProposeIndexes.up')
-    return await this.pool.query(createPriceProposeIndexesQuery)
+    await this.pool.query(createPriceProposeIndexesQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('PriceProposeIndexes.down')
-    return await this.pool.query(dropPriceProposeIndexesQuery)
+    await this.pool.query(dropPriceProposeIndexesQuery)
   }
 
 }

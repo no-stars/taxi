@@ -24,14 +24,14 @@ export class PriceProposeInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('PriceProposeInit.up')
-    return await this.pool.query(createPriceProposeTableQuery)
+    await this.pool.query(createPriceProposeTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('PriceProposeInit.down')
-    return await this.pool.query(dropPriceProposeTableQuery)
+    await this.pool.query(dropPriceProposeTableQuery)
   }
 
 }

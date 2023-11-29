@@ -18,14 +18,14 @@ export class DriverRelations implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('DriverRelations.up')
-    return await this.pool.query(createDriverRelationsQuery)
+    await this.pool.query(createDriverRelationsQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('DriverRelations.down')
-    return await this.pool.query(dropDriverRelationsQuery)
+    await this.pool.query(dropDriverRelationsQuery)
   }
 
 }

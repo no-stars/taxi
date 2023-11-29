@@ -23,14 +23,14 @@ export class PersonInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('PersonInit.up')
-    return await this.pool.query(createPersonTableQuery)
+    await this.pool.query(createPersonTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('PersonInit.down')
-    return await this.pool.query(dropPersonTableQuery)
+    await this.pool.query(dropPersonTableQuery)
   }
 
 }

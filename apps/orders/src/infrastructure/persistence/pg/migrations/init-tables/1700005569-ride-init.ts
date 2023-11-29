@@ -26,14 +26,14 @@ export class RideInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('RideInit.up')
-    return await this.pool.query(createRideTableQuery)
+    await this.pool.query(createRideTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('RideInit.down')
-    return await this.pool.query(dropRideTableQuery)
+    await this.pool.query(dropRideTableQuery)
   }
 
 }

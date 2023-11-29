@@ -30,14 +30,14 @@ export class OrderInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('OrderInit.up')
-    return await this.pool.query(createOrderTableQuery)
+    await this.pool.query(createOrderTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('OrderInit.down')
-    return await this.pool.query(dropOrderTableQuery)
+    await this.pool.query(dropOrderTableQuery)
   }
 
 }

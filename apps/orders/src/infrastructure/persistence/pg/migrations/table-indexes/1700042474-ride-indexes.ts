@@ -14,14 +14,14 @@ export class RideIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('RideIndexes.up')
-    return await this.pool.query(createRideIndexesQuery)
+    await this.pool.query(createRideIndexesQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('RideIndexes.down')
-    return await this.pool.query(dropRideIndexesQuery)
+    await this.pool.query(dropRideIndexesQuery)
   }
 
 }

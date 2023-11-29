@@ -22,14 +22,14 @@ export class RatingInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('RatingInit.up')
-    return await this.pool.query(createRatingTableQuery)
+    await this.pool.query(createRatingTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('RatingInit.down')
-    return await this.pool.query(dropRatingTableQuery)
+    await this.pool.query(dropRatingTableQuery)
   }
 
 }

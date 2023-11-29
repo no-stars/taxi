@@ -27,14 +27,14 @@ export class OrderIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('OrderIndexes.up')
-    return await this.pool.query(createOrderIndexesQuery)
+    await this.pool.query(createOrderIndexesQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('OrderIndexes.down')
-    return await this.pool.query(dropOrderIndexesQuery)
+    await this.pool.query(dropOrderIndexesQuery)
   }
 
 }

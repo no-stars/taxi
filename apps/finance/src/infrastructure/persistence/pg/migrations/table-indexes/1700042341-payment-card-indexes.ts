@@ -14,14 +14,14 @@ export class PaymentCardIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('PaymentCardIndexes.up')
-    return await this.pool.query(createPaymentCardIndexesQuery)
+    await this.pool.query(createPaymentCardIndexesQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('PaymentCardIndexes.down')
-    return await this.pool.query(dropPaymentCardIndexesQuery)
+    await this.pool.query(dropPaymentCardIndexesQuery)
   }
 
 }

@@ -21,14 +21,14 @@ export class AccountInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('AccountInit.up')
-    return await this.pool.query(createAccountModelTableQuery)
+    await this.pool.query(createAccountModelTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('AccountInit.down')
-    return await this.pool.query(dropAccountModelTableQuery)
+    await this.pool.query(dropAccountModelTableQuery)
   }
 
 }

@@ -22,14 +22,14 @@ export class ShiftInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('ShiftInit.up')
-    return await this.pool.query(createShiftTableQuery)
+    await this.pool.query(createShiftTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('ShiftInit.down')
-    return await this.pool.query(dropShiftTableQuery)
+    await this.pool.query(dropShiftTableQuery)
   }
 
 }

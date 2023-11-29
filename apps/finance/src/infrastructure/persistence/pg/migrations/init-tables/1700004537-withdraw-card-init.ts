@@ -22,14 +22,14 @@ export class WithdrawCardInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('WithdrawCardInit.up')
-    return await this.pool.query(createWithdrawCardTableQuery)
+    await this.pool.query(createWithdrawCardTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('WithdrawCardInit.down')
-    return await this.pool.query(dropWithdrawCardTableQuery)
+    await this.pool.query(dropWithdrawCardTableQuery)
   }
 
 }

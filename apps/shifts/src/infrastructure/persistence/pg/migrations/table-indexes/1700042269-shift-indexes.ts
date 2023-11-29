@@ -14,14 +14,14 @@ export class ShiftIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('ShiftIndexes.up')
-    return await this.pool.query(createShiftIndexesQuery)
+    await this.pool.query(createShiftIndexesQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('ShiftIndexes.down')
-    return await this.pool.query(dropShiftIndexesQuery)
+    await this.pool.query(dropShiftIndexesQuery)
   }
 
 }

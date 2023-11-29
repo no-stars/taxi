@@ -14,14 +14,14 @@ export class DriverActivityIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('DriverActivityIndexes.up')
-    return await this.pool.query(createDriverActivityIndexesQuery)
+    await this.pool.query(createDriverActivityIndexesQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('DriverActivityIndexes.down')
-    return await this.pool.query(dropDriverActivityIndexesQuery)
+    await this.pool.query(dropDriverActivityIndexesQuery)
   }
 
 }

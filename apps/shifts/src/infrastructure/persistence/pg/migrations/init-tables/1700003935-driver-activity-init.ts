@@ -22,14 +22,14 @@ export class DriverActivityInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('DriverActivityInit.up')
-    return await this.pool.query(createDriverActivityTableQuery)
+    await this.pool.query(createDriverActivityTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('DriverActivityInit.down')
-    return await this.pool.query(dropDriverActivityTableQuery)
+    await this.pool.query(dropDriverActivityTableQuery)
   }
 
 }

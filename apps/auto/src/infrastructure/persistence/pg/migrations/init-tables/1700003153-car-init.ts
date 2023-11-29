@@ -22,14 +22,14 @@ export class CarInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('CarInit.up')
-    return await this.pool.query(createCarTableQuery)
+    await this.pool.query(createCarTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('CarInit.down')
-    return await this.pool.query(dropCarTableQuery)
+    await this.pool.query(dropCarTableQuery)
   }
 
 }

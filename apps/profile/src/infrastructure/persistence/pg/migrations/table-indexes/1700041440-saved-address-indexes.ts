@@ -14,14 +14,14 @@ export class SavedAddressIndexes implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('SavedAddressIndexes.up')
-    return await this.pool.query(createSavedAddressIndexesQuery)
+    await this.pool.query(createSavedAddressIndexesQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('SavedAddressIndexes.down')
-    return await this.pool.query(dropSavedAddressIndexesQuery)
+    await this.pool.query(dropSavedAddressIndexesQuery)
   }
 
 }

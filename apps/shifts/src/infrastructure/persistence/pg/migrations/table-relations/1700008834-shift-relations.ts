@@ -18,14 +18,14 @@ export class ShiftRelations implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('ShiftRelations.up')
-    return await this.pool.query(createShiftRelationsQuery)
+    await this.pool.query(createShiftRelationsQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('ShiftRelations.down')
-    return await this.pool.query(dropShiftRelationsQuery)
+    await this.pool.query(dropShiftRelationsQuery)
   }
 
 }

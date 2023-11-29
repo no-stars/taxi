@@ -23,14 +23,14 @@ export class PaymentInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('PaymentInit.up')
-    return await this.pool.query(createPaymentTableQuery)
+    await this.pool.query(createPaymentTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('PaymentInit.down')
-    return await this.pool.query(dropPaymentTableQuery)
+    await this.pool.query(dropPaymentTableQuery)
   }
 
 }

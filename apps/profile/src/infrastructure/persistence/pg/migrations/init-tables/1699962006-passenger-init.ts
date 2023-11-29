@@ -20,14 +20,14 @@ export class PassengerInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('PassengerInit.up')
-    return await this.pool.query(createPassengerTableQuery)
+    await this.pool.query(createPassengerTableQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('PassengerInit.down')
-    return await this.pool.query(dropPassengerTableQuery)
+    await this.pool.query(dropPassengerTableQuery)
   }
 
 }

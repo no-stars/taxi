@@ -18,14 +18,14 @@ export class OrderRelations implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<any> {
+  public async up(): Promise<void> {
     console.log('OrderRelations.up')
-    return await this.pool.query(createOrderRelationsQuery)
+    await this.pool.query(createOrderRelationsQuery)
   }
 
-  public async down(): Promise<any> {
+  public async down(): Promise<void> {
     console.log('OrderRelations.down')
-    return await this.pool.query(dropOrderRelationsQuery)
+    await this.pool.query(dropOrderRelationsQuery)
   }
 
 }
