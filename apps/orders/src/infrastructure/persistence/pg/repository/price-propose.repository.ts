@@ -4,7 +4,7 @@ import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
 import PgPriceProposeEntity, {
   PgPriceProposeField,
-} from '@infrastructure/persistence/pg/entities/pg-price-propose.entity'
+} from '@infrastructure/persistence/pg/entities/price-propose.entity'
 
 
 interface PriceProposeRepositoryPort {

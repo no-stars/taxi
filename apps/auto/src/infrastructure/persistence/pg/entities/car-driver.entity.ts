@@ -1,18 +1,16 @@
 import { Expose } from 'class-transformer'
 import { Nullable } from '@libs/common/types/nullable'
 
-export type PgCarField = string | Date | null
+export type PgCarDriverField = string | Date | null
 
-export default class PgCarEntity {
+export default class CarDriverEntity {
 
-  @Expose({ name: 'car_id' })
+  @Expose({ name: 'car_driver_id' })
   id: string
 
-  car_model_id: string
+  driver_id: string
 
-  plate_number: string
-
-  release_year: string
+  car_id: string
 
   created_at: Date
 
@@ -20,12 +18,11 @@ export default class PgCarEntity {
 
   deleted_at: Nullable<Date>
 
-  getValues(): PgCarField[] {
+  getValues(): PgCarDriverField[] {
     return [
       this.id,
-      this.car_model_id,
-      this.plate_number,
-      this.release_year,
+      this.driver_id,
+      this.car_id,
       this.created_at,
       this.updated_at,
       this.deleted_at,

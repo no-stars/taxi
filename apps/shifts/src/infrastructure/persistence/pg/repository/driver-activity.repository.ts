@@ -2,8 +2,9 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgDriverActivityEntity, { PgDriverActivityField } from '@infrastructure/persistence/pg/entities/pg-driver-activity.entity'
-import { PgCarModelField } from '../../../../../../auto/src/infrastructure/persistence/pg/entities/pg-car-model.entity'
+import PgDriverActivityEntity, {
+  PgDriverActivityField,
+} from '@infrastructure/persistence/pg/entities/driver-activity.entity'
 
 
 interface DriverActivityRepositoryPort {

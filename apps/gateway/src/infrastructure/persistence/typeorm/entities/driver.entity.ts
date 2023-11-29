@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm'
-import { TypeOrmAccount } from '@infrastructure/persistence/typeorm/entities/typeorm-account.entity'
+import { TypeOrmAccount } from '@infrastructure/persistence/typeorm/entities/account.entity'
 
 @Entity('driver')
 export class TypeOrmDriver {

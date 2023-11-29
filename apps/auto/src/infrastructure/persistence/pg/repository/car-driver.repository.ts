@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgCarDriverEntity, { PgCarDriverField } from '@infrastructure/persistence/pg/entities/pg-car-driver.entity'
+import PgCarDriverEntity, { PgCarDriverField } from '@infrastructure/persistence/pg/entities/car-driver.entity'
 
 
 interface CarDriverRepositoryPort {

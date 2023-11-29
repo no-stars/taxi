@@ -3,7 +3,7 @@ import { Nullable } from '@libs/common/types/nullable'
 
 export type PgOrderField = string | Date | number | null
 
-export default class PgOrderEntity {
+export default class OrderEntity {
 
   @Expose({ name: 'order_id' })
   id: string

@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgPersonEntity, { PgPersonField } from '@infrastructure/persistence/pg/entities/pg-person.entity'
+import PgPersonEntity, { PgPersonField } from '@infrastructure/persistence/pg/entities/person.entity'
 
 
 interface PersonRepositoryPort {

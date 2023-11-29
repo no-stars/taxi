@@ -1,5 +1,5 @@
 import { Account } from '@core/domain/entities/account.entity'
-import PgAccountEntity from '@infrastructure/persistence/pg/entities/pg-account.entity'
+import PgAccountEntity from '@infrastructure/persistence/pg/entities/account.entity'
 
 export default class AccountEntityMapper {
 

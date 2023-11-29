@@ -3,7 +3,7 @@ import { Nullable } from '@libs/common/types/nullable'
 
 export type PgPriceSegmentRequirementField = string | Date | number | null
 
-export default class PgPriceSegmentRequirementEntity {
+export default class PriceSegmentRequirementEntity {
 
   @Expose({ name: 'price_segment_requirement_id' })
   id: string

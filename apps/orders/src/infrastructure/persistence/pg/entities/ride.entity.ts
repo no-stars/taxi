@@ -3,7 +3,7 @@ import { Nullable } from '@libs/common/types/nullable'
 
 export type PgRideField = string | Date | null
 
-export default class PgRideEntity {
+export default class RideEntity {
 
   @Expose({ name: 'ride_id' })
   id: string

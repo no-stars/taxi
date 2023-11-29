@@ -1,15 +1,18 @@
 import { Expose } from 'class-transformer'
 import { Nullable } from '@libs/common/types/nullable'
 
-export type PgAccountField = string | Date | number | null
+export type PgWithdrawCardField = string | Date | null
 
-export default class PgAccountEntity {
+export default class WithdrawCardEntity {
+
+  @Expose({ name: 'withdraw_card_id' })
+  id: string
 
   account_id: string
 
-  phone_number: string
+  card_type: string
 
-  email: Nullable<string>
+  card_number: string
 
   created_at: Date
 
@@ -17,11 +20,12 @@ export default class PgAccountEntity {
 
   deleted_at: Nullable<Date>
 
-  getValues(): PgAccountField[] {
+  getValues(): PgWithdrawCardField[] {
     return [
+      this.id,
       this.account_id,
-      this.phone_number,
-      this.email,
+      this.card_type,
+      this.card_number,
       this.created_at,
       this.updated_at,
       this.deleted_at,

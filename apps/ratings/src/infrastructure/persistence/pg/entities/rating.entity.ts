@@ -3,7 +3,7 @@ import { Nullable } from '@libs/common/types/nullable'
 
 export type PgRatingField = string | Date | number | null
 
-export default class PgRatingEntity {
+export default class RatingEntity {
 
   @Expose({ name: 'rating_id' })
   id: string

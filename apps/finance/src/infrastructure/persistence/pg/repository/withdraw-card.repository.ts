@@ -4,7 +4,7 @@ import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
 import PgWithdrawCardEntity, {
   PgWithdrawCardField,
-} from '@infrastructure/persistence/pg/entities/pg-withdraw-card.entity'
+} from '@infrastructure/persistence/pg/entities/withdraw-card.entity'
 
 
 interface PgWithdrawCardRepositoryPort {

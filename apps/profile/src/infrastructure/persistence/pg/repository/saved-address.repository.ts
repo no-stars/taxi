@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgSavedAddressEntity, { PgSavedAddressField } from '@infrastructure/persistence/pg/entities/pg-saved-address.entity'
+import PgSavedAddressEntity, { PgSavedAddressField } from '@infrastructure/persistence/pg/entities/saved-address.entity'
 
 
 interface SavedAddressRepositoryPort {

@@ -3,7 +3,7 @@ import { Nullable } from '@libs/common/types/nullable'
 
 export type PgPaymentField = string | Date | number | null
 
-export default class PgPaymentEntity {
+export default class PaymentEntity {
 
   @Expose({ name: 'payment_id' })
   id: string

@@ -3,7 +3,7 @@ import { Nullable } from '@libs/common/types/nullable'
 
 export type PgShiftTypeField = string | Date | number | null
 
-export default class PgShiftTypeEntity {
+export default class ShiftTypeEntity {
 
   @Expose({ name: 'shift_type_id' })
   id: string

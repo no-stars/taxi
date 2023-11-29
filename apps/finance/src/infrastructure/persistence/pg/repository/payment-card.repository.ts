@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgPaymentCardEntity, { PgPaymentCardField } from '@infrastructure/persistence/pg/entities/pg-payment-card.entity'
+import PgPaymentCardEntity, { PgPaymentCardField } from '@infrastructure/persistence/pg/entities/payment-card.entity'
 
 
 interface PgPaymentCardRepositoryPort {

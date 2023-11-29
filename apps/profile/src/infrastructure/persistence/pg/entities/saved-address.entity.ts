@@ -3,7 +3,7 @@ import { Nullable } from '@libs/common/types/nullable'
 
 export type PgSavedAddressField = string | Date | null
 
-export default class PgSavedAddressEntity {
+export default class SavedAddressEntity {
 
   @Expose({ name: 'saved_address_id' })
   id: string

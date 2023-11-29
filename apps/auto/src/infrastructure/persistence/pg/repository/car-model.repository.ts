@@ -2,8 +2,8 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgCarModelEntity, { PgCarModelField } from '@infrastructure/persistence/pg/entities/pg-car-model.entity'
-import PgCarEntity, { PgCarField } from '@infrastructure/persistence/pg/entities/pg-car.entity'
+import PgCarModelEntity, { PgCarModelField } from '@infrastructure/persistence/pg/entities/car-model.entity'
+import PgCarEntity, { PgCarField } from '@infrastructure/persistence/pg/entities/car.entity'
 
 interface CarModelRepositoryPort {
   addCarModel(payload: object): Promise<number | null>

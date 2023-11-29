@@ -4,7 +4,7 @@ import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
 import PgPriceSegmentRequirementEntity, {
   PgPriceSegmentRequirementField,
-} from '@infrastructure/persistence/pg/entities/pg-price-segment-requirement.entity'
+} from '@infrastructure/persistence/pg/entities/price-segment-requirement.entity'
 
 interface PriceSegmentRequirementRepositoryPort {
   addPriceSegmentRequirement(payload: object): Promise<number | null>

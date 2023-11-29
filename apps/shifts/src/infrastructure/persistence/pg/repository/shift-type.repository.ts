@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { Pool, QueryResult } from 'pg'
 import { plainToInstance } from 'class-transformer'
-import PgShiftTypeEntity, { PgShiftTypeField } from '@infrastructure/persistence/pg/entities/pg-shift-type.entity'
+import PgShiftTypeEntity, { PgShiftTypeField } from '@infrastructure/persistence/pg/entities/shift-type.entity'
 
 
 interface ShiftTypeRepositoryPort {
