@@ -1,5 +1,6 @@
 import { DatabaseType } from 'typeorm'
 import { SEED_COUNT } from './seed'
+import { MigrationAction } from './migration'
 
 type TypeormDatabaseType = Exclude<DatabaseType, 'sqljs'>
 
@@ -14,6 +15,7 @@ enum Environment {
 
 export {
   Environment,
+  MigrationAction,
   TypeormDatabaseType,
   SECONDS_IN_MINUTE,
   MILLISECONDS_IN_SECOND,

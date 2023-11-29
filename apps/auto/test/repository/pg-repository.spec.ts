@@ -22,6 +22,8 @@ import {
   CarDriverRelations,
 } from '@infrastructure/persistence/pg/migrations/table-relations'
 import { StringUtils } from '@libs/common/utils'
+import { Migration } from '@libs/common/interfaces'
+import MigrationRunner from '@libs/common/utils/migration-runner'
 
 
 describe('Pg Repository', () => {
@@ -41,7 +43,7 @@ describe('Pg Repository', () => {
       connectionString: postgresContainer.getConnectionUri(),
     })
 
-    const autoMigrations = [
+    const migrations: Migration[] = [
       new CarInit(pool),
       new CarDriverInit(pool),
       new PriceSegmentRequirementInit(pool),
@@ -51,9 +53,7 @@ describe('Pg Repository', () => {
       new CarDriverRelations(pool),
     ]
 
-    for (const migration of autoMigrations) {
-      await migration.up()
-    }
+    await MigrationRunner.up(migrations)
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

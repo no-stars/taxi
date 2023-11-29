@@ -14,6 +14,8 @@ import {
 import { StringUtils } from '@libs/common/utils'
 import { addMinutes } from 'date-fns'
 import { Nullable } from '@libs/common/types/nullable'
+import { Migration } from '@libs/common/interfaces'
+import MigrationRunner from '@libs/common/utils/migration-runner'
 
 
 describe('Pg Repository', () => {
@@ -32,7 +34,7 @@ describe('Pg Repository', () => {
       connectionString: postgresContainer.getConnectionUri(),
     })
 
-    const ordersMigrations = [
+    const migrations: Migration[] = [
       new OrderInit(pool),
       new RideInit(pool),
       new PriceProposeInit(pool),
@@ -40,9 +42,7 @@ describe('Pg Repository', () => {
       new PriceProposeRelations(pool),
     ]
 
-    for (const migration of ordersMigrations) {
-      await migration.up()
-    }
+    await MigrationRunner.up(migrations)
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

@@ -8,6 +8,8 @@ import { PgAccountRepository } from '@infrastructure/persistence/pg/repository/a
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { AccountInit } from '@infrastructure/persistence/pg/migrations/init-tables'
 import { Account } from '@core/domain/entities/account.entity'
+import { Migration } from '@libs/common/interfaces'
+import MigrationRunner from '@libs/common/utils/migration-runner'
 
 
 describe('Pg Repository', () => {
@@ -24,8 +26,11 @@ describe('Pg Repository', () => {
       connectionString: postgresContainer.getConnectionUri(),
     })
 
-    const ratingMigrations = new AccountInit(pool)
-    await ratingMigrations.up()
+    const migrations: Migration[] = [
+      new AccountInit(pool),
+    ]
+
+    await MigrationRunner.up(migrations)
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

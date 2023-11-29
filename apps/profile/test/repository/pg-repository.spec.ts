@@ -22,6 +22,8 @@ import {
   DriverRelations,
 } from '@infrastructure/persistence/pg/migrations/table-relations'
 import { StringUtils } from '@libs/common/utils'
+import { Migration } from '@libs/common/interfaces'
+import MigrationRunner from '@libs/common/utils/migration-runner'
 
 
 describe('Pg Repository', () => {
@@ -42,7 +44,7 @@ describe('Pg Repository', () => {
       connectionString: postgresContainer.getConnectionUri(),
     })
 
-    const profileMigrations = [
+    const migrations: Migration[] = [
       new PassengerInit(pool),
       new SavedAddressInit(pool),
       new PersonInit(pool),
@@ -52,9 +54,7 @@ describe('Pg Repository', () => {
       new DriverRelations(pool),
     ]
 
-    for (const profileMigration of profileMigrations) {
-      await profileMigration.up()
-    }
+    await MigrationRunner.up(migrations)
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

@@ -10,6 +10,8 @@ import { PgWithdrawCardRepository } from '@infrastructure/persistence/pg/reposit
 import { PgPaymentRepository } from '@infrastructure/persistence/pg/repository/payment.repository'
 import { StringUtils } from '@libs/common/utils'
 import { startOfDay } from 'date-fns'
+import { Migration } from '@libs/common/interfaces'
+import MigrationRunner from '@libs/common/utils/migration-runner'
 
 
 describe('Pg Repository', () => {
@@ -28,15 +30,13 @@ describe('Pg Repository', () => {
       connectionString: postgresContainer.getConnectionUri(),
     })
 
-    const financeMigrations = [
+    const migrations: Migration[] = [
       new PaymentInit(pool),
       new WithdrawCardInit(pool),
       new PaymentCardInit(pool),
     ]
 
-    for (const migration of financeMigrations) {
-      await migration.up()
-    }
+    await MigrationRunner.up(migrations)
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

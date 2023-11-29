@@ -10,6 +10,8 @@ import { PgShiftTypeRepository } from '@infrastructure/persistence/pg/repository
 import { PgShiftRepository } from '@infrastructure/persistence/pg/repository/shift.repository'
 import { PgDriverActivityRepository } from '@infrastructure/persistence/pg/repository/driver-activity.repository'
 import { StringUtils } from '@libs/common/utils'
+import { Migration } from '@libs/common/interfaces'
+import MigrationRunner from '@libs/common/utils/migration-runner'
 
 
 describe('Pg Repository', () => {
@@ -28,16 +30,14 @@ describe('Pg Repository', () => {
       connectionString: postgresContainer.getConnectionUri(),
     })
 
-    const shiftMigrations = [
+    const migrations: Migration[] = [
       new ShiftInit(pool),
       new ShiftTypeInit(pool),
       new DriverActivityInit(pool),
       new ShiftRelations(pool),
     ]
 
-    for (const migration of shiftMigrations) {
-      await migration.up()
-    }
+    await MigrationRunner.up(migrations)
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
