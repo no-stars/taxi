@@ -48,7 +48,7 @@ export default class MigrationRunner {
     const isValidArg: boolean = MigrationRunner.validateAction(action)
 
     if (!isValidArg) {
-      MigrationRunner.terminate('up/down argument required')
+      MigrationRunner.terminate('up/down argument required', 2)
     }
   }
 
@@ -56,9 +56,9 @@ export default class MigrationRunner {
     return action === MigrationAction.up || action === MigrationAction.down
   }
 
-  private static terminate(message: string): void {
+  private static terminate(message: string, code: number): void {
     console.log(message)
-    process.exit(2)
+    process.exit(code)
   }
 
 }
