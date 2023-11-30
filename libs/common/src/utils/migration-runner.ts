@@ -1,58 +1,63 @@
 import { MigrationAction } from '../constants'
 import { Migration } from '../interfaces'
-import { Optional } from '../types/optional'
 
 
 export default class MigrationRunner {
 
-  private static action: Optional<string> = process.argv[2]
+  constructor(private readonly migrations: Migration[]) {}
 
-  public static async run(migrations: Migration[]): Promise<void> {
-    this.throwIfNoArgs()
+  public async runStandalone(): Promise<void> {
+    const action: string = MigrationRunner.getActionFromArgs()
 
-    if (this.action === MigrationAction.up) {
-      await this.up(migrations)
+    if (action === MigrationAction.up) {
+      await this.up()
     }
 
-    if (this.action === MigrationAction.down) {
-      await this.down(migrations)
+    if (action === MigrationAction.down) {
+      await this.down()
     }
   }
 
-  public static async up(migrations: Migration[]): Promise<void> {
+  public async up(): Promise<void> {
     console.log('Start migrations')
 
-    for (const migration of migrations) {
+    for (const migration of this.migrations) {
       await migration.up()
     }
 
     console.log('Finish migrations')
   }
 
-  public static async down(migrations: Migration[]): Promise<void> {
+  public async down(): Promise<void> {
     console.log('Undo migrations')
 
-    for (const migration of migrations.reverse()) {
+    for (const migration of this.migrations.reverse()) {
       await migration.down()
     }
 
     console.log('Undo migrations')
   }
 
-  private static throwIfNoArgs(): void {
-    const isValidArg: boolean = MigrationRunner.validateArg(this.action)
+  private static getActionFromArgs(): string {
+    const argAction: string = process.argv[2] ?? ''
+    MigrationRunner.terminateIfInvalidAction(argAction)
+    return argAction
+  }
+
+  private static terminateIfInvalidAction(action: string): void {
+    const isValidArg: boolean = MigrationRunner.validateAction(action)
 
     if (!isValidArg) {
-      MigrationRunner.terminate()
+      MigrationRunner.terminate('up/down argument required')
     }
   }
 
-  private static validateArg(arg: Optional<string>): boolean {
-    return arg === MigrationAction.up || arg === MigrationAction.down
+  private static validateAction(action: string): boolean {
+    return action === MigrationAction.up || action === MigrationAction.down
   }
 
-  private static terminate(): void {
-    console.log('up/down argument required')
+  private static terminate(message: string): void {
+    console.log(message)
     process.exit(2)
   }
 

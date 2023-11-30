@@ -30,7 +30,8 @@ describe('Pg Repository', () => {
       new AccountInit(pool),
     ]
 
-    await MigrationRunner.up(migrations)
+    const runner = new MigrationRunner(migrations)
+    await runner.up()
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

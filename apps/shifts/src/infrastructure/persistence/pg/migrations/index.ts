@@ -30,4 +30,5 @@ const migrations: Migration[] = [
 ]
 
 
-MigrationRunner.run(migrations)
+const runner = new MigrationRunner(migrations)
+runner.runStandalone()

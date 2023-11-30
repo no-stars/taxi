@@ -53,7 +53,8 @@ describe('Pg Repository', () => {
       new CarDriverRelations(pool),
     ]
 
-    await MigrationRunner.up(migrations)
+    const runner = new MigrationRunner(migrations)
+    await runner.up()
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
