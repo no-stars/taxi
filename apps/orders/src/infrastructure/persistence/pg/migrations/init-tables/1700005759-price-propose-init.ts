@@ -1,5 +1,5 @@
 import { Migration } from '@libs/common/interfaces'
-import { Pool } from 'pg'
+import { Pool, QueryResult } from 'pg'
 
 
 const createPriceProposeTableQuery = `
@@ -24,14 +24,14 @@ export class PriceProposeInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<void> {
+  public up(): Promise<QueryResult> {
     console.log('PriceProposeInit.up')
-    await this.pool.query(createPriceProposeTableQuery)
+    return this.pool.query(createPriceProposeTableQuery)
   }
 
-  public async down(): Promise<void> {
+  public down(): Promise<QueryResult> {
     console.log('PriceProposeInit.down')
-    await this.pool.query(dropPriceProposeTableQuery)
+    return this.pool.query(dropPriceProposeTableQuery)
   }
 
 }

@@ -1,5 +1,5 @@
 import { Migration } from '@libs/common/interfaces'
-import { Pool } from 'pg'
+import { Pool, QueryResult } from 'pg'
 
 
 const createShiftTableQuery = `
@@ -22,14 +22,14 @@ export class ShiftInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<void> {
+  public up(): Promise<QueryResult> {
     console.log('ShiftInit.up')
-    await this.pool.query(createShiftTableQuery)
+    return this.pool.query(createShiftTableQuery)
   }
 
-  public async down(): Promise<void> {
+  public down(): Promise<QueryResult> {
     console.log('ShiftInit.down')
-    await this.pool.query(dropShiftTableQuery)
+    return this.pool.query(dropShiftTableQuery)
   }
 
 }

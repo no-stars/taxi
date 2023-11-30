@@ -1,4 +1,4 @@
 export default interface Migration {
-  up(): Promise<void>
-  down(): Promise<void>
+  up(): Promise<any>
+  down(): Promise<any>
 }

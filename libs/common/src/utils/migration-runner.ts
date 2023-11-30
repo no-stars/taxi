@@ -6,15 +6,15 @@ export default class MigrationRunner {
 
   constructor(private readonly migrations: Migration[]) {}
 
-  public async runStandalone(): Promise<void> {
+  public runStandalone(): void {
     const action: string = MigrationRunner.getActionFromArgs()
 
     if (action === MigrationAction.up) {
-      await this.up()
+      this.up()
     }
 
     if (action === MigrationAction.down) {
-      await this.down()
+      this.down()
     }
   }
 

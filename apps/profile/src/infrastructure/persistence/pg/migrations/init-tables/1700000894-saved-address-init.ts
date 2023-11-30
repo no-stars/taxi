@@ -1,5 +1,5 @@
 import { Migration } from '@libs/common/interfaces'
-import { Pool } from 'pg'
+import { Pool, QueryResult } from 'pg'
 
 
 const createSavedAddressModelTableQuery = `
@@ -22,14 +22,14 @@ export class SavedAddressInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<void> {
+  public up(): Promise<QueryResult> {
     console.log('SavedAddressInit.up')
-    await this.pool.query(createSavedAddressModelTableQuery)
+    return this.pool.query(createSavedAddressModelTableQuery)
   }
 
-  public async down(): Promise<void> {
+  public down(): Promise<QueryResult> {
     console.log('SavedAddressInit.down')
-    await this.pool.query(dropSavedAddressModelTableQuery)
+    return this.pool.query(dropSavedAddressModelTableQuery)
   }
 
 }

@@ -1,5 +1,5 @@
 import { Migration } from '@libs/common/interfaces'
-import { Pool } from 'pg'
+import { Pool, QueryResult } from 'pg'
 
 
 const createDriverRelationsQuery = `
@@ -18,14 +18,14 @@ export class DriverRelations implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<void> {
+  public up(): Promise<QueryResult> {
     console.log('DriverRelations.up')
-    await this.pool.query(createDriverRelationsQuery)
+    return this.pool.query(createDriverRelationsQuery)
   }
 
-  public async down(): Promise<void> {
+  public down(): Promise<QueryResult> {
     console.log('DriverRelations.down')
-    await this.pool.query(dropDriverRelationsQuery)
+    return this.pool.query(dropDriverRelationsQuery)
   }
 
 }

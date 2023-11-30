@@ -1,5 +1,5 @@
 import { Migration } from '@libs/common/interfaces'
-import { Pool } from 'pg'
+import { Pool, QueryResult } from 'pg'
 
 
 //  start_location GEOMETRY(Point, 4326) NOT NULL,
@@ -30,14 +30,14 @@ export class OrderInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<void> {
+  public up(): Promise<QueryResult> {
     console.log('OrderInit.up')
-    await this.pool.query(createOrderTableQuery)
+    return this.pool.query(createOrderTableQuery)
   }
 
-  public async down(): Promise<void> {
+  public down(): Promise<QueryResult> {
     console.log('OrderInit.down')
-    await this.pool.query(dropOrderTableQuery)
+    return this.pool.query(dropOrderTableQuery)
   }
 
 }

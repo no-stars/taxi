@@ -1,5 +1,5 @@
 import { Migration } from '@libs/common/interfaces'
-import { Pool } from 'pg'
+import { Pool, QueryResult } from 'pg'
 
 
 const createCarDriverTableQuery = `
@@ -21,14 +21,14 @@ export class CarDriverInit implements Migration {
 
   constructor(private readonly pool: Pool) {}
 
-  public async up(): Promise<void> {
+  public up(): Promise<QueryResult> {
     console.log('CarDriverInit.up')
-    await this.pool.query(createCarDriverTableQuery)
+    return this.pool.query(createCarDriverTableQuery)
   }
 
-  public async down(): Promise<void> {
+  public down(): Promise<QueryResult> {
     console.log('CarDriverInit.down')
-    await this.pool.query(dropCarDriverTableQuery)
+    return this.pool.query(dropCarDriverTableQuery)
   }
 
 }
