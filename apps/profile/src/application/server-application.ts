@@ -1,36 +1,20 @@
-import { INestMicroservice } from '@nestjs/common'
-import { MicroserviceOptions } from '@nestjs/microservices'
-import { NestFactory } from '@nestjs/core'
-import { LoggerService, ValidationPipe, ValidationPipeOptions } from '@nestjs/common'
+import { NestApplication, NestFactory } from '@nestjs/core'
+import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger'
+import { INestApplication, LoggerService, ValidationPipe, ValidationPipeOptions } from '@nestjs/common'
 import { Logger as PinoLogger } from 'nestjs-pino'
 
 import { RootModule } from '@application/modules/root.module'
-import { options as serviceOptions } from '@libs/communication/profile'
+import { SwaggerOptions } from '@libs/common/interfaces'
 
 
 export class ServerApplication {
 
-  private readonly port: string = process.env.APP_PORT || '3004'
   private logger: LoggerService
+  private readonly port: string = process.env.APP_PORT || '3004'
+  private readonly swaggerBasePath: string = process.env.SWAGGER_BASE_PATH || ''
 
   async run(): Promise<void> {
-    const kafkaMicroservice: MicroserviceOptions = {
-      transport: serviceOptions.transport,
-      options: {
-        client: {
-          brokers: serviceOptions.options?.client?.brokers || [],
-        },
-        consumer: {
-          groupId: 'profile-consumer',
-        },
-      },
-    }
-
-    const app = await NestFactory.create(RootModule, { bufferLogs: true })
-    // const microservice: INestMicroservice = app.connectMicroservice<MicroserviceOptions>(
-    //   kafkaMicroservice,
-    //   { inheritAppConfig: true }
-    // )
+    const app: NestApplication = await NestFactory.create(RootModule, { bufferLogs: true })
 
     this.logger = app.get(PinoLogger)
 
@@ -42,19 +26,35 @@ export class ServerApplication {
     app.useLogger(this.logger)
     app.useGlobalPipes(new ValidationPipe(validationOptions))
 
-    // await app.startAllMicroservices()
-    await app.listen(this.port)
-
     this.log()
+    this.buildAPIDocumentation(app)
+
+    await app.listen(this.port)
   }
 
   static new(): ServerApplication {
     return new ServerApplication()
   }
 
+  private buildAPIDocumentation(app: INestApplication): void {
+    const SWAGGER_OPTIONS: SwaggerOptions = {
+      title: 'Taxi Profile Service',
+      description: 'Taxi profile service',
+      version: '1.0',
+    }
+
+    const options: Omit<OpenAPIObject, 'paths'> = new DocumentBuilder()
+      .setTitle(SWAGGER_OPTIONS.title)
+      .setDescription(SWAGGER_OPTIONS.description)
+      .setVersion(SWAGGER_OPTIONS.version)
+      .build()
+
+    const document: OpenAPIObject = SwaggerModule.createDocument(app, options)
+    SwaggerModule.setup(this.swaggerBasePath, app, document)
+  }
+
   private log(): void {
     this.logger.log(`App is running on port: ${this.port}`)
-    this.logger.log(`Service is listening ${serviceOptions.options?.client?.brokers}`)
   }
 
 }
