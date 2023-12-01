@@ -1,16 +1,11 @@
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { NestFactory } from '@nestjs/core'
-import { LoggerService, ValidationPipe, ValidationPipeOptions } from "@nestjs/common"
+import { LoggerService, ValidationPipe, ValidationPipeOptions } from '@nestjs/common'
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger'
 import { RootModule } from '@application/modules/root.module'
 import { Logger as PinoLogger } from 'nestjs-pino'
+import { SwaggerOptions } from '@libs/common/interfaces'
 
-
-interface SwaggerOptions {
-  title: string
-  description: string
-  version: string
-}
 
 export class ServerApplication {
 

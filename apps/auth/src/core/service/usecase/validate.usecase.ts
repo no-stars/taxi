@@ -8,6 +8,7 @@ interface ValidatePayload {
 
 interface JwtPayload {
   sub: string
+  iat: number
 }
 
 export class ValidateUseCase {
