@@ -4,6 +4,8 @@ import { Pool, QueryResult } from 'pg'
 
 const createPassengerTableQuery = `
 CREATE TABLE IF NOT EXISTS passengers (
+  // Доменные модели обычно создаются из кода и дефолтные в них не используются
+  // Неочевидные дефолтные значения чаще запутывают, чем помогают
   passenger_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   person_id UUID NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now(),

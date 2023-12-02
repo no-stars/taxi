@@ -19,6 +19,8 @@ describe('Pg Repository', () => {
   let postgresContainer: StartedPostgreSqlContainer
   let repo: PgAccountRepository
 
+  // Методы beforeAll и afterAll очень похожи между сервисами, стоит завести "AbstractTest", для общей части тестов.
+  // Конкретные миграции, как например `AccountInit` можно передавать параметрами
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start()
 
@@ -53,6 +55,7 @@ describe('Pg Repository', () => {
   })
 
   it('should create and return multiple accounts', async () => {
+    // Повторящиеся генерации моделей стоит выносить в отдельные методы, с только важными для тестов параметрами
     const account1 = Account.new({
       account_id: StringUtils.uuid(),
       phoneNumber: '+79035487612',
@@ -73,6 +76,7 @@ describe('Pg Repository', () => {
     await repo.addAccount(account1)
     await repo.addAccount(account2)
 
+    // Для read/write тестирования достаточно одной модели
     const foundAccount1 = await repo.findAccount({ phoneNumber: '+79035487612' })
     const foundAccount2 = await repo.findAccount({ phoneNumber: '+79035487613' })
     expect([foundAccount1, foundAccount2]).toEqual([foundAccount1, foundAccount2])
