@@ -9,6 +9,8 @@ const envFilePath = process.env.NODE_ENV === Environment.PRODUCTION
   ? `./apps/${serviceName}/.env`
   : `./apps/${serviceName}/local.env`
 
+console.log(serviceName, envFilePath)
+
 
 @Module({
   imports: [

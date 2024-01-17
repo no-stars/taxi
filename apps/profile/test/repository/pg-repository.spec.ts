@@ -1,15 +1,12 @@
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql'
-import { Test } from '@nestjs/testing'
-import { TestingModule } from '@nestjs/testing/testing-module'
-import { Pool } from 'pg'
+import { RootModule } from '@application/modules/root.module'
 
+import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { PgPassengerRepository } from '@infrastructure/persistence/pg/repository/passenger.repository'
 import { PgPersonRepository } from '@infrastructure/persistence/pg/repository/person.repository'
 import { PgDriverRepository } from '@infrastructure/persistence/pg/repository/driver.repository'
 import {
   PgSavedAddressRepository,
 } from '@infrastructure/persistence/pg/repository/saved-address.repository'
-import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import {
   PassengerInit,
   SavedAddressInit,
@@ -21,178 +18,141 @@ import {
   PassengerRelations,
   DriverRelations,
 } from '@infrastructure/persistence/pg/migrations/table-relations'
+
 import { StringUtils } from '@libs/common/utils'
-import { Migration } from '@libs/common/interfaces'
-import { MigrationRunner } from '@libs/common/utils'
+import { TestServer } from '@libs/testing/server/test-server'
 
 
 describe('Pg Repository', () => {
   jest.setTimeout(60000)
 
-  let postgresClient: Pool
-  let postgresContainer: StartedPostgreSqlContainer
-
+  let testServer: TestServer
   let passengerRepo: PgPassengerRepository
   let personRepo: PgPersonRepository
   let driverRepo: PgDriverRepository
   let savedAddressRepo: PgSavedAddressRepository
 
   beforeAll(async () => {
-    postgresContainer = await new PostgreSqlContainer().start()
-
-    const pool = new Pool({
-      connectionString: postgresContainer.getConnectionUri(),
+    testServer = await TestServer.new(RootModule, {
+      dbConnectionToken: PG_CONNECTION,
+      setupMigrations: [
+        PassengerInit, SavedAddressInit, PersonInit, DriverInit,
+        SavedAddressRelations, PassengerRelations, DriverRelations,
+      ],
     })
 
-    const migrations: Migration[] = [
-      new PassengerInit(pool),
-      new SavedAddressInit(pool),
-      new PersonInit(pool),
-      new DriverInit(pool),
-      new SavedAddressRelations(pool),
-      new PassengerRelations(pool),
-      new DriverRelations(pool),
-    ]
-
-    const runner = new MigrationRunner(migrations)
-    await runner.up()
-
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        {
-          provide: PG_CONNECTION,
-          useFactory: () => pool,
-        },
-        PgPassengerRepository,
-        PgPersonRepository,
-        PgDriverRepository,
-        PgSavedAddressRepository,
-      ],
-    }).compile()
-
-    postgresClient = module.get(PG_CONNECTION)
-    passengerRepo = module.get(PgPassengerRepository)
-    personRepo = module.get(PgPersonRepository)
-    driverRepo = module.get(PgDriverRepository)
-    savedAddressRepo = module.get(PgSavedAddressRepository)
+    passengerRepo = testServer.testingModule.get(PgPassengerRepository)
+    personRepo = testServer.testingModule.get(PgPersonRepository)
+    driverRepo = testServer.testingModule.get(PgDriverRepository)
+    savedAddressRepo = testServer.testingModule.get(PgSavedAddressRepository)
   })
 
   afterAll(async () => {
-    await postgresClient.end()
-    await postgresContainer.stop()
+    await testServer.stop()
   })
 
   it('should create and then find driver and passenger with corresponding person', async () => {
-    const person = {
-      person_id: StringUtils.uuid(),
-      account_id: StringUtils.uuid(),
-      first_name: 'Asd',
-      last_name: 'Zxc',
-      middle_name: 'Qwe',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const passenger = {
-      passenger_id: StringUtils.uuid(),
-      person_id: person.person_id,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const driver = {
-      driver_id: StringUtils.uuid(),
-      person_id: person.person_id,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+    // given
+    const person = createPerson()
+    const actualPassenger = createPassenger(person.person_id)
+    const actualDriver = createDriver(person.person_id)
 
     await personRepo.addPerson(person)
-    await passengerRepo.addPassenger(passenger)
-    await driverRepo.addDriver(driver)
+    await passengerRepo.addPassenger(actualPassenger)
+    await driverRepo.addDriver(actualDriver)
 
-    const profile = await personRepo.findProfile({ accountId: person.account_id })
-    const expectedProfile = {
+    const actualProfile = {
       id: person.person_id,
-      passenger_id: passenger.passenger_id,
-      driver_id: driver.driver_id,
+      passenger_id: actualPassenger.passenger_id,
+      driver_id: actualDriver.driver_id,
     }
 
-    expect(profile).toEqual(expectedProfile)
+    // when
+    const expectedProfile = await personRepo.findProfile({ accountId: person.account_id })
+
+    // then
+    expect(actualProfile).toEqual(expectedProfile)
   })
 
   it('should create and then find person by its corresponding driver and passenger', async () => {
-    const person = {
-      person_id: StringUtils.uuid(),
-      account_id: StringUtils.uuid(),
-      first_name: 'Asd',
-      last_name: 'Zxc',
-      middle_name: 'Qwe',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const passenger = {
-      passenger_id: StringUtils.uuid(),
-      person_id: person.person_id,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const driver = {
-      driver_id: StringUtils.uuid(),
-      person_id: person.person_id,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+    // given
+    const actualPerson = createPerson()
+    const passenger = createPassenger(actualPerson.person_id)
+    const driver = createDriver(actualPerson.person_id)
 
-    await personRepo.addPerson(person)
+    await personRepo.addPerson(actualPerson)
     await passengerRepo.addPassenger(passenger)
     await driverRepo.addDriver(driver)
 
-    const foundPersonByPassenger = await personRepo.findPerson({ passengerId: passenger.passenger_id })
-    const foundPersonByDriver = await personRepo.findPerson({ driverId: driver.driver_id })
+    // when
+    const expectedPersonByPassenger = await personRepo.findPerson({ passengerId: passenger.passenger_id })
+    const expectedPersonByDriver = await personRepo.findPerson({ driverId: driver.driver_id })
 
-    // expect(foundPersonByPassenger).toEqual(person)
-    // expect(foundPersonByDriver).toEqual(person)
+    // then
+    // expect(actualPerson).toEqual(expectedPersonByPassenger)
+    // expect(actualPerson).toEqual(expectedPersonByDriver)
   })
 
   it('should create and then find saved address', async () => {
-    const person = {
-      person_id: StringUtils.uuid(),
-      account_id: StringUtils.uuid(),
-      first_name: 'Asd',
-      last_name: 'Zxc',
-      middle_name: 'Qwe',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const passenger = {
-      passenger_id: StringUtils.uuid(),
-      person_id: person.person_id,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const savedAddress = {
-      saved_address_id: StringUtils.uuid(),
-      address_name: 'qqq',
-      passenger_id: passenger.passenger_id,
-      coordinates: '35.204088, 54.307690',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+    // given
+    const person = createPerson()
+    const passenger = createPassenger(person.person_id)
+    const actualSavedAddress = createSavedAddress(passenger.passenger_id)
 
     await personRepo.addPerson(person)
     await passengerRepo.addPassenger(passenger)
-    await savedAddressRepo.addSavedAddress(savedAddress)
+    await savedAddressRepo.addSavedAddress(actualSavedAddress)
 
-    const foundSavedAddress = await savedAddressRepo.findSavedAddressList({ passengerId: passenger.passenger_id })
+    // when
+    const expectedSavedAddress = await savedAddressRepo.findSavedAddressList({ passengerId: passenger.passenger_id })
 
-    // expect(foundSavedAddress).toEqual(savedAddress)
+    // then
+    // expect(actualSavedAddress).toEqual(expectedSavedAddress)
   })
 })
+
+
+function createPerson(): any {
+  return {
+    person_id: StringUtils.uuid(),
+    account_id: StringUtils.uuid(),
+    first_name: 'Asd',
+    last_name: 'Zxc',
+    middle_name: 'Qwe',
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}
+
+function createPassenger(personId: string): any {
+  return {
+    passenger_id: StringUtils.uuid(),
+    person_id: personId,
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}
+
+function createDriver(personId: string): any {
+  return {
+    driver_id: StringUtils.uuid(),
+    person_id: personId,
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}
+
+function createSavedAddress(passengerId: string): any {
+  return {
+    saved_address_id: StringUtils.uuid(),
+    address_name: 'qqq',
+    passenger_id: passengerId,
+    coordinates: '35.204088, 54.307690',
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}

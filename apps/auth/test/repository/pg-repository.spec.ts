@@ -1,80 +1,57 @@
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql'
-import { Test } from '@nestjs/testing'
-import { TestingModule } from '@nestjs/testing/testing-module'
-import { Pool } from 'pg'
+import { RootModule } from '@application/modules/root.module'
+import { Account } from '@core/domain/entities/account.entity'
 
-import { StringUtils } from '@libs/common/utils'
 import { PgAccountRepository } from '@infrastructure/persistence/pg/repository/account.repository'
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { AccountInit } from '@infrastructure/persistence/pg/migrations/init-tables'
-import { Account } from '@core/domain/entities/account.entity'
-import { Migration } from '@libs/common/interfaces'
-import { MigrationRunner } from '@libs/common/utils'
+
+import { StringUtils } from '@libs/common/utils'
+import { TestServer } from '@libs/testing/server/test-server'
 
 
 describe('Pg Repository', () => {
   jest.setTimeout(60000)
 
-  let postgresClient: Pool
-  let postgresContainer: StartedPostgreSqlContainer
+  let testServer: TestServer
   let repo: PgAccountRepository
 
   beforeAll(async () => {
-    postgresContainer = await new PostgreSqlContainer().start()
-
-    const pool = new Pool({
-      connectionString: postgresContainer.getConnectionUri(),
+    testServer = await TestServer.new(RootModule, {
+      dbConnectionToken: PG_CONNECTION,
+      setupMigrations: [AccountInit],
     })
 
-    const migrations: Migration[] = [
-      new AccountInit(pool),
-    ]
-
-    const runner = new MigrationRunner(migrations)
-    await runner.up()
-
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        {
-          provide: PG_CONNECTION,
-          useFactory: () => pool,
-        },
-        PgAccountRepository,
-      ],
-    }).compile()
-
-    postgresClient = module.get(PG_CONNECTION)
-    repo = module.get(PgAccountRepository)
+    repo = testServer.testingModule.get(PgAccountRepository)
   })
 
   afterAll(async () => {
-    await postgresClient.end()
-    await postgresContainer.stop()
+    await testServer.stop()
   })
 
   it('should create and return multiple accounts', async () => {
-    const account1 = Account.new({
-      account_id: StringUtils.uuid(),
-      phoneNumber: '+79035487612',
-      email: null,
-      created_at: new Date(),
-      updated_at: new Date(),
-      deleted_at: null,
-    })
-    const account2 = Account.new({
-      id: StringUtils.uuid(),
-      phoneNumber: '+79035487613',
-      email: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    })
+    // given
+    const actualAccount1 = createAccount('+79035487612', 'asd@hotmail.com')
+    const actualAccount2 = createAccount('+79035487613', 'zxc@protonmail.com')
+    await repo.addAccount(actualAccount1)
+    await repo.addAccount(actualAccount2)
 
-    await repo.addAccount(account1)
-    await repo.addAccount(account2)
+    // when
+    const expectedAccount1 = await repo.findAccount({ phoneNumber: actualAccount1.getPhoneNumber() })
+    const expectedAccount2 = await repo.findAccount({ phoneNumber: actualAccount2.getPhoneNumber() })
 
-    const foundAccount1 = await repo.findAccount({ phoneNumber: '+79035487612' })
-    const foundAccount2 = await repo.findAccount({ phoneNumber: '+79035487613' })
-    expect([foundAccount1, foundAccount2]).toEqual([foundAccount1, foundAccount2])
+    // then
+    expect([actualAccount1, actualAccount2]).toEqual([expectedAccount1, expectedAccount2])
   })
 })
+
+
+function createAccount(phoneNumber: string, email: string): Account {
+  return new Account({
+    account_id: StringUtils.uuid(),
+    phoneNumber: phoneNumber,
+    email: email,
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  })
+}

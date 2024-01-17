@@ -7,8 +7,8 @@ import { AutoModule } from '@application/modules/auto.module'
 
 @Module({
   imports: [
-    InfrastructureModule,
     AutoModule,
+    InfrastructureModule,
   ],
   controllers: [
     RootController,

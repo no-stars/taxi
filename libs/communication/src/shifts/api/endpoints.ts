@@ -1,7 +1,7 @@
-export const ENDPOINTS_NAMESPACE = 'auto'
+export const ENDPOINTS_NAMESPACE = 'shift'
 
 export const ENDPOINTS = {
-  cars: 'cars',
-  brands: 'brands',
-  models: 'models',
+  shifts: 'shifts',
+  shiftTypes: 'shift_types',
+  driverActivities: 'driver_activities',
 }

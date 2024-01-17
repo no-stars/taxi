@@ -1,7 +1,6 @@
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql'
-import { Test } from '@nestjs/testing'
-import { TestingModule } from '@nestjs/testing/testing-module'
-import { Pool } from 'pg'
+import { addMinutes } from 'date-fns'
+
+import { RootModule } from '@application/modules/root.module'
 
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { OrderInit, RideInit, PriceProposeInit } from '@infrastructure/persistence/pg/migrations/init-tables'
@@ -11,376 +10,229 @@ import { PgRideRepository } from '@infrastructure/persistence/pg/repository/ride
 import {
   PgPriceProposeRepository,
 } from '@infrastructure/persistence/pg/repository/price-propose.repository'
+
 import { StringUtils } from '@libs/common/utils'
-import { addMinutes } from 'date-fns'
 import { Nullable } from '@libs/common/types/nullable'
-import { Migration } from '@libs/common/interfaces'
-import { MigrationRunner } from '@libs/common/utils'
+import { TestServer } from '@libs/testing/server/test-server'
 
 
 describe('Pg Repository', () => {
   jest.setTimeout(60000)
 
-  let postgresClient: Pool
-  let postgresContainer: StartedPostgreSqlContainer
+  let testServer: TestServer
   let orderRepo: PgOrderRepository
   let rideRepo: PgRideRepository
   let priceProposeRepo: PgPriceProposeRepository
 
   beforeAll(async () => {
-    postgresContainer = await new PostgreSqlContainer().start()
-
-    const pool = new Pool({
-      connectionString: postgresContainer.getConnectionUri(),
+    testServer = await TestServer.new(RootModule, {
+      dbConnectionToken: PG_CONNECTION,
+      setupMigrations: [
+        OrderInit, RideInit, PriceProposeInit, OrderRelations, PriceProposeRelations,
+      ],
     })
 
-    const migrations: Migration[] = [
-      new OrderInit(pool),
-      new RideInit(pool),
-      new PriceProposeInit(pool),
-      new OrderRelations(pool),
-      new PriceProposeRelations(pool),
-    ]
-
-    const runner = new MigrationRunner(migrations)
-    await runner.up()
-
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        {
-          provide: PG_CONNECTION,
-          useFactory: () => pool,
-        },
-        PgOrderRepository,
-        PgRideRepository,
-        PgPriceProposeRepository,
-      ],
-    }).compile()
-
-    postgresClient = module.get(PG_CONNECTION)
-    orderRepo = module.get(PgOrderRepository)
-    rideRepo = module.get(PgRideRepository)
-    priceProposeRepo = module.get(PgPriceProposeRepository)
+    orderRepo = testServer.testingModule.get(PgOrderRepository)
+    rideRepo = testServer.testingModule.get(PgRideRepository)
+    priceProposeRepo = testServer.testingModule.get(PgPriceProposeRepository)
   })
 
   afterAll(async () => {
-    await postgresClient.end()
-    await postgresContainer.stop()
+    await testServer.stop()
   })
 
   it('should create and then find multiple orders', async () => {
-    const order1 = {
-      order_id: StringUtils.uuid(),
-      ride_id: null,
-      start_location: '35.204088, 54.307690',
-      finish_location: '35.810650, 55.819656',
-      passenger_id: StringUtils.uuid(),
-      price_segment: 'COMFORT',
-      recommended_price: 320,
-      price: 320,
-      payment_type: 'cash',
-      order_type: 'fix_price',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const order2 = {
-      order_id: StringUtils.uuid(),
-      ride_id: null,
-      start_location: '35.810650, 55.819656',
-      finish_location: '35.204088, 54.307690',
-      passenger_id: StringUtils.uuid(),
-      price_segment: 'ECO',
-      recommended_price: 180,
-      price: 160,
-      payment_type: 'non_cash',
-      order_type: 'auction_price',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+    // given
+    const actualOrder1 = createOrder(null, StringUtils.uuid())
+    const actualOrder2 = createOrder(null, StringUtils.uuid())
+    await orderRepo.addOrder(actualOrder1)
+    await orderRepo.addOrder(actualOrder2)
 
-    await orderRepo.addOrder(order1)
-    await orderRepo.addOrder(order2)
+    // when
+    const expectedOrder1 = await orderRepo.findOrderById(actualOrder1.order_id)
+    const expectedOrder2 = await orderRepo.findOrderById(actualOrder2.order_id)
 
-    const foundOrder1 = await orderRepo.findOrderById(order1.order_id)
-    const foundOrder2 = await orderRepo.findOrderById(order2.order_id)
-    // expect([order1, order2]).toEqual([foundOrder1, foundOrder2])
+    // then
+    // expect([actualOrder1, actualOrder2]).toEqual([expectedOrder1, expectedOrder2])
   })
 
   it('should create and then find multiple orders by passengerId', async () => {
-    const order1 = {
-      order_id: StringUtils.uuid(),
-      ride_id: null,
-      start_location: '35.204088, 54.307690',
-      finish_location: '35.810650, 55.819656',
-      passenger_id: StringUtils.uuid(),
-      price_segment: 'COMFORT',
-      recommended_price: 320,
-      price: 320,
-      payment_type: 'cash',
-      order_type: 'fix_price',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const order2 = {
-      order_id: StringUtils.uuid(),
-      ride_id: null,
-      start_location: '35.810650, 55.819656',
-      finish_location: '35.204088, 54.307690',
-      passenger_id: order1.passenger_id,
-      price_segment: 'ECO',
-      recommended_price: 180,
-      price: 160,
-      payment_type: 'non_cash',
-      order_type: 'auction_price',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+    // given
+    const passengerId: string = StringUtils.uuid()
+    const actualOrder1 = createOrder(null, passengerId)
+    const actualOrder2 = createOrder(null, passengerId)
+    await orderRepo.addOrder(actualOrder1)
+    await orderRepo.addOrder(actualOrder2)
 
-    await orderRepo.addOrder(order1)
-    await orderRepo.addOrder(order2)
+    // when
+    const expectedOrders = await orderRepo.findOrderList({ passengerId: passengerId })
 
-    const foundOrders = await orderRepo.findOrderList({ passengerId: order1.passenger_id })
-    // expect([order1, order2]).toEqual(foundOrders)
+    // then
+    // expect([actualOrder1, actualOrder2]).toEqual(expectedOrders)
   })
 
   it('should create and then allow to update order', async () => {
-    const order = {
-      order_id: StringUtils.uuid(),
-      ride_id: null,
-      start_location: '35.204088, 54.307690',
-      finish_location: '35.810650, 55.819656',
-      passenger_id: StringUtils.uuid(),
-      price_segment: 'COMFORT',
-      recommended_price: 320,
-      price: 320,
-      payment_type: 'cash',
-      order_type: 'fix_price',
-      created_at: new Date(),
-      updated_at: null as Nullable<Date>,
-      deleted_at: null,
-    }
+    // given
+    const actualOrder = createOrder(null, StringUtils.uuid())
+    await orderRepo.addOrder(actualOrder)
 
-    await orderRepo.addOrder(order)
-    order.price = 122
-    order.price_segment = 'ECO'
-    order.updated_at = new Date()
-    await orderRepo.updateOrder(order.order_id, order)
+    // when
+    actualOrder.price = 122
+    actualOrder.price_segment = 'ECO'
+    actualOrder.updated_at = new Date()
+    await orderRepo.updateOrder(actualOrder.order_id, actualOrder)
+    const expectedOrder = await orderRepo.findOrderById(actualOrder.order_id)
 
-    const foundOrder = await orderRepo.findOrderById(order.order_id)
-    // expect(order).toEqual(foundOrder)
+    // then
+    // expect(actualOrder).toEqual(expectedOrder)
   })
 
   it('should create and then find multiple rides', async () => {
-    const ride1 = {
-      ride_id: StringUtils.uuid(),
-      start_time: new Date(),
-      pick_up_time: null,
-      finish_time: null,
-      driver_id: StringUtils.uuid(),
-      car_id: StringUtils.uuid(),
-      payment_id: StringUtils.uuid(),
-      status: 'driver_on_the_way',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const ride2 = {
-      ride_id: StringUtils.uuid(),
-      start_time: new Date(),
-      pick_up_time: addMinutes(new Date(), 3),
-      finish_time: null,
-      driver_id: ride1.driver_id,
-      car_id: StringUtils.uuid(),
-      payment_id: StringUtils.uuid(),
-      status: 'passenger_picked_up',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+    // given
+    const driverId: string = StringUtils.uuid()
+    const actualRide1 = createRide(driverId)
+    const actualRide2 = createRide(driverId)
+    await rideRepo.addRide(actualRide1)
+    await rideRepo.addRide(actualRide2)
 
-    await rideRepo.addRide(ride1)
-    await rideRepo.addRide(ride2)
+    // when
+    const expectedRides = await rideRepo.findRideList({ driverId: driverId })
 
-    const foundRides = await rideRepo.findRideList({ driverId: ride1.driver_id })
-    // expect(foundRides).toEqual([ride1, ride2])
+    // then
+    // expect([actualRide1, actualRide2]).toEqual(expectedRides)
   })
 
   it('should create and then allow to update ride', async () => {
-    const ride = {
-      ride_id: StringUtils.uuid(),
-      start_time: new Date(),
-      pick_up_time: null as Nullable<Date>,
-      finish_time: null,
-      driver_id: StringUtils.uuid(),
-      car_id: StringUtils.uuid(),
-      payment_id: StringUtils.uuid(),
-      status: 'driver_on_the_way',
-      created_at: new Date(),
-      updated_at: null as Nullable<Date>,
-      deleted_at: null,
-    }
+    // given
+    const actualRide = createRide(StringUtils.uuid())
+    await rideRepo.addRide(actualRide)
 
-    await rideRepo.addRide(ride)
-    ride.pick_up_time = addMinutes(new Date(), 3)
-    ride.status = 'passenger_picked_up'
-    ride.updated_at = new Date()
-    await rideRepo.updateRide(ride.ride_id, ride)
+    // when
+    actualRide.pick_up_time = addMinutes(new Date(), 3)
+    actualRide.status = 'passenger_picked_up'
+    actualRide.updated_at = new Date()
+    await rideRepo.updateRide(actualRide.ride_id, actualRide)
+    const expectedRides = await rideRepo.findRideList({ driverId: actualRide.driver_id })
 
-    const foundRides = await rideRepo.findRideList({ driverId: ride.driver_id })
-    // expect(foundRides).toEqual([ride])
+    // then
+    // expect([actualRide]).toEqual(expectedRides)
   })
 
-  it('should create order with correct ride id', async () => {
-    const ride = {
-      ride_id: StringUtils.uuid(),
-      start_time: new Date(),
-      pick_up_time: null,
-      finish_time: null,
-      driver_id: StringUtils.uuid(),
-      car_id: StringUtils.uuid(),
-      payment_id: StringUtils.uuid(),
-      status: 'driver_on_the_way',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const order = {
-      order_id: StringUtils.uuid(),
-      ride_id: ride.ride_id,
-      start_location: '35.204088, 54.307690',
-      finish_location: '35.810650, 55.819656',
-      passenger_id: StringUtils.uuid(),
-      price_segment: 'COMFORT',
-      recommended_price: 320,
-      price: 320,
-      payment_type: 'cash',
-      order_type: 'fix_price',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-
+  it('should create an order with correct ride id', async () => {
+    // given
+    const ride = createRide(StringUtils.uuid())
+    const actualOrder = createOrder(ride.ride_id, StringUtils.uuid())
     await rideRepo.addRide(ride)
-    await orderRepo.addOrder(order)
+    await orderRepo.addOrder(actualOrder)
 
-    const foundOrder = await orderRepo.findOrderById(order.order_id)
-    // expect(foundOrder).toEqual(order)
+    // when
+    const expectedOrder = await orderRepo.findOrderById(actualOrder.order_id)
+
+    // then
+    // expect(actualOrder).toEqual(expectedOrder)
   })
 
-  it('should raise an error with random ride id', async () => {
-    const order = {
-      order_id: StringUtils.uuid(),
-      ride_id: StringUtils.uuid(),
-      start_location: '35.204088, 54.307690',
-      finish_location: '35.810650, 55.819656',
-      passenger_id: StringUtils.uuid(),
-      price_segment: 'COMFORT',
-      recommended_price: 320,
-      price: 320,
-      payment_type: 'cash',
-      order_type: 'fix_price',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+  it('should raise an error on adding order with random ride id', async () => {
+    // given
+    const order = createOrder('b91c9572-04e6-4065-9e3f-400450fd3f12', StringUtils.uuid())
 
+    // when
     const addOrder = async () => await orderRepo.addOrder(order)
 
+    // then
     await expect(addOrder()).rejects.toThrowError()
   })
 
-  it('should create with correct order id', async () => {
-    const order = {
-      order_id: StringUtils.uuid(),
-      ride_id: null,
-      start_location: '35.204088, 54.307690',
-      finish_location: '35.810650, 55.819656',
-      passenger_id: StringUtils.uuid(),
-      price_segment: 'COMFORT',
-      recommended_price: 320,
-      price: 320,
-      payment_type: 'cash',
-      order_type: 'fix_price',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const pricePropose = {
-      price_propose_id: StringUtils.uuid(),
-      order_id: order.order_id,
-      driver_id: StringUtils.uuid(),
-      propose_type: 'driver_propose',
-      proposed_price: 330,
-      result: null,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+  it('should create price propose with correct order id', async () => {
+    // given
+    const order = createOrder(null, StringUtils.uuid())
+    const actualPricePropose = createPricePropose(order.order_id)
 
     await orderRepo.addOrder(order)
-    await priceProposeRepo.addPricePropose(pricePropose)
+    await priceProposeRepo.addPricePropose(actualPricePropose)
 
-    const foundPriceProposes = await priceProposeRepo.findPriceProposeList({ orderId: order.order_id })
-    // expect(foundPriceProposes).toEqual([pricePropose])
+    // when
+    const expectedPriceProposes = await priceProposeRepo.findPriceProposeList({ orderId: order.order_id })
+
+    // then
+    // expect([actualPricePropose]).toEqual(expectedPriceProposes)
   })
 
-  it('should raise an error with random order id', async () => {
-    const pricePropose = {
-      price_propose_id: StringUtils.uuid(),
-      order_id: StringUtils.uuid(),
-      driver_id: StringUtils.uuid(),
-      propose_type: 'driver_propose',
-      proposed_price: 330,
-      result: null,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+  it('should raise an error on adding price propose with random order id', async () => {
+    // given
+    const pricePropose = createPricePropose(StringUtils.uuid())
 
+    // when
     const addPricePropose = async () => await priceProposeRepo.addPricePropose(pricePropose)
 
+    // then
     await expect(addPricePropose()).rejects.toThrowError()
   })
 
   it('should create and allow to update price propose', async () => {
-    const order = {
-      order_id: StringUtils.uuid(),
-      ride_id: null,
-      start_location: '35.204088, 54.307690',
-      finish_location: '35.810650, 55.819656',
-      passenger_id: StringUtils.uuid(),
-      price_segment: 'COMFORT',
-      recommended_price: 320,
-      price: 320,
-      payment_type: 'cash',
-      order_type: 'fix_price',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const pricePropose = {
-      price_propose_id: StringUtils.uuid(),
-      order_id: order.order_id,
-      driver_id: StringUtils.uuid(),
-      propose_type: 'driver_propose',
-      proposed_price: 330,
-      result: null as Nullable<string>,
-      created_at: new Date(),
-      updated_at: null as Nullable<Date>,
-      deleted_at: null,
-    }
+    // given
+    const order = createOrder(null, StringUtils.uuid())
+    const actualPricePropose = createPricePropose(order.order_id)
 
     await orderRepo.addOrder(order)
-    await priceProposeRepo.addPricePropose(pricePropose)
-    pricePropose.result = 'accepted'
-    pricePropose.updated_at = new Date()
-    await priceProposeRepo.updatePricePropose(pricePropose.price_propose_id, pricePropose)
+    await priceProposeRepo.addPricePropose(actualPricePropose)
 
-    const foundPriceProposes = await priceProposeRepo.findPriceProposeList({ orderId: order.order_id })
-    // expect(foundPriceProposes).toEqual([pricePropose])
+    // when
+    actualPricePropose.result = 'accepted'
+    actualPricePropose.updated_at = new Date()
+    await priceProposeRepo.updatePricePropose(actualPricePropose.price_propose_id, actualPricePropose)
+    const expectedPriceProposes = await priceProposeRepo.findPriceProposeList({ orderId: order.order_id })
+
+    // then
+    // expect([actualPricePropose]).toEqual(expectedPriceProposes)
   })
 })
+
+
+function createOrder(rideId: Nullable<string>, passengerId: string): any {
+  return {
+    order_id: StringUtils.uuid(),
+    ride_id: rideId,
+    start_location: '35.204088, 54.307690',
+    finish_location: '35.810650, 55.819656',
+    passenger_id: passengerId,
+    price_segment: 'COMFORT',
+    recommended_price: 320,
+    price: 320,
+    payment_type: 'cash',
+    order_type: 'fix_price',
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}
+
+function createRide(driverId: string): any {
+  return {
+    ride_id: StringUtils.uuid(),
+    start_time: new Date(),
+    pick_up_time: null as Nullable<Date>,
+    finish_time: null,
+    driver_id: driverId,
+    car_id: StringUtils.uuid(),
+    payment_id: StringUtils.uuid(),
+    status: 'driver_on_the_way',
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}
+
+function createPricePropose(orderId: string): any {
+  return {
+    price_propose_id: StringUtils.uuid(),
+    order_id: orderId,
+    driver_id: StringUtils.uuid(),
+    propose_type: 'driver_propose',
+    proposed_price: 330,
+    result: null as Nullable<string>,
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}

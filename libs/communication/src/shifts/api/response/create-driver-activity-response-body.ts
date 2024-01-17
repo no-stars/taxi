@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 
-export class CreateCarResponseBody {
+export class CreateDriverActivityResponseBody {
 
   @ApiProperty()
   carId: string

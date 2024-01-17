@@ -1,7 +1,4 @@
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql'
-import { Test } from '@nestjs/testing'
-import { TestingModule } from '@nestjs/testing/testing-module'
-import { Pool } from 'pg'
+import { RootModule } from '@application/modules/root.module'
 
 import { PG_CONNECTION } from '@infrastructure/persistence/database.config'
 import { ShiftInit, ShiftTypeInit, DriverActivityInit } from '@infrastructure/persistence/pg/migrations/init-tables'
@@ -9,148 +6,117 @@ import { ShiftRelations } from '@infrastructure/persistence/pg/migrations/table-
 import { PgShiftTypeRepository } from '@infrastructure/persistence/pg/repository/shift-type.repository'
 import { PgShiftRepository } from '@infrastructure/persistence/pg/repository/shift.repository'
 import { PgDriverActivityRepository } from '@infrastructure/persistence/pg/repository/driver-activity.repository'
+
 import { StringUtils } from '@libs/common/utils'
-import { Migration } from '@libs/common/interfaces'
-import { MigrationRunner } from '@libs/common/utils'
+import { TestServer } from '@libs/testing/server/test-server'
 
 
 describe('Pg Repository', () => {
   jest.setTimeout(60000)
 
-  let postgresClient: Pool
-  let postgresContainer: StartedPostgreSqlContainer
+  let testServer: TestServer
   let shiftTypeRepo: PgShiftTypeRepository
   let shiftRepo: PgShiftRepository
   let driverActivityRepo: PgDriverActivityRepository
 
   beforeAll(async () => {
-    postgresContainer = await new PostgreSqlContainer().start()
-
-    const pool = new Pool({
-      connectionString: postgresContainer.getConnectionUri(),
+    testServer = await TestServer.new(RootModule, {
+      dbConnectionToken: PG_CONNECTION,
+      setupMigrations: [
+        ShiftInit, ShiftTypeInit, DriverActivityInit, ShiftRelations,
+      ],
     })
 
-    const migrations: Migration[] = [
-      new ShiftInit(pool),
-      new ShiftTypeInit(pool),
-      new DriverActivityInit(pool),
-      new ShiftRelations(pool),
-    ]
-
-    const runner = new MigrationRunner(migrations)
-    await runner.up()
-
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        {
-          provide: PG_CONNECTION,
-          useFactory: () => pool,
-        },
-        PgShiftTypeRepository,
-        PgDriverActivityRepository,
-        PgShiftRepository,
-      ],
-    }).compile()
-
-    postgresClient = module.get(PG_CONNECTION)
-    shiftTypeRepo = module.get(PgShiftTypeRepository)
-    driverActivityRepo = module.get(PgDriverActivityRepository)
-    shiftRepo = module.get(PgShiftRepository)
+    shiftTypeRepo = testServer.testingModule.get(PgShiftTypeRepository)
+    driverActivityRepo = testServer.testingModule.get(PgDriverActivityRepository)
+    shiftRepo = testServer.testingModule.get(PgShiftRepository)
   })
 
   afterAll(async () => {
-    await postgresClient.end()
-    await postgresContainer.stop()
+    await testServer.stop()
   })
 
   it('should create and then find multiple shift types', async () => {
-    const shiftType1 = {
-      shift_type_id: StringUtils.uuid(),
-      shift_name: 'asd',
-      price: 600,
-      working_hours: 10,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const shiftType2 = {
-      shift_type_id: StringUtils.uuid(),
-      shift_name: 'zxc',
-      price: 1200,
-      working_hours: 4,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+    // given
+    const actualShiftType1 = createShiftType('asd')
+    const actualShiftType2 = createShiftType('zxc')
+    await shiftTypeRepo.addShiftType(actualShiftType1)
+    await shiftTypeRepo.addShiftType(actualShiftType2)
 
-    await shiftTypeRepo.addShiftType(shiftType1)
-    await shiftTypeRepo.addShiftType(shiftType2)
+    // when
+    const expectedShiftTypes = await shiftTypeRepo.findShiftTypeList()
 
-    const foundShiftTypes = await shiftTypeRepo.findShiftTypeList()
-    expect(foundShiftTypes).toEqual([shiftType1, shiftType2])
+    // then
+    expect([actualShiftType1, actualShiftType2]).toEqual(expectedShiftTypes)
   })
 
-  it('should create and then find multiple driver activities by driver', async () => {
-    const driverActivity1 = {
-      driver_activity_id: StringUtils.uuid(),
-      driver_id: StringUtils.uuid(),
-      car_id: StringUtils.uuid(),
-      status: 'online',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const driverActivity2 = {
-      driver_activity_id: StringUtils.uuid(),
-      driver_id: StringUtils.uuid(),
-      car_id: null,
-      status: 'offline',
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
+  it('should create and then find multiple driver activities filtered by driver', async () => {
+    // given
+    const actualDriverActivity1 = createDriverActivity()
+    const actualDriverActivity2 = createDriverActivity()
+    await driverActivityRepo.addDriverActivity(actualDriverActivity1)
+    await driverActivityRepo.addDriverActivity(actualDriverActivity2)
 
-    await driverActivityRepo.addDriverActivity(driverActivity1)
-    await driverActivityRepo.addDriverActivity(driverActivity2)
+    // when
+    const expectedDriverActivity = await driverActivityRepo.findDriverActivityList({
+      driverId: actualDriverActivity1.driver_id,
+    })
 
-    const foundDriverActivity = await driverActivityRepo.findDriverActivityList({ driverId: driverActivity2.driver_id })
-    expect(foundDriverActivity).toEqual([driverActivity2])
+    // then
+    expect([actualDriverActivity1]).toEqual(expectedDriverActivity)
   })
 
-  it('should create and then find multiple shifts', async () => {
-    const shiftType = {
-      shift_type_id: StringUtils.uuid(),
-      shift_name: 'dsa',
-      price: 600,
-      working_hours: 10,
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const shift1 = {
-      shift_id: StringUtils.uuid(),
-      driver_id: StringUtils.uuid(),
-      shift_type_id: shiftType.shift_type_id,
-      payment_id: StringUtils.uuid(),
-      created_at: new Date(),
-      updated_at: null,
-      deleted_at: null,
-    }
-    const shift2 = {
-      shift_id: StringUtils.uuid(),
-      driver_id: StringUtils.uuid(),
-      shift_type_id: shiftType.shift_type_id,
-      payment_id: StringUtils.uuid(),
-      created_at: new Date(150),
-      updated_at: null,
-      deleted_at: null,
-    }
+  it('should create and then find multiple shifts filtered by date', async () => {
+    // given
+    const shiftType = createShiftType('qwe')
+    const actualShift1 = createShift(shiftType.shift_type_id, new Date())
+    const actualShift2 = createShift(shiftType.shift_type_id, new Date(150))
 
     await shiftTypeRepo.addShiftType(shiftType)
-    await shiftRepo.addShift(shift1)
-    await shiftRepo.addShift(shift2)
+    await shiftRepo.addShift(actualShift1)
+    await shiftRepo.addShift(actualShift2)
 
-    const foundShifts = await shiftRepo.findShiftList({ day: new Date(0) })
-    expect(foundShifts).toEqual([shift2])
+    // when
+    const expectedShifts = await shiftRepo.findShiftList({ day: new Date(0) })
+
+    // then
+    expect([actualShift2]).toEqual(expectedShifts)
   })
 })
+
+
+function createShiftType(shiftName: string): any {
+  return {
+    shift_type_id: StringUtils.uuid(),
+    shift_name: shiftName,
+    price: 600,
+    working_hours: 10,
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}
+
+function createShift(shiftTypeId: string, createdAt: Date): any {
+  return {
+    shift_id: StringUtils.uuid(),
+    driver_id: StringUtils.uuid(),
+    shift_type_id: shiftTypeId,
+    payment_id: StringUtils.uuid(),
+    created_at: createdAt,
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}
+
+function createDriverActivity(): any {
+  return {
+    driver_activity_id: StringUtils.uuid(),
+    driver_id: StringUtils.uuid(),
+    car_id: StringUtils.uuid(),
+    status: 'online',
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  }
+}
