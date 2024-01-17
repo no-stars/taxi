@@ -4,11 +4,11 @@ import { Pool, QueryResult } from 'pg'
 
 const createPriceSegmentRequirementTableQuery = `
 CREATE TABLE IF NOT EXISTS price_segment_requirements (
-  price_segment_requirement_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  price_segment_requirement_id UUID PRIMARY KEY,
   price_segment TEXT NOT NULL,
   car_model_id UUID NOT NULL,
   min_year INTEGER,
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );

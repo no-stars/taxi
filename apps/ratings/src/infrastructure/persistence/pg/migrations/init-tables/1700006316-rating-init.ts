@@ -4,11 +4,11 @@ import { Pool, QueryResult } from 'pg'
 
 const createRatingTableQuery = `
 CREATE TABLE IF NOT EXISTS ratings (
-  rating_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  rating_id UUID PRIMARY KEY,
   ride_id UUID NOT NULL UNIQUE,
   stars_by_passenger INTEGER CHECK (stars_by_passenger > 0 AND stars_by_passenger <= 5),
   stars_by_driver INTEGER CHECK (stars_by_driver > 0 AND stars_by_driver <= 5),
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );

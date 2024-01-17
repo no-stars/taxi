@@ -4,11 +4,11 @@ import { Pool, QueryResult } from 'pg'
 
 const createDriverActivityTableQuery = `
 CREATE TABLE IF NOT EXISTS driver_activities (
-  driver_activity_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  driver_activity_id UUID PRIMARY KEY,
   driver_id UUID NOT NULL,
   car_id UUID,
   status TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );

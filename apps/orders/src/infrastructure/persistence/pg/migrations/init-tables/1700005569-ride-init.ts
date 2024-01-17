@@ -4,7 +4,7 @@ import { Pool, QueryResult } from 'pg'
 
 const createRideTableQuery = `
 CREATE TABLE IF NOT EXISTS rides (
-  ride_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  ride_id UUID PRIMARY KEY,
   start_time TIMESTAMPTZ NOT NULL,
   pick_up_time TIMESTAMPTZ,
   finish_time TIMESTAMPTZ,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS rides (
   car_id UUID NOT NULL,
   payment_id UUID NOT NULL,
   status TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );

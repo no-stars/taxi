@@ -4,10 +4,10 @@ import { Pool, QueryResult } from 'pg'
 
 const createCarModelTableQuery = `
 CREATE TABLE IF NOT EXISTS car_models (
-  car_model_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  car_model_id UUID PRIMARY KEY,
   car_brand TEXT NOT NULL,
   model_name TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );

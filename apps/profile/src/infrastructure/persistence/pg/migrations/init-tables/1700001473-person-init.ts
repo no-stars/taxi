@@ -4,12 +4,12 @@ import { Pool, QueryResult } from 'pg'
 
 const createPersonTableQuery = `
 CREATE TABLE IF NOT EXISTS persons (
-  person_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  person_id UUID PRIMARY KEY,
   account_id UUID NOT NULL,
   first_name TEXT NOT NULL,
   last_name TEXT,
   middle_name TEXT,
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );

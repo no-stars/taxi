@@ -6,7 +6,7 @@ import { Pool, QueryResult } from 'pg'
 //  finish_location GEOMETRY(Point, 4326) NOT NULL,
 const createOrderTableQuery = `
 CREATE TABLE IF NOT EXISTS orders (
-  order_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id UUID PRIMARY KEY,
   ride_id UUID,
   start_location POINT NOT NULL,
   finish_location POINT NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS orders (
   price INTEGER NOT NULL,
   payment_type TEXT NOT NULL,
   order_type TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );

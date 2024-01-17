@@ -4,11 +4,11 @@ import { Pool, QueryResult } from 'pg'
 
 const createShiftTypeTableQuery = `
 CREATE TABLE IF NOT EXISTS shift_types (
-  shift_type_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  shift_type_id UUID PRIMARY KEY,
   shift_name TEXT NOT NULL UNIQUE,
   price INTEGER NOT NULL,
   working_hours INTEGER NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );

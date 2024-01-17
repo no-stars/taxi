@@ -4,10 +4,10 @@ import { Pool, QueryResult } from 'pg'
 
 const createAccountModelTableQuery = `
 CREATE TABLE IF NOT EXISTS accounts (
-  account_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  account_id UUID PRIMARY KEY,
   phone_number TEXT NOT NULL UNIQUE,
   email TEXT UNIQUE,
-  created_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );
